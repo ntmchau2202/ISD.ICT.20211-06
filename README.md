@@ -20,6 +20,6 @@
     - Deposit
     - Pay for bike rental
     - Return deposit
-  - Write in .md file and push it to a specific branch for each usecase. For example, for the usecase "CUD Bike", push your work to "design/cud-bike"
+  - Write in .md file and push it to a specific branch for each usecase. For example, for the usecase "CUD Bike", push your work to "feature/usecase-cud-bike"
   - Deadline: 5 PM 08 Oct. 2021
   - Meeting on: 8 PM 08 Oct. 2021
