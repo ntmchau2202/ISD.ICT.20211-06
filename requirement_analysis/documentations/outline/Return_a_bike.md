@@ -12,7 +12,7 @@
 - System return deposit if needed and deduct the amount of money
 
 
-### Basic flow for deleting bike
+### Basic flow for returning bike
 - Users choose a dock to return
 - Users return the bike to the dock chosen
 - Users are asked to confirm the card information and transaction content
