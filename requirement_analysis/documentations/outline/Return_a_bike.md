@@ -19,5 +19,4 @@
 - System deduct money from credit card
 
 ### Alternative flow
-#### Exception
-- Invalid bike input: users haven't rent a bike yet, the dock chosen is full, not enough money in credit card
+- Exceptions: users haven't rent a bike yet, the dock chosen is full, not enough money in credit card
