@@ -1,4 +1,4 @@
-# OUTLINE FOR "CUD BIKE" USECASE OF ECOBIKE PROJECT
+# OUTLINE FOR "RETURN A BIKE" USECASE OF ECOBIKE PROJECT
 
 ## Descriptions
 - Customers return the bike they rent
