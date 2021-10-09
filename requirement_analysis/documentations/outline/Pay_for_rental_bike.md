@@ -6,7 +6,11 @@
 ## Actor
 - Customers
 
-### Basic flow for paying for the rental bike
+### Step for paying for rental bike
+- Users confirm method of paying and the rental money
+- Money is deducted from credit card
+
+### Basic flow for paying for rental bike
 - Users confirm paying method again to make transaction
 - Users have to provide card information and transaction content
 - System calculates the money based on the rental period
