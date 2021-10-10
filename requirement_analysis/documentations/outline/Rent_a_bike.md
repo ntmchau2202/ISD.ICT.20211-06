@@ -19,7 +19,7 @@ Suppose that user has entered the application successfully:
 - System shows bike information, including:
   - Bike type
   - License plate
-  - Current battery (if this is an e-bike)
+  - Current battery
 - The user choose to deposit
 - System call "DEPOSIT" usecase
 - The lock is automatically opened, allowing user to use the bike
