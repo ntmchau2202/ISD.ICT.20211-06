@@ -1,4 +1,4 @@
-# OUTLINE FOR "CUD BIKE" USECASE OF ECOBIKE PROJECT
+# OUTLINE FOR "CRUD BIKE" USECASE OF ECOBIKE PROJECT
 
 ## Descriptions
 - Administrator can create, update and delete bike from list of available bike for renting
