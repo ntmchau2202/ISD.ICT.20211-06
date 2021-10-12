@@ -59,16 +59,16 @@ b. Guidelines for writing usecase outline:
 a. For the (1) assignment
 
 - Pull the branch `topic/specs` for starting your work easily
-- Write your `specifications` in a .docx file and put them in folder `/requirement_analysis/documentations/usecase_specifications`
-- Your `usecase diagrams` should be put in folder `/requirement_analysis/diagrams/usecase/`. 
-- Your `activity diagrams` should be put in folder `/requirement_analysis/diagrams/activity/`
-- Others diagrams (if there are) can be put in folder `/requirement_analysis/diagrams/`
+- Write your `specifications` in a .docx file and put them in folder `/usecase_specifications`
+- Your `usecase diagrams` should be put in folder `/requirement_analysis/diagrams/usecase`. 
+- Your `activity diagrams` should be put in folder `/requirement_analysis/diagrams/activity`
+- Others diagrams (if there are) can be put in folder `/requirement_analysis/diagrams`
 - Remember put your `.asta` files in the folder `/requirement_analysis/.asta` also
 - Push your work to a specific branch for each usecase, with the convention `topic/specs-usecase-name`. For example, for the usecase "CRUD Bike", push your work to `topic/specs-crud-bike`
 
 b. For the (2) assignment
 
-- Write your `SRS` in a .docx file and put it in folder `/requirement_analysis/documentations/usecase_specifications/`
+- Write your `SRS` in a .docx file and put it in folder `/usecase_specifications`
 - Push your work to the branch `topic/srs`
 
 c. Timeline for working
