@@ -106,3 +106,39 @@ a. Submissions:
 - 1st meeting for review: 8 PM 23 Oct. 2021
 - 2nd deadline after review: 5 PM 24 Oct. 2021
 - Deadline submission: before 10 PM 24 Oct. 2021
+
+-------------------- 
+
+# LAB 05: Interface design
+## Tasks:
+- Design graphical user interface: Screen configuration standarlization, mockup designs, screen transition diagrams, detailed screen specifications
+- Design interface with another system/device: using subsystem
+
+## Assignments:
+
+1. Assignments:
+
+- Long: design UI and write specifications for Rent bike usecase
+- Duong: design UI and write specifications for Return bike usecase
+- Chau: design UI and write specifications for the main UI and View bike usecase; propose Interbank subsystem
+
+2. Notes:
+
+a. Submissions:
+
+- Put all your `.astah` file to folder `/detailed_design/interface_design/.astah`
+- Put all your exported diagrams to folder `/detailed_design/interface_design/diagrams`
+- Put all your UI design (i.e mockups) to folder `/detailed_design/interface_design/design`
+- Put all your preview images (if you have) to folder `/detailed_design/interface_design/preview` 
+- Put all your images used to conduct the UI to folder `/detailed_design/interface_design/images`. The brand logo or button icons... should be put in `./icon` folder, other images can be put in `./data` folder
+- Put all your specfications to folder `/detailed_design/interface_design/interface_specs`
+- Push your GUI design to a specific brach with the name convention `topic/gui-usecase-name`, for example, `topic/gui-view-bike`
+- Push the subsystem design to a specific branch `topic/subsystem-subsystemname`, for example, `topic/subsystem-interbank`
+
+b. Timeline for working
+
+- 1st meeting for discussing the configuration standarlization and subsystem design: 10 PM 27 Oct. 2021
+- 1st deadline: 5 PM 28 Oct. 2021
+- 2nd meeting for reviewing work: 8 PM 30 Oct. 2021
+- 2nd deadline for refine work: 5 PM 31 Oct. 2021
+- Deadline submission: before 10 PM 31 Oct. 2021
