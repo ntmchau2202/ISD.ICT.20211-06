@@ -33,7 +33,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+            <Pane prefHeight="500.0" prefWidth="750.0" GridPane.rowIndex="1">
                <children>
                   <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="42.0" layoutY="126.0" pickOnBounds="true">
                      <image>
@@ -117,9 +117,9 @@
                   </Label>
                </children>
             </Pane>
-            <ScrollPane prefHeight="500.0" prefWidth="450.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="450.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <content>
-                  <Pane prefHeight="150.0" prefWidth="430.0">
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="430.0">
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="28.0" layoutY="25.0" pickOnBounds="true">
                            <image>
