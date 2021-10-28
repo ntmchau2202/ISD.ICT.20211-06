@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane layoutX="6.0" layoutY="7.0" prefHeight="600.0" prefWidth="1200.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="750.0" prefWidth="750.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="500.0" prefHeight="500.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Pane prefHeight="100.0" prefWidth="600.0">
+               <children>
+                  <Label layoutX="131.0" layoutY="40.0" text="Dock information">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="imgv_logo" fitHeight="80.0" fitWidth="80.0" layoutX="43.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icon/ecobike_logo_transparent.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="42.0" layoutY="126.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/data/dai-co-viet-dock.jpg" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="265.0" layoutY="109.0" text="Dai Co Viet dock bike">
+                     <font>
+                        <Font name="Segoe UI Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="266.0" layoutY="148.0" text="Address:">
+                     <font>
+                        <Font name="Segoe UI Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="265.0" layoutY="179.0" text="Dock area:">
+                     <font>
+                        <Font name="Segoe UI Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="266.0" layoutY="209.0" text="Total number of docks:">
+                     <font>
+                        <Font name="Segoe UI Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="265.0" layoutY="239.0" text="Number of available bikes:">
+                     <font>
+                        <Font name="Segoe UI Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="265.0" layoutY="271.0" text="Number of available docks:">
+                     <font>
+                        <Font name="Segoe UI Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="265.0" layoutY="302.0" text="Distance:">
+                     <font>
+                        <Font name="Segoe UI Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="265.0" layoutY="334.0" text="Estimated walking time:">
+                     <font>
+                        <Font name="Segoe UI Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="343.0" layoutY="148.0" text="123 Dai Co Viet, Dong Da, Hanoi">
+                     <font>
+                        <Font name="Segoe UI Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="364.0" layoutY="179.0" text="20m2">
+                     <font>
+                        <Font name="Segoe UI Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="471.0" layoutY="208.0" text="50">
+                     <font>
+                        <Font name="Segoe UI Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="354.0" layoutY="302.0" text="1.5 km">
+                     <font>
+                        <Font name="Segoe UI Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="515.0" layoutY="271.0" text="14">
+                     <font>
+                        <Font name="Segoe UI Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="515.0" layoutY="246.0" text="36">
+                     <font>
+                        <Font name="Segoe UI Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="480.0" layoutY="334.0" text="25 mins">
+                     <font>
+                        <Font name="Segoe UI Italic" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <ScrollPane prefHeight="500.0" prefWidth="450.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <content>
+                  <Pane prefHeight="150.0" prefWidth="430.0">
+                     <children>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="28.0" layoutY="25.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@../images/data/electric-bike.jpg" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="144.0" layoutY="41.0" text="Electric bike 1236">
+                           <font>
+                              <Font name="Segoe UI Bold Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="144.0" layoutY="66.0" text="Battery:">
+                           <font>
+                              <Font name="Segoe UI Bold Italic" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="144.0" layoutY="91.0" text="Distance estimation:">
+                           <font>
+                              <Font name="Segoe UI Bold Italic" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </content>
+               <padding>
+                  <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+               </padding>
+            </ScrollPane>
+         </children>
+      </GridPane>
+   </children>
+</Pane>
