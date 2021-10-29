@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="101.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="101.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icon/ecobike_logo_transparent.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="105.0" layoutY="35.0" text="Information of payment">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutY="101.0" prefHeight="300.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="170.0" layoutY="14.0" text="User 's name:" />
+            <Label layoutX="170.0" layoutY="52.0" text="Type of bike rent: " />
+            <Label layoutX="170.0" layoutY="97.0" text="Time rent:" />
+            <Label layoutX="173.0" layoutY="134.0" text="Subtotal: " />
+            <Label layoutX="173.0" layoutY="179.0" text="Total:" />
+            <Label layoutX="334.0" layoutY="14.0" text="Hieu" />
+            <Label layoutX="333.0" layoutY="52.0" text="Ninja" />
+            <Label layoutX="333.0" layoutY="97.0" text="1 h" />
+            <Label layoutX="334.0" layoutY="134.0" text="100,000 VND" />
+            <Label layoutX="334.0" layoutY="179.0" text="110,000 VND" />
+            <Label layoutX="418.0" layoutY="179.0" text="(VAT: 10%)" textFill="#a60909" />
+            <Button layoutX="300.0" layoutY="233.0" mnemonicParsing="false" text="Update card info" />
+            <Button layoutX="211.0" layoutY="233.0" mnemonicParsing="false" text="Confirm" />
+         </children>
+      </Pane>
+   </children>
+</Pane>
