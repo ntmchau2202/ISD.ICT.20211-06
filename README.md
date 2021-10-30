@@ -79,4 +79,30 @@ c. Timeline for working
 - Final deadline before merging: 5 PM 17 Oct. 2021
 - Deadline submission: before 10 PM 17 Oct. 2021
 
+-------------------- 
 
+# LAB 03: Interaction diagrams
+## Tasks:
+- Complete interaction diagrams (including sequence diagram and communication diagram) for these usecases:
+  - View station information and/or View bike information
+  - Rent bike
+  - Return bike
+
+## Assignments:
+1. Assignments
+- Chau: Interaction diagrams for View bike information usecase
+- Long: Interaction diagrams for Rent bike usecase
+- Duong: Interaction diagrams for Return bike usecase
+
+2. Notes
+
+a. Submissions:
+- Put all your `.astah` files to folder `/architecture_design/.astah`
+- Put all your exported diagrams to folder `/architecture_design/diagrams`
+- Push your work to a specific branch with the convention `topic/ad-usecase-name`. For example, if you're working with the Rent bike usecase, your branch name will be `topic/ad-rent-bike`
+
+3. Timeline for working
+- 1st deadline: 5 PM 23 Oct. 2021
+- 1st meeting for review: 8 PM 23 Oct. 2021
+- 2nd deadline after review: 5 PM 24 Oct. 2021
+- Deadline submission: before 10 PM 24 Oct. 2021
