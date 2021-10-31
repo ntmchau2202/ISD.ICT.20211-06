@@ -13,19 +13,19 @@
          <top>
             <Pane prefHeight="100.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="imgv_logo" fitHeight="80.0" fitWidth="80.0" layoutX="244.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgv_logo" fitHeight="80.0" fitWidth="80.0" layoutX="58.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icon/ecobike_logo_transparent.png" />
                      </image>
                   </ImageView>
-                  <TextField fx:id="txtf_searchBar" layoutX="444.0" layoutY="28.0" prefHeight="45.0" prefWidth="454.0" />
-                  <Button fx:id="btn_search" layoutX="810.0" layoutY="38.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Search" />
-                  <Label layoutX="331.0" layoutY="36.0" text="EcoBike">
+                  <TextField fx:id="txtf_searchBar" layoutX="291.0" layoutY="28.0" prefHeight="45.0" prefWidth="826.0" />
+                  <Button fx:id="btn_search" layoutX="1025.0" layoutY="38.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Search" />
+                  <Label layoutX="145.0" layoutY="37.0" text="EcoBike">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <ChoiceBox layoutX="699.0" layoutY="38.0" prefHeight="25.0" prefWidth="98.0" />
+                  <ChoiceBox layoutX="914.0" layoutY="38.0" prefHeight="25.0" prefWidth="98.0" />
                </children>
             </Pane>
          </top>
