@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="101.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="101.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icon/ecobike_logo_transparent.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="105.0" layoutY="35.0" text="Information of deposit">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutY="101.0" prefHeight="300.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="172.0" layoutY="55.0" text="User 's name:" />
+            <Label layoutX="172.0" layoutY="93.0" text="Type of bike rent: " />
+            <Label layoutX="173.0" layoutY="128.0" text="Deposit:" />
+            <Label layoutX="336.0" layoutY="55.0" text="Long" />
+            <Label layoutX="335.0" layoutY="93.0" text="Normal bike" />
+            <Label layoutX="335.0" layoutY="128.0" prefHeight="21.0" prefWidth="87.0" text="700,000 VND" />
+            <Button layoutX="297.0" layoutY="214.0" mnemonicParsing="false" text="Update card info" />
+            <Button layoutX="190.0" layoutY="214.0" mnemonicParsing="false" text="Confirm" />
+         </children>
+      </Pane>
+   </children>
+</Pane>
