@@ -142,3 +142,36 @@ b. Timeline for working
 - 2nd meeting for reviewing work: 8 PM 30 Oct. 2021
 - 2nd deadline for refine work: 5 PM 31 Oct. 2021
 - Deadline submission: before 10 PM 31 Oct. 2021
+
+-------------------- 
+
+# LAB 05: Analyze class diagram
+## Tasks:
+- Design class diagrams for the usecases: 
+  - View station, and/or View bike information
+  - Rent bike
+  - Return bike
+with all relevant usecases
+
+## Assignments:
+
+1. Assignments:
+
+- Long: Rent bike usecase
+- Duong: Return bike usecase
+- Chau: View bike station and/or view bike information
+
+1. Notes:
+
+a. Submissions:
+
+- Modify your previous works in your `.astah` files and export them to `/architectural_design/diagrams` folder
+- Push your work to a specific branch with naming convention `topic/cd-your-usecase`, for example, `topic/cd-view-bike-info`
+
+b. Timeline for working
+
+- 1st deadline: 5 PM 04 Nov. 2021
+- 1st meeting for review: 10 PM 04 Nov. 2021
+- 2nd deadline for refining work: 5 PM 06 Nov. 2021
+- 2nd meeting for review (if needed): 10 PM 04 Nov. 2021
+- Deadline submission: before 10 PM 05 Oct. 2021
