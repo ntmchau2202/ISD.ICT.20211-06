@@ -175,3 +175,28 @@ b. Timeline for working
 - 2nd deadline for refining work: 5 PM 06 Nov. 2021
 - 2nd meeting for review (if needed): 10 PM 04 Nov. 2021
 - Deadline submission: before 10 PM 05 Oct. 2021
+
+-------------------- 
+
+# LAB 06: Class implementation
+## Tasks: 
+Design class functions and write docs for the classes
+
+## Assignments:
+1. Assignments
+- Chau: Bike information subsystem and interbank subsystem
+- Long & Duong: Rent bike subsystem
+
+2. Notes:
+
+a. Guidelines for submission
+
+- Pull the branch `topic/class-design` and add packages/classes/interfaces according to your design to the source code folder `/src`
+- If you need to update the subsystem classes and methods of classes, make a clone of `EcoBike-Full-Class-Diagrams.asta` in folder `architecture_design/.astah`, add your name to the end and modify on this file. Put it in the above `/.astah` folder for future merge
+- Write detail doc for classes in comment form, so that it can be exported into JavaDocs later
+- Push your work to a specific branch with the naming convention `topic/cd-docs-yourpartname`, for example, `topic/cd-docs-rentbike`
+
+b. Timeline for working
+
+- 5 PM 13 Nov. 2021
+- Deadline submission: before 10 PM 13 Nov. 2021
