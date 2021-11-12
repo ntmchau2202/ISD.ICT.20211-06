@@ -34,4 +34,21 @@ public abstract class EcoBikeBaseScreenHandler {
 	 * Initialize the views and components of the screen
 	 */
 	protected abstract void initialize();
+	
+	/**
+	 * Display a message box with error message and error code
+	 * @param errMsg Message to be displayed
+	 * @param errCode Error code of the failure
+	 */
+	public void notifyError(String errMsg, int errCode) {
+		
+	}
+	
+	/**
+	 * Display a message box with notify message
+	 * @param msg Message to be displayed
+	 */
+	public void notifySuccess(String msg) {
+		
+	}
 }
