@@ -2,12 +2,41 @@ package entities;
 
 import java.sql.Timestamp;
 
+/**
+ * This is the class for object entity Credit card including all information of a card 
+ * @author Duong
+ *
+ */
 public class CreditCard {
+	
+	/**
+	 * The valid number of the card 
+	 */
 	private String cardNumber;
+	
+	/**
+	 * The name of the holder of the card
+	 */
 	private String cardHolderName;
+	
+	/**
+	 * The bank responsible for the card
+	 */
 	private String issueBank;
+	
+	/**
+	 * The expired date of the card in defined time format
+	 */
 	private Timestamp expirationDate;
+	
+	/**
+	 * The security code of the card
+	 */
 	private int cardSecurity;
+	
+	public CreditCard() {
+		
+	}
 	public CreditCard(String cardNumber, String cardHolderName, String issueBank, Timestamp expirationDate,
 			int cardSecurity) {
 		super();
@@ -15,36 +44,6 @@ public class CreditCard {
 		this.cardHolderName = cardHolderName;
 		this.issueBank = issueBank;
 		this.expirationDate = expirationDate;
-		this.cardSecurity = cardSecurity;
-	}
-	public String getCardNumber() {
-		return cardNumber;
-	}
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
-	}
-	public String getCardHolderName() {
-		return cardHolderName;
-	}
-	public void setCardHolderName(String cardHolderName) {
-		this.cardHolderName = cardHolderName;
-	}
-	public String getIssueBank() {
-		return issueBank;
-	}
-	public void setIssueBank(String issueBank) {
-		this.issueBank = issueBank;
-	}
-	public Timestamp getExpirationDate() {
-		return expirationDate;
-	}
-	public void setExpirationDate(Timestamp expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-	public int getCardSecurity() {
-		return cardSecurity;
-	}
-	public void setCardSecurity(int cardSecurity) {
 		this.cardSecurity = cardSecurity;
 	}
 	

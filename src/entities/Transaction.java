@@ -2,6 +2,10 @@ package entities;
 
 import java.sql.Timestamp;
 
+/**
+ * This class stores informaton about the transaction for using in the interbank
+ */
+
 public class Transaction {
 	/**
 	 * ID of the transaction

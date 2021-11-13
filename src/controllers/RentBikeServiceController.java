@@ -4,25 +4,40 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.InterbankInterface;
 
+/**
+ * This class handles rent bike, return bike and pause bike rental request from customers
+ */
 public class RentBikeServiceController {
 	private InterbankInterface interbankSystem;
 	
+	/**
+	 * Initialize the controller for EcoBike rent bike service
+	 */
 	public RentBikeServiceController() {
 		
 	}
 	
+	/**
+	 * Start renting bike process, including calling the interbank subsystem for performing transaction
+	 * @param bikeBarcode barCode of the bike to be rented
+	 */
 	public void rentBike(String bikeBarcode)  {
 		
 	}
 	
-
+	/**
+	 * Start pausing bike rental process
+	 * @param bikeBarcode barCode of the bike to be rented
+	 */
 	public void pauseBikeRental(String bikeBarcode) {
 		
 	}
 	
-
+	/**
+	 * Start return bike process, including calling the interbank subsystem for performing transaction
+	 * @param bikeBarcode barCode of the bike to be returned
+	 */
 	public void returnBike(String bikeBarcode) {
-		// TODO Auto-generated method stub
 	}
 	
 	/**

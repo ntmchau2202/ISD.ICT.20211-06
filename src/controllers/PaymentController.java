@@ -1,15 +1,17 @@
 package controllers;
 
 import entities.CreditCard;
-import entities.Transaction;
+import entities.Invoice;
+import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 
+/**
+ * This is the class controller including all the methods and operations for payment use case
+ * @author Duong
+ *
+ */
 public class PaymentController {
-	
-	public PaymentController() {
-		
-	}
 	
 	/**
 	 * Pay for the deposit for the rental bike
@@ -18,9 +20,22 @@ public class PaymentController {
 	 * @param content  the content of transaction
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @return {@link entities.Transaction} a record of transaction
+	 * @return the transaction entity ({@link entities.PaymentTransaction}
 	 */
-	public Transaction payDeposit(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
+	public PaymentTransaction payDeposit(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
+		return null;
+	}
+	
+	/**
+	 * Return the deposit for the rental bike that was paid before
+	 * @param card  the credit card used to pay
+	 * @param amount  the money to pay deposit
+	 * @param content  the content of transaction
+	 * @throws RentBikeException If the transaction is invalid
+	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 * @return the transaction entity ({@link entities.PaymentTransaction}
+	 */
+	public PaymentTransaction returnDeposit(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
 		return null;
 	}
 	
@@ -31,7 +46,7 @@ public class PaymentController {
 	 * @param content  the content of transaction
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @return {@link entities.Transaction} a record of transaction
+	 * @return the transaction entity ({@link entities.PaymentTransaction}
 	 */
 	public void payRental(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
 		
@@ -49,21 +64,54 @@ public class PaymentController {
 	
 	/**
 	 * Display a screen including transaction information
-	 * @param transaction  The transaction {@link entities.Transaction}
-	 * @throws RentBikeException If the bike is not currently available or the barcode is not valid
+	 * @param transaction  The transaction entity ({@link entities.PaymentTransaction}
+	 * @throws RentBikeException If the transaction is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void displayTransactionInfo(Transaction transaction) throws EcoBikeUndefinedException {
+	public void displayTransactionInfo(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
 		
 	}
 	
 	/**
-	 * save the transaction
-	 * @param transaction  The transaction {@link entities.Transaction}
+	 * save the transaction to the database
+	 * @param transaction  The transaction entity ({@link entities.PaymentTransaction}
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void saveTransaction(Transaction transaction) throws RentBikeException, EcoBikeUndefinedException {
+	public void saveTransaction(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
 		
 	}
+	
+	/**
+	 * Create an invoice including all the information relevant to renting bike
+	 * @param transaction  The transaction entity ({@link entities.PaymentTransaction}
+	 * @throws RentBikeException If the transaction is not valid
+	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 * @return The invoice entity ({@link entities.Invoice}
+	 */
+	public Invoice createInvoice(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
+		return null;
+	}
+	
+	/**
+	 * Display a screen including the invoice information
+	 * @param invoice  The Invoice entity ({@link entities.Invoice}
+	 * @throws RentBikeException If the invoice is not valid
+	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 * @return The invoice entity ({@link entities.Invoice}
+	 */
+	public void displayInvoiceScreen(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
+		
+	}
+	
+	/**
+	 * save the invoice to the database
+	 * @param transaction  The invoice entity ({@link entities.Invoice}
+	 * @throws RentBikeException If the invoice is invalid
+	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 */
+	public void saveInvoice(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
+		
+	}
+	
 }

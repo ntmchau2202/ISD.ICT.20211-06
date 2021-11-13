@@ -6,8 +6,8 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 
 /**
- * This class creates a handler for getting payment information from customer and sends it to the controller
- * @author Hikaru
+ * This is the class handler for payment method screen
+ * @author Duong
  *
  */
 public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
@@ -29,7 +29,6 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
 	}
 
 	/**
-	 * -- Confirm the payment method
 	 * Get payment method information from the form and go to transaction screen
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */

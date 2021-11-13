@@ -4,7 +4,7 @@ import controllers.EcoBikeBaseController;
 
 /**
  * This class spawns a handler for the first splash screen of the EcoBike application
- * @author Hikaru
+ * @author chauntm
  *
  */
 

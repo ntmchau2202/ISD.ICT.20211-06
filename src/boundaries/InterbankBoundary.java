@@ -3,6 +3,10 @@ package boundaries;
 import entities.CreditCard;
 import interfaces.InterbankInterface;
 
+/**
+ * This class implements functions for performing transactions on the bank side
+ * It must have functions in InterbankInterface for further communication with the EcoBike subsystems
+ */
 public class InterbankBoundary implements InterbankInterface {
 
 	@Override

@@ -1,15 +1,22 @@
 package views;
 
 import controllers.EcoBikeBaseController;
+import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeUndefinedException;
+import exceptions.ecobike.RentBikeException;
 
 /**
- * This class spawns a handler for displaying customer's transaction details and get confirmations from customer
- * @author chauntm
+ * This is the class handler for transaction screen
+ * @author Duong
  *
  */
 public class TransactionScreenHandler extends EcoBikeBaseScreenHandler {
-	
+	/**
+	 * Initialize handler for transaction screen of EcoBike application
+	 * @param screenTitle Title of the screen
+	 * @param controller Controller for handling request from the screen
+	 * @param prevScreen An instance to the screen that called this screen
+	 */
 	protected TransactionScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
 		super(screenTitle, controller, prevScreen);
 		// TODO Auto-generated constructor stub
@@ -22,10 +29,12 @@ public class TransactionScreenHandler extends EcoBikeBaseScreenHandler {
 	}
 	
 	/**
-	 * Display the transaction information and allow customer to confirm or reject transaction
+	 * Show details of the transaction and allow customer to confirm or eject payment
+	 * @param transaction  The transaction entity ({@link entities.PaymentTransaction}
+	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void confirmTransaction() throws EcoBikeUndefinedException {
+	public void confirmTransaction(PaymentTransaction transaction) throws  RentBikeException, EcoBikeUndefinedException {
 		
 	}
 
