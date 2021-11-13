@@ -4,6 +4,11 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.RentBikeInterface;
 
+/**
+ * This is the class controller including all the methods and operations for return bike use case
+ * @author Duong
+ *
+ */
 public class ReturnBikeController implements RentBikeInterface {
 	public ReturnBikeController() {
 		
