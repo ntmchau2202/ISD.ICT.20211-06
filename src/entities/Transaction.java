@@ -3,6 +3,9 @@ package entities;
 import java.sql.Timestamp;
 
 public class Transaction {
+	/**
+	 * ID of the transaction
+	 */
 	private String transactionId;
 	private CreditCard card;
 	private double amount;

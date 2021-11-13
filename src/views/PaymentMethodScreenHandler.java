@@ -5,8 +5,18 @@ import entities.CreditCard;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 
+/**
+ * This class creates a handler for getting payment information from customer and sends it to the controller
+ * @author Hikaru
+ *
+ */
 public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
-
+	/**
+	 * Initialize handler for paying method screen of EcoBike application
+	 * @param screenTitle Title of the screen
+	 * @param controller Controller for handling request from the screen
+	 * @param prevScreen An instance to the screen that called this screen
+	 */
 	protected PaymentMethodScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
 		super(screenTitle, controller, prevScreen);
 		// TODO Auto-generated constructor stub
@@ -19,7 +29,8 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
 	}
 
 	/**
-	 * Confirm the payment method
+	 * -- Confirm the payment method
+	 * Get payment method information from the form and go to transaction screen
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
 	public void confirmPaymentMethod() throws EcoBikeUndefinedException {
@@ -27,29 +38,21 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
 	}
 	
 	/**
-	 * Confirm the transaction
+	 * Check if the form has any blank field or input that does not satisfy requirements
 	 * @throws RentBikeException If the card info is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void validateForm() throws RentBikeException, EcoBikeUndefinedException {
+	private void validateForm() throws RentBikeException, EcoBikeUndefinedException {
 		
 	}
 	
 	/**
-	 * Update the card info
+	 * Get inputs from the form and send request to controller to update the card information
 	 * @param card The credit card used to update
 	 * @throws RentBikeException If the card is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void updateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-		
-	}
-	
-	/**
-	 * display the error
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 */
-	public void notifyError() throws EcoBikeUndefinedException {
+	public void updateCard() throws RentBikeException, EcoBikeUndefinedException {
 		
 	}
 }

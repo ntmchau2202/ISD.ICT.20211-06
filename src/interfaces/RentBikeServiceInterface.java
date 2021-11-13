@@ -9,7 +9,7 @@ import exceptions.ecobike.RentBikeException;
  * @author chauntm
  *
  */
-public interface RentBikeInterface {
+public interface RentBikeServiceInterface {
 	/**
 	 * Calls the Rent bike sequence of operations for customers to rent bike
 	 * @param bikeBarcode Barcode of the bike to be rented

@@ -2,7 +2,12 @@ package views;
 
 import controllers.EcoBikeBaseController;
 
-public class DockInformationHandler extends EcoBikeBaseScreenHandler {
+/**
+ * This class creates a handler for getting behaviors of customer on dock information screen 
+ * @author chauntm
+ *
+ */
+public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
 	/**
 	 * Initialize handler for dock information screen
@@ -10,7 +15,7 @@ public class DockInformationHandler extends EcoBikeBaseScreenHandler {
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected DockInformationHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
+	protected DockInformationScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
 		super(screenTitle, controller, prevScreen);
 		// TODO Auto-generated constructor stub
 	}

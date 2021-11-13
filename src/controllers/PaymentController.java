@@ -6,8 +6,10 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 
 public class PaymentController {
-	public PaymentController() {}
 	
+	public PaymentController() {
+		
+	}
 	
 	/**
 	 * Pay for the deposit for the rental bike
@@ -16,7 +18,7 @@ public class PaymentController {
 	 * @param content  the content of transaction
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @return the transaction ({@link entities.Transaction}
+	 * @return {@link entities.Transaction} a record of transaction
 	 */
 	public Transaction payDeposit(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
 		return null;
@@ -29,7 +31,7 @@ public class PaymentController {
 	 * @param content  the content of transaction
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @return the transaction ({@link entities.Transaction}
+	 * @return {@link entities.Transaction} a record of transaction
 	 */
 	public void payRental(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
 		
@@ -47,7 +49,7 @@ public class PaymentController {
 	
 	/**
 	 * Display a screen including transaction information
-	 * @param transaction  The transaction ({@link entities.Transaction}
+	 * @param transaction  The transaction {@link entities.Transaction}
 	 * @throws RentBikeException If the bike is not currently available or the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
@@ -57,7 +59,7 @@ public class PaymentController {
 	
 	/**
 	 * save the transaction
-	 * @param transaction  The transaction ({@link entities.Transaction}
+	 * @param transaction  The transaction {@link entities.Transaction}
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */

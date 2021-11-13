@@ -2,6 +2,11 @@ package views;
 
 import controllers.EcoBikeBaseController;
 
+/**
+ * This class creates a handler for displaying the map and getting customer's activities on the main screen
+ * @author chauntm
+ *
+ */
 public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 
 	/**

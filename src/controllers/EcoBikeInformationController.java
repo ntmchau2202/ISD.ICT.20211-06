@@ -16,9 +16,10 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @param dock The dock having information to be queried
 	 * @throws NoInformationException If there is no information about the entity
 	 * @throws EcoBikeUndefinedException If there is an unexpected error when querying for information
+	 * @return a JSON contains dock information
 	 */
-	public void getDockInformation(Dock dock) throws NoInformationException, EcoBikeUndefinedException {
-		
+	public String getDockInformation(Dock dock) throws NoInformationException, EcoBikeUndefinedException {
+		return null;
 	}
 
 	/**
@@ -26,8 +27,9 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @param dock The bike having information to be queried
 	 * @throws NoInformationException If there is no information about the entity
 	 * @throws EcoBikeUndefinedException If there is an unexpected error when querying for information
+	 * @return a JSON contains bike information
 	 */
-	public void getBikeInformation(Bike bike) throws NoInformationException, EcoBikeUndefinedException {
-		
+	public String getBikeInformation(Bike bike) throws NoInformationException, EcoBikeUndefinedException {
+		return null;
 	}
 }

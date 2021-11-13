@@ -2,6 +2,11 @@ package views;
 
 import controllers.EcoBikeBaseController;
 
+/**
+ * This class creates a handler for getting customer's behaviors on the bike information screen
+ * @author chauntm
+ *
+ */
 public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	/**
 	 * Initialize the handler for bike information screen
