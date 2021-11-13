@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * @author Duong
  *
  */
-public class Transaction {
+public class PaymentTransaction {
 	/**
 	 * The id of transaction. This must be a unique String
 	 */
@@ -39,10 +39,10 @@ public class Transaction {
 	 */
 	private String errorMessage;
 	
-	public Transaction() {
+	public PaymentTransaction() {
 		
 	}
-	public Transaction(String transactionId, CreditCard card, double amount, Timestamp transactionTime, String content,
+	public PaymentTransaction(String transactionId, CreditCard card, double amount, Timestamp transactionTime, String content,
 			String errorMessage) {
 		super();
 		this.transactionId = transactionId;

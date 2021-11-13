@@ -15,7 +15,7 @@ public class Dock {
 	/**
 	 * An unique string describes the id of the dock
 	 */
-	private String dock_id;
+	private String dockID;
 	
 	/**
 	 * The address of the dock
@@ -25,7 +25,7 @@ public class Dock {
 	/**
 	 * The area of the dock calculated in meter square
 	 */
-	private String dock_area;
+	private int dock_area;
 	
 	/**
 	 * The number of available bikes in the dock that customers can rent
@@ -41,11 +41,11 @@ public class Dock {
 		
 	}
 
-	public Dock(String name, String dock_id, String dock_address, String dock_area, int num_available_bike,
+	public Dock(String name, String dockID, String dock_address, int dock_area, int num_available_bike,
 			int num_dock_space_free) {
 		super();
 		this.name = name;
-		this.dock_id = dock_id;
+		this.dockID = dockID;
 		this.dock_address = dock_address;
 		this.dock_area = dock_area;
 		this.num_available_bike = num_available_bike;
