@@ -1,0 +1,4 @@
+*.lock
+*.exe
+*.bak
+/bin/
