@@ -200,3 +200,24 @@ b. Timeline for working
 
 - 5 PM 13 Nov. 2021
 - Deadline submission: before 10 PM 13 Nov. 2021
+
+---------------------------
+
+# LAB 07: Data modeling
+## Tasks: 
+- Implement database for EcoBike system. Write detail specifications for the database
+
+## Assignments:
+1. Assignments
+- Chau: Bike, BikeInDock, Dock, Administrator database
+- Duong & Long: CreditCard, Transaction, Invoice, BikeRent database
+
+2. Notes:
+
+a. Guidelines for submission
+- Write your database specification in a .docx file with given template and put it into `/detailed_design/data_modeling`, push it to a specific brand with the convention `topic/data-yourpartofdatabase`
+
+b. Timeline for working
+- Team meeting to discuss about database design: 16 Nov. 2021
+- Deadline for 1st submission: 8 PM 19 Nov. 2021
+- Deadline for submission: 10 PM 20 Nov. 2021
