@@ -26,7 +26,8 @@ create table BikeInDock(dock_id int not null,
 						constraint FK_BikeInDock_Bike foreign key (bike_barcode) references Bike(bike_barcode));
 
 create table Customer(customer_name varchar(256) not null,
-						customer_id int not null identity(1,1) primary key);
+						customer_id int not null identity(1,1) primary key,
+						customer_email varchar(128) not null);
 
 create table CreditCard(cardholder_name varchar(256) not null,
 						creditcard_number varchar(25) not null primary key,
@@ -44,6 +45,7 @@ create table RentBike(customer_id int not null,
 					constraint FK_RentBike_Bike foreign key (bike_barcode) references Bike(bike_barcode),
 					constraint FK_RenBike_Customer foreign key (customer_id) references Customer(customer_id),
 					constraint Check_RenBike_Time check (end_time > start_time));
+
 
 create table BikeStatus(bike_barcode int not null primary key,
 						current_status varchar(4),
