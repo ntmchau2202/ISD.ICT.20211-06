@@ -238,6 +238,7 @@ b. Timeline for working
 a. Guidelines for submission
 - Write your testcase specification for each class in a different sheet with name of the class into `unit_test/ecobike_testcase_specs.xlsx` excel file (just for separation and better tracking :) )
 - Write your test classes into `src/test` package
+- Push your work to a specific branch, namely `topic/test-yourusecase`
 
 b. Timeline for working
 - Deadline for 1st submission: 5 PM 3 Dec. 2021
