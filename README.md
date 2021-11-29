@@ -221,3 +221,24 @@ b. Timeline for working
 - Team meeting to discuss about database design: 16 Nov. 2021
 - Deadline for 1st submission: 8 PM 19 Nov. 2021
 - Deadline for submission: 10 PM 20 Nov. 2021
+  
+----------------------------
+
+# LAB 08: Unit Test
+## Tasks: 
+- Desig test cases for the application, write corresponding code for these test cases
+
+## Assignments:
+1. Assignments
+- Chau: Test cases related to adding and viewing bike information
+- Duong & Long: Test cases related to rent bike & performing transaction
+
+2. Notes:
+
+a. Guidelines for submission
+- Write your testcase specification for each class in a different sheet with name of the class into `unit_test/ecobike_testcase_specs.xlsx` excel file (just for separation and better tracking :) )
+- Write your test classes into `src/test` package
+
+b. Timeline for working
+- Deadline for 1st submission: 5 PM 3 Dec. 2021
+- Deadline for submission: 10 PM 4 Nov. 2021
