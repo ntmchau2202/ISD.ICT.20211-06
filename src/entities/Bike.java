@@ -16,22 +16,22 @@ public class Bike {
 	/**
 	 * type of the bike
 	 */
-	private String bike_type;
+	private String bikeType;
 	
 	/**
 	 * The link to the image of the bike
 	 */
-	private String bike_image;
+	private String bikeImage;
 	
 	/**
 	 * The unique bar-code of the bike 
 	 */
-	private String bar_code;
+	private String barCode;
 	
 	/**
 	 * The rental price of the bike per unit time
 	 */
-	private double bike_rental_price;
+	private double bikeRentalPrice;
 	
 	/**
 	 * The amount of deposit customers have to pay before renting the bike
@@ -46,43 +46,130 @@ public class Bike {
 	/**
 	 * The time the bike was added to the dock in defined format
 	 */
-	private Timestamp create_date;
+	private Timestamp createDate;
 	
 	/**
 	 * The current status of the bike
 	 */
-	private int current_status;
+	private int currentStatus;
 	
 	/**
 	 * The current battery of the bike
 	 */
-	private int current_battery;
+	private int currentBattery;
 	
 	/**
 	 * The total time the customer has rent calculated in minute
 	 */
-	private int total_rent_time;
+	private int totalRentTime;
 
 	public Bike() {
 		
 	}
 
-	public Bike(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
-			double deposit, String currency, Timestamp create_date, int current_status, int current_battery,
-			int total_rent_time) {
+	public Bike(String name, String bikeType, String bikeImage, String barCode, double bikeRentalPrice,
+				double deposit, String currency, Timestamp createDate, int currentStatus, int currentBattery,
+				int totalRentTime) {
 		super();
 		this.name = name;
-		this.bike_type = bike_type;
-		this.bike_image = bike_image;
-		this.bar_code = bar_code;
-		this.bike_rental_price = bike_rental_price;
+		this.bikeType = bikeType;
+		this.bikeImage = bikeImage;
+		this.barCode = barCode;
+		this.bikeRentalPrice = bikeRentalPrice;
 		this.deposit = deposit;
 		this.currency = currency;
-		this.create_date = create_date;
-		this.current_status = current_status;
-		this.current_battery = current_battery;
-		this.total_rent_time = total_rent_time;
+		this.createDate = createDate;
+		this.currentStatus = currentStatus;
+		this.currentBattery = currentBattery;
+		this.totalRentTime = totalRentTime;
 	}
-	
-	
+
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getBikeType() {
+		return bikeType;
+	}
+
+	public void setBikeType(String bikeType) {
+		this.bikeType = bikeType;
+	}
+
+	public String getBikeImage() {
+		return bikeImage;
+	}
+
+	public void setBikeImage(String bikeImage) {
+		this.bikeImage = bikeImage;
+	}
+
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
+
+	public double getBikeRentalPrice() {
+		return bikeRentalPrice;
+	}
+
+	public void setBikeRentalPrice(double bikeRentalPrice) {
+		this.bikeRentalPrice = bikeRentalPrice;
+	}
+
+	public double getDeposit() {
+		return deposit;
+	}
+
+	public void setDeposit(double deposit) {
+		this.deposit = deposit;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public Timestamp getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Timestamp createDate) {
+		this.createDate = createDate;
+	}
+
+	public int getCurrentStatus() {
+		return currentStatus;
+	}
+
+	public void setCurrentStatus(int currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+
+	public int getCurrentBattery() {
+		return currentBattery;
+	}
+
+	public void setCurrentBattery(int currentBattery) {
+		this.currentBattery = currentBattery;
+	}
+
+	public int getTotalRentTime() {
+		return totalRentTime;
+	}
+
+	public void setTotalRentTime(int totalRentTime) {
+		this.totalRentTime = totalRentTime;
+	}
 }

@@ -8,7 +8,8 @@ import interfaces.InterbankInterface;
  * This class handles rent bike, return bike and pause bike rental request from customers
  */
 public class RentBikeServiceController {
-	private InterbankInterface interbankSystem;
+	//private InterbankInterface interbankSystem;
+	//private EcoBikeInformationController ecoBikeInformationController;
 	
 	/**
 	 * Initialize the controller for EcoBike rent bike service
@@ -16,13 +17,15 @@ public class RentBikeServiceController {
 	public RentBikeServiceController() {
 		
 	}
-	
+
 	/**
 	 * Start renting bike process, including calling the interbank subsystem for performing transaction
+	 *
 	 * @param bikeBarcode barCode of the bike to be rented
 	 */
-	public void rentBike(String bikeBarcode)  {
-		
+	public void rentBike(String bikeBarcode) {
+		entities.Bike bike;
+
 	}
 	
 	/**
@@ -72,7 +75,9 @@ public class RentBikeServiceController {
 	/**
 	 * Invoke counter for tracking rental time
 	 */
-	private void startCoutingRentTime() {
+	private void startCountingRentTime() {
 		
 	}
+
+
 }
