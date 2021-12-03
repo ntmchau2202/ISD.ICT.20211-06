@@ -1,5 +1,7 @@
 package entities;
 
+import utils.Configs;
+
 import java.sql.Timestamp;
 
 /**
@@ -16,7 +18,7 @@ public class Bike {
 	/**
 	 * type of the bike
 	 */
-	private String bikeType;
+	private Configs.BikeType bikeType;
 	
 	/**
 	 * The link to the image of the bike
@@ -31,12 +33,12 @@ public class Bike {
 	/**
 	 * The rental price of the bike per unit time
 	 */
-	private double bikeRentalPrice;
+	private float bikeRentalPrice;
 	
 	/**
 	 * The amount of deposit customers have to pay before renting the bike
 	 */
-	private double deposit;
+	private float deposit;
 	
 	/**
 	 * The currency of money the credit card uses
@@ -63,12 +65,19 @@ public class Bike {
 	 */
 	private int totalRentTime;
 
-	public Bike() {
-		
+	public Bike(){
+
 	}
 
-	public Bike(String name, String bikeType, String bikeImage, String barCode, double bikeRentalPrice,
-				double deposit, String currency, Timestamp createDate, int currentStatus, int currentBattery,
+	public Bike(int totalRentTime, float deposit, Configs.BikeType bikeType) {
+		super();
+		this.totalRentTime = totalRentTime;
+		this.deposit = deposit;
+		this.bikeType = bikeType;
+	}
+
+	public Bike(String name, Configs.BikeType bikeType, String bikeImage, String barCode, float bikeRentalPrice,
+				float deposit, String currency, Timestamp createDate, int currentStatus, int currentBattery,
 				int totalRentTime) {
 		super();
 		this.name = name;
@@ -93,11 +102,11 @@ public class Bike {
 		this.name = name;
 	}
 
-	public String getBikeType() {
+	public Configs.BikeType getBikeType() {
 		return bikeType;
 	}
 
-	public void setBikeType(String bikeType) {
+	public void setBikeType(Configs.BikeType bikeType) {
 		this.bikeType = bikeType;
 	}
 
@@ -117,19 +126,19 @@ public class Bike {
 		this.barCode = barCode;
 	}
 
-	public double getBikeRentalPrice() {
+	public float getBikeRentalPrice() {
 		return bikeRentalPrice;
 	}
 
-	public void setBikeRentalPrice(double bikeRentalPrice) {
+	public void setBikeRentalPrice(float bikeRentalPrice) {
 		this.bikeRentalPrice = bikeRentalPrice;
 	}
 
-	public double getDeposit() {
+	public float getDeposit() {
 		return deposit;
 	}
 
-	public void setDeposit(double deposit) {
+	public void setDeposit(float deposit) {
 		this.deposit = deposit;
 	}
 
