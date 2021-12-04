@@ -72,5 +72,77 @@ public class Invoice {
 		this.timeCreate = timeCreate;
 	}
 
+	public String getInvoiceID() {
+		return invoiceID;
+	}
+
+	public void setInvoiceID(String invoiceID) {
+		this.invoiceID = invoiceID;
+	}
+
+	public String getBikeName() {
+		return bikeName;
+	}
+
+	public void setBikeName(String bikeName) {
+		this.bikeName = bikeName;
+	}
+
+	public double getDeposit() {
+		return deposit;
+	}
+
+	public void setDeposit(double deposit) {
+		this.deposit = deposit;
+	}
+
+	public Timestamp getStart_time() {
+		return start_time;
+	}
+
+	public void setStart_time(Timestamp start_time) {
+		this.start_time = start_time;
+	}
+
+	public Timestamp getEnd_time() {
+		return end_time;
+	}
+
+	public void setEnd_time(Timestamp end_time) {
+		this.end_time = end_time;
+	}
+
+	public int getTotal_rent_time() {
+		return total_rent_time;
+	}
+
+	public void setTotal_rent_time(int total_rent_time) {
+		this.total_rent_time = total_rent_time;
+	}
+
+	public double getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(double subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+
+	public Timestamp getTimeCreate() {
+		return timeCreate;
+	}
+
+	public void setTimeCreate(Timestamp timeCreate) {
+		this.timeCreate = timeCreate;
+	}
+
 	
 }

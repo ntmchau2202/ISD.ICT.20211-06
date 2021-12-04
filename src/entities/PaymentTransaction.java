@@ -42,14 +42,48 @@ public class PaymentTransaction {
 	public PaymentTransaction() {
 		
 	}
-	public PaymentTransaction(String transactionId, CreditCard card, double amount, Timestamp transactionTime, String content,
-			String errorMessage) {
+	public PaymentTransaction(String transactionId, CreditCard card, double amount, Timestamp transactionTime, String content) {
 		super();
 		this.transactionId = transactionId;
 		this.card = card;
 		this.amount = amount;
 		this.transactionTime = transactionTime;
 		this.content = content;
+	}
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+	public CreditCard getCard() {
+		return card;
+	}
+	public void setCard(CreditCard card) {
+		this.card = card;
+	}
+	public double getAmount() {
+		return amount;
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+	public Timestamp getTransactionTime() {
+		return transactionTime;
+	}
+	public void setTransactionTime(Timestamp transactionTime) {
+		this.transactionTime = transactionTime;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
 	

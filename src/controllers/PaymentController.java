@@ -1,5 +1,11 @@
 package controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import entities.CreditCard;
 import entities.Invoice;
 import entities.PaymentTransaction;
@@ -12,6 +18,7 @@ import exceptions.ecobike.RentBikeException;
  *
  */
 public class PaymentController {
+	public PaymentController() {}
 	
 	/**
 	 * Pay for the deposit for the rental bike
@@ -112,6 +119,43 @@ public class PaymentController {
 	 */
 	public void saveInvoice(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
 		
+	}
+	
+	public boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
+		
+		return true;
+	}
+	
+	public boolean validateCardNumber(String cardNumber) {
+		if(cardNumber.length()!=10) return false;
+		try {
+			Integer.parseInt(cardNumber);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean validateCardHolderName(String cardHolderName) {
+		return cardHolderName.matches("^[\\p{L} .'-]+$");
+	}
+	
+	public boolean validateIssueBank(String issueBank) {
+		return issueBank.equalsIgnoreCase("VCB") || issueBank.equalsIgnoreCase("AGB");
+	}
+	
+	public boolean validateExdpirationDate(String expirationDate) {
+		SimpleDateFormat format = new java.text.SimpleDateFormat("mm/yy");
+        try {
+            format.parse(expirationDate);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+	}
+	
+	public boolean validateCardSecurity(String cardSecurity) {
+		return cardSecurity.matches("^[0-9]{3,4}$");
 	}
 	
 }

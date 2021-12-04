@@ -1,7 +1,7 @@
 package views;
 
 import controllers.EcoBikeBaseController;
-import entities.Transaction;
+import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 
@@ -34,8 +34,12 @@ public class TransactionScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void confirmTransaction(Transaction transaction) throws  RentBikeException, EcoBikeUndefinedException {
-		
+	public void confirmTransaction(PaymentTransaction transaction) throws  RentBikeException, EcoBikeUndefinedException {
+		boolean check = validationTransaction(transaction);
+	}
+	
+	public boolean validationTransaction(PaymentTransaction transaction) {
+		return true;
 	}
 
 }
