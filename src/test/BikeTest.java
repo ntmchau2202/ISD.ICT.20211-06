@@ -54,7 +54,6 @@ public class BikeTest {
 		"ABC, normal, laksjfhbg/alkjfhg, 135afg21, 10, 300, VND, 12/3abc/2021",
 		", normal, laksjfhbg/alkjfhg, 135afg21, 10, 300, VND, 12/03/2021",
 		"ABC, , laksjfhbg/alkjfhg, 135afg21, 10, 300, VND, 12/03/2021",
-		
 		"ABC, normal, laksjfhbg/alkjfhg, , 0, 300, VND, 12/03/2021",
 	})
 	public void BikeConstructorTestException(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
