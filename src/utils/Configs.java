@@ -5,5 +5,8 @@ package utils;
  * @author chauntm
  */
 public class Configs {
-
+	public enum BIKE_STATUS {
+		FREE,
+		RENTED,		
+	}
 }
