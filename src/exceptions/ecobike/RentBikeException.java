@@ -6,4 +6,9 @@ package exceptions.ecobike;
  */
 public class RentBikeException extends EcoBikeException {
 
+	public RentBikeException(String message) {
+		super(message);
+		// TODO Auto-generated constructor stub
+	}
+
 }

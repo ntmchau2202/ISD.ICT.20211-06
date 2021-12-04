@@ -5,4 +5,9 @@ package exceptions.ecobike;
  */
 public class NoInformationException extends EcoBikeException {
 
+	public NoInformationException(String message) {
+		super(message);
+		// TODO Auto-generated constructor stub
+	}
+
 }

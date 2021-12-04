@@ -8,7 +8,6 @@ import java.util.Enumeration;
  * @author chauntm
  */
 public class Configs {
-
     //renting service related constant
     public  enum BikeType{
         STANDARDBIKE,
@@ -30,4 +29,8 @@ public class Configs {
     public static float chargeTimeIntervalInMinute = 15f;
     public static float chargeTimeIntervalCost = 3000f;
 
+	public enum BIKE_STATUS {
+		FREE,
+		RENTED,		
+	}
 }
