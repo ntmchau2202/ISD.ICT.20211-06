@@ -1,5 +1,12 @@
 package views;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import controllers.EcoBikeBaseController;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeUndefinedException;
@@ -41,9 +48,6 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @throws RentBikeException If the card info is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	private void validateForm() throws RentBikeException, EcoBikeUndefinedException {
-		
-	}
 	
 	/**
 	 * Get inputs from the form and send request to controller to update the card information
