@@ -65,9 +65,6 @@ public class RentBikeServiceController {
 
 		rentingCost *= Configs.chargeMultiplierDictionary.get(bike.getBikeType());
 
-		//add deposit
-		rentingCost += bike.getDeposit();
-
 		return rentingCost;
 	}
 	
