@@ -19,14 +19,31 @@ public class Customer {
 	 */
 	private String customerName;
 	
+	private String customerEmail;
+	
 	public Customer() {
 		
 	}
 
-	public Customer(String customerID, String customerName) {
+	public Customer(String customerID, String customerName, String customerEmail) {
 		super();
 		this.customerID = customerID;
 		this.customerName = customerName;
+		this.customerEmail = customerEmail;
 	}
+
+	public String getCustomerID() {
+		return customerID;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+	
+	
 	
 }
