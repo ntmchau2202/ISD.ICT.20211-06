@@ -1,6 +1,7 @@
 package entities;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 /**
  * This is the class for object entity Invoice including all information of an invoice
@@ -18,6 +19,8 @@ public class Invoice {
 	 * The name of the bike customers rent
 	 */
 	private String bikeName;
+	
+	private ArrayList<PaymentTransaction> listTransaction;
 	
 	/**
 	 * The amount of deposit customers have to pay before renting the bike
@@ -54,13 +57,24 @@ public class Invoice {
 	 */
 	private Timestamp timeCreate;
 	
+	private int rentID;
+	
+	public int getRentID() {
+		return rentID;
+	}
+
+	public void setRentID(int rentID) {
+		this.rentID = rentID;
+	}
+
 	public Invoice() {
-		
+		listTransaction = new ArrayList<PaymentTransaction>();
 	}
 
 	public Invoice(String invoiceID, String bikeName, double deposit, Timestamp start_time, Timestamp end_time,
 			int total_rent_time, double subtotal, double total, Timestamp timeCreate) {
 		super();
+		listTransaction = new ArrayList<PaymentTransaction>();
 		this.invoiceID = invoiceID;
 		this.bikeName = bikeName;
 		this.deposit = deposit;
@@ -70,6 +84,18 @@ public class Invoice {
 		this.subtotal = subtotal;
 		this.total = total;
 		this.timeCreate = timeCreate;
+	}
+	
+	public void addTransaction(PaymentTransaction transaction) {
+		this.listTransaction.add(transaction);
+	}
+	
+	public void removeTransaction(PaymentTransaction transaction) {
+		this.listTransaction.remove(transaction);
+	}
+	
+	public ArrayList<PaymentTransaction> getTransactionList() {
+		return this.listTransaction;
 	}
 
 	public String getInvoiceID() {

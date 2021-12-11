@@ -85,7 +85,7 @@ public class Bike {
 		this.setCurrency(currency);
 		this.setCreateDate(create_date);
 		this.setTotalRentTime(0);
-		this.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
+		this.setCurrentStatus(Configs.BIKE_STATUS.FREE);
 		this.setCurrentBattery(100);
 	}
 

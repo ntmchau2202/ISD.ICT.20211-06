@@ -23,7 +23,7 @@ public class FunctionalUtils {
 		return false;
 	}
 	
-	public Timestamp stringToTimeStamp(String dateString) throws EcoBikeException {
+	public static Timestamp stringToTimeStamp(String dateString) throws EcoBikeException {
 		try {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 		    Date parsedDate = (Date) dateFormat.parse(dateString);

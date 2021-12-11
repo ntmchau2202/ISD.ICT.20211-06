@@ -9,7 +9,7 @@ import java.util.Enumeration;
  */
 public class Configs {
     //renting service related constant
-    public  enum BikeType{
+    public enum BikeType{
         STANDARDBIKE,
         STANDARDEBIKE,
         TWINBIKE
@@ -32,5 +32,21 @@ public class Configs {
 	public enum BIKE_STATUS {
 		FREE,
 		RENTED,		
+	}
+	
+	public enum TransactionType {
+		// transaction_detail = PAY_DEPOSIT: rent_id; PAY_RENTAL: rent_id; RETURN_DEPOSIT: rent_id;
+		PAY_DEPOSIT("PAY_DEPOSIT"),
+		PAY_RENTAL("PAY_RENTAL"),
+		RETURN_DEPOSIT("RETURN_DEPOSIT");
+
+		private String transactionType;
+		TransactionType(String string) {
+			this.transactionType = string;
+		}
+		
+		public String toString() {
+			return this.transactionType;
+		}
 	}
 }

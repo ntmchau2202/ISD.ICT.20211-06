@@ -17,7 +17,7 @@ public class PaymentTransaction {
 	 * The Credit card entity including all information about the credit card used to pay
 	 * {@link entity.CreditCard}
 	 */
-	private CreditCard card;
+	private String creditCardNumber;
 	
 	/**
 	 * A double value describes the amount of money to make a transaction. The currency is VND
@@ -42,25 +42,18 @@ public class PaymentTransaction {
 	public PaymentTransaction() {
 		
 	}
-	public PaymentTransaction(String transactionId, CreditCard card, double amount, Timestamp transactionTime, String content) {
-		super();
-		this.transactionId = transactionId;
-		this.card = card;
-		this.amount = amount;
-		this.transactionTime = transactionTime;
-		this.content = content;
-	}
+	
 	public String getTransactionId() {
 		return transactionId;
 	}
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
-	public CreditCard getCard() {
-		return card;
+	public String getCreditCardNumber() {
+		return this.creditCardNumber;
 	}
-	public void setCard(CreditCard card) {
-		this.card = card;
+	public void setCreditCardNumber(String creditCardNumber) {
+		this.creditCardNumber = creditCardNumber;
 	}
 	public double getAmount() {
 		return amount;

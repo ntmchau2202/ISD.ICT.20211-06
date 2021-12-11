@@ -14,6 +14,7 @@ import entities.Dock;
 import entities.Invoice;
 import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeException;
+import exceptions.ecobike.InvalidEcoBikeInformationException;
 
 
 public class DBUtils {
@@ -46,6 +47,23 @@ public class DBUtils {
 				result.getDouble("deposit_price"), 
 				result.getString("currency_unit"), 
 				result.getString("create_date"));
+		// get and set bike current status
+		stm = connection.prepareStatement(
+				"SELECT * from BikeStatus WHERE bike_barcode=?");
+		stm.setString(1, bikeBarcode);
+		result = stm.executeQuery();
+		String bikeStatus = result.getString("current_status");
+		Configs.BIKE_STATUS bikeStat;
+		if(bikeStatus.equalsIgnoreCase("FREE")) {
+			bikeStat = Configs.BIKE_STATUS.FREE;
+		} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
+			bikeStat = Configs.BIKE_STATUS.RENTED;
+		} else {
+			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
+		}
+		bikeRes.setCurrentStatus(bikeStat);
+		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
+		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
 		String strRes = JSONUtils.serializeBikeInformation(bikeRes);
 		return strRes;
 	}
@@ -72,20 +90,40 @@ public class DBUtils {
 		if (connection == null) {
 			initializeDBInstance();
 		}
-		PreparedStatement stm = connection.prepareStatement(
+		PreparedStatement stmI = connection.prepareStatement(
 				"SELECT * FROM Invoice WHERE invoice_id=?");
-		stm.setString(1, invoiceID);
-		ResultSet result = stm.executeQuery();
-		Invoice invoiceRes = null; // TODO need to re-consider database and constructor compliance
-//		Invoice invoiceRes = new Invoice(result.getString("invoice_id"), 
-//				String bikeName, 
-//				double deposit, 
-//				Timestamp start_time, 
-//				Timestamp end_time,
-//				int total_rent_time, 
-//				double subtotal, 
-//				double total, 
-//				Timestamp timeCreate);
+		stmI.setString(1, invoiceID);
+		ResultSet resultI = stmI.executeQuery();
+		int rentID = resultI.getInt("rent_id");
+
+		Invoice invoiceRes = new Invoice();
+		while(resultI.next()) {
+			String transactionID = resultI.getString("transaction_id");
+			PreparedStatement stmT = connection.prepareStatement(
+					"SELECT * FROM EcoBikeTransaction WHERE transaction_id=?");
+			stmT.setString(1, transactionID);
+			ResultSet resultT = stmT.executeQuery();
+			PaymentTransaction transaction = new PaymentTransaction();
+			transaction.setAmount(resultT.getFloat("transaction_amount"));
+			transaction.setTransactionId(transactionID);
+			// doing a little bit structured here. Will change it to OO later
+			String transactionDetails = resultT.getString("transaction_detail");
+			if(transactionDetails.contains(Configs.TransactionType.PAY_DEPOSIT.toString()) ||
+					transactionDetails.contains(Configs.TransactionType.PAY_RENTAL.toString()) || 
+							transactionDetails.contains(Configs.TransactionType.RETURN_DEPOSIT.toString())) {
+				transaction.setContent(transactionDetails);
+			} else {
+				throw new InvalidEcoBikeInformationException("invalid transaction message in database");
+			}
+			invoiceRes.addTransaction(transaction);
+		}
+		
+		PreparedStatement stmR = connection.prepareStatement(
+				"SELECT * FROM RentBike WHERE rent_id=?");
+		stmR.setInt(1, rentID);
+		ResultSet resultR = stmR.executeQuery();
+		invoiceRes.setStart_time(resultR.getTimestamp("start_time"));
+		invoiceRes.setEnd_time(resultR.getTimestamp("end_time"));
 		String strRes = JSONUtils.serializeInvoiceInformation(invoiceRes);
 		return strRes;
 	}	
@@ -116,7 +154,7 @@ public class DBUtils {
 		CreditCard card = new CreditCard(result.getString("creditcard_number"), 
 				result.getString("cardholder_name"), 
 				result.getString("issuing_bank"), 
-				result.getString("expiration_date"), // TODO need field this in DB
+				result.getString("expiration_date"), 
 				result.getString("security_code"));
 		String strRes = JSONUtils.serializeCreditCardInformation(card);
 		return strRes;
@@ -130,13 +168,18 @@ public class DBUtils {
 				"SELECT * FROM EcoBikeTransaction WHERE transaction_id=?");
 		stm.setString(1, transactionID);
 		ResultSet result = stm.executeQuery();
-		PaymentTransaction transaction = new PaymentTransaction(result.getString("transaction_id"), 
-//				result.getString("creditcard_number"), // TODO need to compilance this w database
-				null,
-				result.getDouble("transaction_amount"),
-//				result.getDouble("transaction_time"), // TODO need to convert this to timestamp first
-				null,
-				result.getString("transation_detail"));
+		PaymentTransaction transaction = new PaymentTransaction();
+		transaction.setCreditCardNumber(result.getString("creditcard_number"));
+		transaction.setTransactionId(transactionID);
+		transaction.setAmount(result.getFloat("transaction_amount"));
+		String transactionDetails = result.getString("transaction_detail");
+		if(transactionDetails.contains(Configs.TransactionType.PAY_DEPOSIT.toString()) ||
+				transactionDetails.contains(Configs.TransactionType.PAY_RENTAL.toString()) || 
+						transactionDetails.contains(Configs.TransactionType.RETURN_DEPOSIT.toString())) {
+			transaction.setContent(transactionDetails);
+		} else {
+			throw new InvalidEcoBikeInformationException("invalid transaction message in database");
+		}
 		String strRes = JSONUtils.serializeTransactionInformation(transaction);
 		return strRes;
 	}
