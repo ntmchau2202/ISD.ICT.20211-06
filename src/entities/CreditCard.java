@@ -34,9 +34,6 @@ public class CreditCard {
 	 */
 	private String cardSecurity;
 	
-	public CreditCard() {
-		
-	}
 	public CreditCard(String cardNumber, String cardHolderName, String issueBank, String expirationDate,
 			String cardSecurity) {
 		super();

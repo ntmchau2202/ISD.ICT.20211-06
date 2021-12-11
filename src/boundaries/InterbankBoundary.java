@@ -1,6 +1,7 @@
 package boundaries;
 
 import entities.CreditCard;
+import entities.PaymentTransaction;
 import interfaces.InterbankInterface;
 
 /**
@@ -10,19 +11,22 @@ import interfaces.InterbankInterface;
 public class InterbankBoundary implements InterbankInterface {
 
 	@Override
-	public void payDeposit(CreditCard creditCard, int amount, String content) {
+	public PaymentTransaction payDeposit(CreditCard creditCard, int amount, String content) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void returnDeposit(CreditCard creditCard, int amount, String content) {
+	public PaymentTransaction returnDeposit(CreditCard creditCard, int amount, String content) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void payRental(CreditCard creditCard, int amount, String content) {
+	public PaymentTransaction payRental(CreditCard creditCard, int amount, String content) {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}

@@ -43,19 +43,4 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
 		
 	}
 	
-	/**
-	 * Check if the form has any blank field or input that does not satisfy requirements
-	 * @throws RentBikeException If the card info is invalid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 */
-	
-	/**
-	 * Get inputs from the form and send request to controller to update the card information
-	 * @param card The credit card used to update
-	 * @throws RentBikeException If the card is invalid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 */
-	public void updateCard() throws RentBikeException, EcoBikeUndefinedException {
-		
-	}
 }

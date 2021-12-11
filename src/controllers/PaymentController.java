@@ -2,35 +2,70 @@ package controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import boundaries.InterbankBoundary;
 import entities.CreditCard;
 import entities.Invoice;
 import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
+import exceptions.interbank.InterbankException;
+import exceptions.interbank.InvalidCardException;
+import interfaces.InterbankInterface;
 
 /**
- * This is the class controller including all the methods and operations for payment use case
- * @author Duong
+ * This is the class controller including all the methods and operations for payment use case.
+ * <br>@author Duong
  *
  */
 public class PaymentController {
+	
+	/**
+	 * Represent the card used for payment.
+	 */
+	private CreditCard card;
+	
+	/**
+	 * Represent the Interbank subsystem.
+	 */
+	private InterbankInterface interbank;
+	
 	public PaymentController() {}
 	
 	/**
-	 * Pay for the deposit for the rental bike
-	 * @param card  the credit card used to pay
-	 * @param amount  the money to pay deposit
-	 * @param content  the content of transaction
-	 * @throws RentBikeException If the transaction is invalid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @return the transaction entity ({@link entities.PaymentTransaction}
+	 * Pay for the deposit for the rental bike and return message result.
+	 * <br>@param cardNumber  the credit card number
+	 * <br>@param amount  the money to pay deposit
+	 * <br>@param content  the content of transaction
+	 * <br>@throws RentBikeException If the transaction is invalid
+	 * <br>@throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 * <br>@return {@link java.util.Map Map} represent the payment result with a
+	 *         message.
 	 */
-	public PaymentTransaction payDeposit(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
-		return null;
+	@SuppressWarnings("unused")
+	public Map<String, String> payDeposit(int amount, String content, 
+			String cardNumber, String cardHolderName, 
+			String issueBank, String expirationDate, 
+			String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+		Map<String, String> result = new Hashtable<String, String>();
+		result.put("RESULT", "PAYMENT FAILED!");
+		try {
+			this.card = new CreditCard(cardNumber, cardHolderName, issueBank, 
+					getExpirationDate(expirationDate), securityCode);
+			this.interbank = new InterbankBoundary();
+			PaymentTransaction transaction = interbank.payDeposit(card, amount, content);
+			result.put("RESULT", "PAYMENT SUCCESSFUL!");
+			result.put("MESSAGE", "You have succesffully paid the deposit!");
+		} catch (Exception e) {
+			result.put("MESSAGE", e.getMessage());
+		}
+		return result;
 	}
 	
 	/**
@@ -40,10 +75,27 @@ public class PaymentController {
 	 * @param content  the content of transaction
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @return the transaction entity ({@link entities.PaymentTransaction}
+	 * <br>@return {@link java.util.Map Map} represent the payment result with a
+	 *         message.
 	 */
-	public PaymentTransaction returnDeposit(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
-		return null;
+	@SuppressWarnings("unused")
+	public Map<String, String> returnDeposit(int amount, String content, 
+			String cardNumber, String cardHolderName, 
+			String issueBank, String expirationDate, 
+			String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+		Map<String, String> result = new Hashtable<String, String>();
+		result.put("RESULT", "RETURN FAILED!");
+		try {
+			this.card = new CreditCard(cardNumber, cardHolderName, issueBank, 
+					getExpirationDate(expirationDate), securityCode);
+			this.interbank = new InterbankBoundary();
+			PaymentTransaction transaction = interbank.returnDeposit(card, amount, content);
+			result.put("RESULT", "RETURN SUCCESSFUL!");
+			result.put("MESSAGE", "You have succesffully receive the deposit!");
+		} catch (Exception e) {
+			result.put("MESSAGE", e.getMessage());
+		}
+		return result;
 	}
 	
 	/**
@@ -53,10 +105,27 @@ public class PaymentController {
 	 * @param content  the content of transaction
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @return the transaction entity ({@link entities.PaymentTransaction}
+	 * <br>@return {@link java.util.Map Map} represent the payment result with a
+	 *         message.
 	 */
-	public void payRental(CreditCard card, double amount, String content) throws RentBikeException, EcoBikeUndefinedException {
-		
+	@SuppressWarnings("unused")
+	public Map<String, String> payRental(int amount, String content, 
+			String cardNumber, String cardHolderName, 
+			String issueBank, String expirationDate, 
+			String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+		Map<String, String> result = new Hashtable<String, String>();
+		result.put("RESULT", "PAYMENT FAILED!");
+		try {
+			this.card = new CreditCard(cardNumber, cardHolderName, issueBank, 
+					getExpirationDate(expirationDate), securityCode);
+			this.interbank = new InterbankBoundary();
+			PaymentTransaction transaction = interbank.payRental(card, amount, content);
+			result.put("RESULT", "PAYMNET SUCCESSFUL!");
+			result.put("MESSAGE", "You have succesffully pay the rental!");
+		} catch (Exception e) {
+			result.put("MESSAGE", e.getMessage());
+		}
+		return result;
 	}
 	
 	/**
@@ -156,6 +225,40 @@ public class PaymentController {
 	
 	public boolean validateCardSecurity(String cardSecurity) {
 		return cardSecurity.matches("^[0-9]{3,4}$");
+	}
+	
+	/**
+	 * Validate the input date which should be in the format "mm/yy", and then
+	 * return a {@link java.lang.String String} representing the date in the
+	 * required format "mmyy".
+	 * 
+	 * <br>@param date - the {@link java.lang.String String} represents the input date
+	 * <br>@return {@link java.lang.String String} - date in the required format
+	 * <br>@throws InvalidCardException - If the string does not represent a valid date
+	 * in the expected format
+	 */
+	public String getExpirationDate(String date) throws InvalidCardException {
+		String strs[] = date.split("/");
+		if(strs.length != 2) {
+			throw new InvalidCardException();
+		}
+		
+		String expirationDate = null;
+		int month = -1;
+		int year = -1;
+		
+		try {
+			month = Integer.parseInt(strs[0]);
+			year = Integer.parseInt(strs[1]);
+			if(month < 1 || month > 12 || year < Calendar.getInstance()
+					.get(Calendar.YEAR) % 100 || year > 100) {
+				throw new InvalidCardException();
+			}
+			expirationDate = strs[0] + strs[1];
+		} catch (Exception e) {
+			throw new InvalidCardException();
+		}
+		return expirationDate;
 	}
 	
 }
