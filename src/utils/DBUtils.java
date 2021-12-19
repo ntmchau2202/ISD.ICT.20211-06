@@ -183,6 +183,19 @@ public class DBUtils {
 		String strRes = JSONUtils.serializeTransactionInformation(transaction);
 		return strRes;
 	}
-	
-	
+
+	public static Bike getBike(String barcode) throws EcoBikeException, SQLException {
+		if (connection == null) {
+			initializeDBInstance();
+		}
+		//todo: return bike entities
+		return new Bike();
+	}
+
+	public static void updateBikeStatus(String bike) throws EcoBikeException, SQLException {
+		if (connection == null) {
+			initializeDBInstance();
+		}
+		//todo: update bike entities
+	}
 }
