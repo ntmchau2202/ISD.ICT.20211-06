@@ -61,15 +61,15 @@ public class RentBikeServiceController {
 	 * @param  bike Barcode of the bike to be rented
 	 * @return a float value expresses the money have to pay in currency VND
 	 */
-	public float calculateFee(Bike bike) {
+	public float calculateFee(String bikeType, float rentTime) {
 		//renting cost
-		float rentingCost = bike.getTotalRentTime() <= Configs.freeOfChargeTimeInMinute
+		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute
 				? 0
-				: bike.getTotalRentTime() - Configs.firstChargeTimeIntervalInMinute > 0
-					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((bike.getTotalRentTime() - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
+				: rentTime - Configs.firstChargeTimeIntervalInMinute > 0
+					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
 					: Configs.firstChargeTimeIntervalCost;
 
-		rentingCost *= Configs.chargeMultiplierDictionary.get(bike.getBikeType());
+		rentingCost *= Configs.chargeMultiplierDictionary.get(bikeType);
 
 		return rentingCost;
 	}
