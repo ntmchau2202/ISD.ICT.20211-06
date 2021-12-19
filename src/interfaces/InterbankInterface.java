@@ -1,6 +1,7 @@
 package interfaces;
 
 import entities.CreditCard;
+import entities.PaymentTransaction;
 
 /**
  * This interface provides functions that the interbank subsystem must be implemented for its communication with other subsystem
@@ -9,32 +10,35 @@ import entities.CreditCard;
  */
 public interface InterbankInterface {
 	/**
-	 * Perform pay deposit operation on the given credit card, with the specified amount of money
-	 * @param creditCard The credit card used for transaction
-	 * @param amount The amount of transaction
-	 * @param content Details about the transaction
+	 * Perform pay deposit operation on the given credit card, with the specified amount of money.
+	 * <br>@param creditCard The credit card used for transaction
+	 * <br>@param amount The amount of transaction
+	 * <br>@param content Details about the transaction
+	 * <br>@return PaymentTransaction  the transaction {@link entities.PaymentTransaction} 
 	 */
-	public void payDeposit(CreditCard creditCard, int amount, String content);
+	public PaymentTransaction payDeposit(CreditCard creditCard, int amount, String content);
 
 	/**
-	 * Perform return deposit operation on the given credit card, with the specified amount of money
-	 * @param creditCard The credit card used for transaction
-	 * @param amount The amount of transaction
-	 * @param content Details about the transaction
+	 * Perform return deposit operation on the given credit card, with the specified amount of money.
+	 * <br>@param creditCard The credit card used for transaction
+	 * <br>@param amount The amount of transaction
+	 * <br>@param content Details about the transaction
+	 * <br>@return PaymentTransaction  the transaction {@link entities.PaymentTransaction}
 	 */
-	public void returnDeposit(CreditCard creditCard, int amount, String content);
+	public PaymentTransaction returnDeposit(CreditCard creditCard, int amount, String content);
 	
 	/**
-	 * Perform pay rental operation on the given credit card, with the specified amount of money
-	 * @param creditCard The credit card used for transaction
-	 * @param amount The amount of transaction
-	 * @param content Details about the transaction
+	 * Perform pay rental operation on the given credit card, with the specified amount of money.
+	 * <br>@param creditCard The credit card used for transaction
+	 * <br>@param amount The amount of transaction
+	 * <br>@param content Details about the transaction
+	 * <br>@return PaymentTransaction  the transaction {@link entities.PaymentTransaction}
 	 */
-	public void payRental(CreditCard creditCard, int amount, String content);
+	public PaymentTransaction payRental(CreditCard creditCard, int amount, String content);
 	
 	/**
-	 * Get current balance of a given credit card
-	 * @param creditCard The card with the balance to be queried
+	 * Get current balance of a given credit card.
+	 * <br>@param creditCard The card with the balance to be queried
 	 */
 	public void getBalance(CreditCard creditCard);
 }

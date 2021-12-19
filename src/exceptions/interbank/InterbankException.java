@@ -2,8 +2,12 @@ package exceptions.interbank;
 
 /**
  * Exceptions on the interbank side
- * @author chauntm
+ * <br>@author chauntm
  */
-public class InterbankException {
 
+@SuppressWarnings("serial")
+public class InterbankException extends RuntimeException {
+	public InterbankException(String message) {
+		super(message);
+	}
 }
