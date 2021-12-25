@@ -1,6 +1,8 @@
 package views;
 
+import boundaries.RentBikeServiceBoundary;
 import controllers.EcoBikeBaseController;
+import entities.Bike;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
@@ -8,15 +10,28 @@ import controllers.EcoBikeBaseController;
  *
  */
 public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
+	private static BikeInformationScreenHandler bikeInfoHandler;
+	private Bike currentBike;
+	protected BikeInformationScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
+		super(screenTitle, prevScreen);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Initialize the handler for bike information screen
 	 * @param screenTitle Title of the screen
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected BikeInformationScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
-		// TODO Auto-generated constructor stub
+	public static BikeInformationScreenHandler getBikeInformationScreenHandler(Bike bikeToView, EcoBikeBaseScreenHandler prevScreen) {
+		if (bikeInfoHandler == null) {
+			bikeInfoHandler = new BikeInformationScreenHandler("EcoBike bike "+ bikeToView.getName() + "information", prevScreen);
+		}
+		bikeInfoHandler.prevScreen = prevScreen;
+		if (bikeToView != null) {
+			bikeInfoHandler.currentBike = bikeToView;
+		}
+		return bikeInfoHandler;
 	}
 
 	@Override
@@ -29,7 +44,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	 * Request the controller to start rent bike process for the currently selected bike
 	 */
 	public void rentBike() {
-		
+		PaymentMethodScreenHandler paymentScreenHandler = PaymentMethodScreenHandler.getPaymentMethodScreenHandler(currentBike, this);
+		// paymentScreenHandler.show();
 	}
 	
 	/**

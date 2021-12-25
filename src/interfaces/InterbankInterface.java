@@ -16,7 +16,7 @@ public interface InterbankInterface {
 	 * <br>@param content Details about the transaction
 	 * <br>@return PaymentTransaction  the transaction {@link entities.PaymentTransaction} 
 	 */
-	public PaymentTransaction payDeposit(CreditCard creditCard, int amount, String content);
+	public PaymentTransaction payDeposit(CreditCard creditCard, double amount, String content);
 
 	/**
 	 * Perform return deposit operation on the given credit card, with the specified amount of money.
@@ -25,7 +25,7 @@ public interface InterbankInterface {
 	 * <br>@param content Details about the transaction
 	 * <br>@return PaymentTransaction  the transaction {@link entities.PaymentTransaction}
 	 */
-	public PaymentTransaction returnDeposit(CreditCard creditCard, int amount, String content);
+	public PaymentTransaction returnDeposit(CreditCard creditCard, double amount, String content);
 	
 	/**
 	 * Perform pay rental operation on the given credit card, with the specified amount of money.
@@ -34,7 +34,7 @@ public interface InterbankInterface {
 	 * <br>@param content Details about the transaction
 	 * <br>@return PaymentTransaction  the transaction {@link entities.PaymentTransaction}
 	 */
-	public PaymentTransaction payRental(CreditCard creditCard, int amount, String content);
+	public PaymentTransaction payRental(CreditCard creditCard, double amount, String content);
 	
 	/**
 	 * Get current balance of a given credit card.

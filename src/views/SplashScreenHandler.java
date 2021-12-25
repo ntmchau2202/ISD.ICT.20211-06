@@ -1,6 +1,7 @@
 package views;
 
 import controllers.EcoBikeBaseController;
+import controllers.EcoBikeInformationController;
 
 /**
  * This class spawns a handler for the first splash screen of the EcoBike application
@@ -9,20 +10,24 @@ import controllers.EcoBikeBaseController;
  */
 
 public class SplashScreenHandler extends EcoBikeBaseScreenHandler {
+	protected SplashScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
+		super(screenTitle, prevScreen);
+		// TODO Auto-generated constructor stub
+		EcoBikeInformationController.getEcoBikeInformationController();
+	}
+
 	/**
 	 * Initialize handler for splash screen of EcoBike application
 	 * @param screenTitle Title of the screen
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected SplashScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub
+		// TODO setup and display the screen here
+		// then flash to the main screen
+		
 		
 	}
 

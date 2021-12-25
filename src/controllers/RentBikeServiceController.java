@@ -5,6 +5,7 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.InterbankInterface;
 import entities.Bike;
+import entities.CreditCard;
 import utils.*;
 
 import java.sql.SQLException;
@@ -18,8 +19,8 @@ public class RentBikeServiceController {
 	/**
 	 * Initialize the controller for EcoBike rent bike service
 	 */
-	public RentBikeServiceController() {
-		
+	public RentBikeServiceController(InterbankInterface interbankSystem) {
+		this.interbankSystem = interbankSystem;
 	}
 
 	/**
@@ -31,9 +32,9 @@ public class RentBikeServiceController {
 	 */
 	public void rentBike(String bikeBarcode) throws EcoBikeException, SQLException {
 		//get bike from repository
-		entities.Bike bike = DBUtils.getBike(bikeBarcode);
-
+		Bike bike = DBUtils.getBike(bikeBarcode);
 		//show payment method screen
+		startCountingRentTime(bike);
 
 	}
 	
@@ -43,7 +44,7 @@ public class RentBikeServiceController {
 	 */
 	public void pauseBikeRental(String bikeBarcode) throws EcoBikeException, SQLException {
 
-		entities.Bike bike = DBUtils.getBike(bikeBarcode);
+		Bike bike = DBUtils.getBike(bikeBarcode);
 	}
 	
 	/**
@@ -53,7 +54,7 @@ public class RentBikeServiceController {
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
 	public void returnBike(String bikeBarcode) throws EcoBikeException, SQLException {
-		entities.Bike bike = DBUtils.getBike(bikeBarcode);
+		Bike bike = DBUtils.getBike(bikeBarcode);
 	}
 	
 	/**
@@ -88,14 +89,15 @@ public class RentBikeServiceController {
 	 * Request to pay for rental bike
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void requestToPay() throws EcoBikeUndefinedException {
+	public void requestToPay(CreditCard card, double amount, String content) throws EcoBikeUndefinedException {
 		//todo: request to pay
+		this.interbankSystem.payRental(card, amount, content);
 	}
 	
 	/**
 	 * Invoke counter for tracking rental time
 	 */
-	private void startCountingRentTime() {
+	private void startCountingRentTime(Bike bike) {
 		//todo: start counting rental time
 	}
 

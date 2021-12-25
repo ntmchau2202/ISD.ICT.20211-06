@@ -1,6 +1,13 @@
 package views;
 
+import java.sql.SQLException;
+
 import controllers.EcoBikeBaseController;
+import controllers.EcoBikeInformationController;
+import entities.Bike;
+import entities.Dock;
+import exceptions.ecobike.EcoBikeException;
+import utils.JSONUtils;
 
 /**
  * This class creates a handler for getting behaviors of customer on dock information screen 
@@ -8,6 +15,21 @@ import controllers.EcoBikeBaseController;
  *
  */
 public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
+	private static DockInformationScreenHandler dockInformationScreenHandler;
+
+	protected DockInformationScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
+		super(screenTitle, prevScreen);
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public static DockInformationScreenHandler getDockInformationScreenHandler(Dock dockToDisplay, EcoBikeBaseScreenHandler prevScreen) {
+		if (dockInformationScreenHandler == null) {
+			dockInformationScreenHandler = new DockInformationScreenHandler("EcoBike Dock " + dockToDisplay.getName() + " information", prevScreen);
+		}
+		dockInformationScreenHandler.prevScreen = prevScreen;
+		return dockInformationScreenHandler;
+	}
 
 	/**
 	 * Initialize handler for dock information screen
@@ -15,11 +37,7 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected DockInformationScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
-		// TODO Auto-generated constructor stub
-	}
-
+	
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
@@ -28,9 +46,13 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	
 	/**
 	 * Request the controller to return information about the bike selected and call the screen for displaying data
+	 * @throws SQLException 
+	 * @throws EcoBikeException 
 	 */
-	public void viewBikeInformation() {
-		
+	public void viewBikeInformation(String bikeBarcode) throws EcoBikeException, SQLException {
+		String bikeInf = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
+		Bike bike = JSONUtils.toBike(bikeInf);
+		BikeInformationScreenHandler bikeScreen = BikeInformationScreenHandler.getBikeInformationScreenHandler(bike, this);
 	}
 	
 	

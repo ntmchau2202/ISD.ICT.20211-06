@@ -2,6 +2,8 @@ package entities;
 
 import java.util.ArrayList;
 
+import utils.JSONUtils;
+
 /**
  * This is the class for object entity Customer including information of the customer
  * @author Duong
@@ -41,7 +43,7 @@ public class Customer {
 	}
 
 	public String getCustomerEmail() {
-		return customerEmail;
+		return JSONUtils.serializeCustomerInformation(this);
 	}
 	
 	

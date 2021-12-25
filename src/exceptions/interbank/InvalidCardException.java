@@ -7,7 +7,7 @@ package exceptions.interbank;
  */
 @SuppressWarnings("serial")
 public class InvalidCardException extends InterbankException {
-	public InvalidCardException() {
-		super("Error: Invalid card!");
+	public InvalidCardException(String string) {
+		super(string);
 	}
 }

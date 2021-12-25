@@ -16,9 +16,20 @@ import utils.DBUtils;
  *
  */
 public class EcoBikeInformationController extends EcoBikeBaseController {
-	public EcoBikeInformationController() {
-
+	
+	private static EcoBikeInformationController ecobikeInfoController;
+	
+	private EcoBikeInformationController() {
+		super();
 	}
+	
+	public static EcoBikeInformationController getEcoBikeInformationController()  {
+		if (ecobikeInfoController == null) {
+			ecobikeInfoController = new EcoBikeInformationController();
+		}
+		return ecobikeInfoController;
+	}
+	
 	/**
 	 * Gets information about a given dock
 	 * @param dock The dock having information to be queried

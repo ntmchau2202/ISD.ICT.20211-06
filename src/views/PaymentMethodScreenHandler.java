@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import controllers.EcoBikeBaseController;
+import entities.Bike;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
@@ -18,22 +19,39 @@ import exceptions.ecobike.RentBikeException;
  *
  */
 public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
+	private static PaymentMethodScreenHandler paymentScreenHandler;
+	private Bike bikeToBeRent;
+	protected PaymentMethodScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
+		super(screenTitle, prevScreen);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Initialize handler for paying method screen of EcoBike application
 	 * @param screenTitle Title of the screen
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected PaymentMethodScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
-		// TODO Auto-generated constructor stub
-	}
+
+	
 
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public static PaymentMethodScreenHandler getPaymentMethodScreenHandler(Bike bike, EcoBikeBaseScreenHandler prevScreen) {
+		if (paymentScreenHandler == null) {
+			paymentScreenHandler = new PaymentMethodScreenHandler("Register payment method for EcoBike", prevScreen);
+		}
+		paymentScreenHandler.prevScreen = prevScreen;
+		if (bike != null) {
+			paymentScreenHandler.bikeToBeRent = bike;
+		}
+		return paymentScreenHandler;
+	}
+	
 
 	/**
 	 * Get payment method information from the form and go to transaction screen
