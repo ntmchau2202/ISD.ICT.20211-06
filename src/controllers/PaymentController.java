@@ -129,16 +129,6 @@ public class PaymentController {
 	}
 	
 	/**
-	 * Request to update payment method
-	 * @param card  The credit card used to pay
-	 * @throws RentBikeException If the card is invalid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 */
-	public void requestToUpdatePaymentMethod(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-		
-	}
-	
-	/**
 	 * Display a screen including transaction information
 	 * @param transaction  The transaction entity ({@link entities.PaymentTransaction}
 	 * @throws RentBikeException If the transaction is not valid
