@@ -122,11 +122,11 @@ public class JSONUtils {
 			transaction.setAmount(jsonTrans.getFloat("transaction_amount"));
 			transaction.setContent(jsonTrans.getString("transaction_detail"));
 			transaction.setCreditCardNumber(jsonTrans.getString("creditcard_number"));
-			transaction.setTransactionTime(FunctionalUtils.stringToTimeStamp(jsonTrans.getString("transaction_time")));
+			transaction.setTransactionTime(jsonTrans.getString("transaction_time"));
 			invoice.addTransaction(transaction);
 		}
-		invoice.setStart_time(FunctionalUtils.stringToTimeStamp(result.getString("start_time")));
-		invoice.setEnd_time(FunctionalUtils.stringToTimeStamp(result.getString("end_time")));
+		invoice.setStartTime(result.getString("start_time"));
+		invoice.setEndTime(result.getString("end_time"));
 		return invoice;
 	}
 	
@@ -150,7 +150,7 @@ public class JSONUtils {
 		transaction.setContent(result.getString("transaction_detail"));
 		transaction.setCreditCardNumber(result.getString("creditcard_number"));
 		transaction.setTransactionId(result.getString("transaction_id"));
-		transaction.setTransactionTime(FunctionalUtils.stringToTimeStamp(result.getString("transaction_time")));
+		transaction.setTransactionTime(result.getString("transaction_time"));
 		return transaction;
 	}
 	

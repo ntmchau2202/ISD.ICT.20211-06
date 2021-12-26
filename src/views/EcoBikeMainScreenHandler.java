@@ -1,6 +1,13 @@
 package views;
 
+import java.sql.SQLException;
+
 import controllers.EcoBikeBaseController;
+import controllers.EcoBikeInformationController;
+import entities.Bike;
+import entities.Dock;
+import exceptions.ecobike.EcoBikeException;
+import utils.JSONUtils;
 
 /**
  * This class creates a handler for displaying the map and getting customer's activities on the main screen
@@ -15,10 +22,20 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected EcoBikeMainScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
+	
+	private static EcoBikeMainScreenHandler mainScreenHandler;
+	
+	protected EcoBikeMainScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
+		super(screenTitle, prevScreen);
 	}
-
+	
+	public static EcoBikeMainScreenHandler getMainScreenHandler(EcoBikeBaseScreenHandler prevScreen) {
+		if (mainScreenHandler == null) {
+			mainScreenHandler = new EcoBikeMainScreenHandler("EcoBike Main", null);
+		}
+		mainScreenHandler.prevScreen = prevScreen;
+		return mainScreenHandler;
+	}
 	@Override
 	protected void initialize() {
 		
@@ -33,9 +50,15 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	
 	/**
 	 * Request the information controller to get information about the selected dock
+	 * @throws EcoBikeException 
+	 * @throws SQLException 
 	 */
-	public void viewDockInformation() {
-		
+	public void viewDockInformation(String dockID) throws SQLException, EcoBikeException {
+		String dockInf = EcoBikeInformationController.getEcoBikeInformationController().getDockInformation(dockID);
+		Dock dock = JSONUtils.toDock(dockInf);
+		// use the dock entity to display on the screen here
+		DockInformationScreenHandler dockScreen = DockInformationScreenHandler.getDockInformationScreenHandler(dock, this);
+		// dockScreen.show();
 	}
 	
 	/**
@@ -43,5 +66,12 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	 */
 	public void scanBarcode() {
 		
+	}
+	
+	public void viewBikeInformation(String bikeBarcode) throws EcoBikeException, SQLException {
+		String bikeInf = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
+		Bike bike = JSONUtils.toBike(bikeInf);
+		BikeInformationScreenHandler bikeScreen = BikeInformationScreenHandler.getBikeInformationScreenHandler(bike, this);
+		// bikeScreen.show();		
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.Configs;
 import utils.FunctionalUtils;
+import utils.JSONUtils;
 
 /**
  * This is the class for object entity Bike including information of a bike
@@ -69,10 +70,6 @@ public class Bike {
 	 * The total time the customer has rent calculated in minute
 	 */
 	private int totalRentTime;
-
-	public Bike() {
-		
-	}
 
 	public Bike(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
 			double deposit, String currency, String create_date) throws InvalidEcoBikeInformationException {
@@ -233,7 +230,7 @@ public class Bike {
 	
 	// return a JSON string containing information about the string
 	public String toString() {
-		return "";
+		return JSONUtils.serializeBikeInformation(this);
 	}
 	
 }

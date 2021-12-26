@@ -2,6 +2,7 @@ package entities;
 
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.FunctionalUtils;
+import utils.JSONUtils;
 
 /**
  * This is the class for object entity Dock including all information of the dock
@@ -140,6 +141,10 @@ public class Dock {
 			throw new InvalidEcoBikeInformationException("number of free space in dock must be non-negative");
 		}
 		this.numDockSpaceFree = numDockSpaceFree;
+	}
+	
+	public String toString() {
+		return JSONUtils.serializeDockInformation(this);
 	}
 	
 	

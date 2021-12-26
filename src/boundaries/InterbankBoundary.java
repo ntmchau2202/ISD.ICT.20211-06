@@ -1,5 +1,6 @@
 package boundaries;
 
+import controllers.InterbankController;
 import entities.CreditCard;
 import entities.PaymentTransaction;
 import interfaces.InterbankInterface;
@@ -9,23 +10,31 @@ import interfaces.InterbankInterface;
  * It must have functions in InterbankInterface for further communication with the EcoBike subsystems
  */
 public class InterbankBoundary implements InterbankInterface {
+	private String bankName;
+	private InterbankController interbankController;
+	
+	public InterbankBoundary(String issuingBank) {
+		super();
+		this.bankName = issuingBank;
+		interbankController = new InterbankController();
+	}
 
 	@Override
-	public PaymentTransaction payDeposit(CreditCard creditCard, int amount, String content) {
+	public PaymentTransaction payDeposit(CreditCard creditCard, double amount, String content) {
 		return null;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public PaymentTransaction returnDeposit(CreditCard creditCard, int amount, String content) {
+	public PaymentTransaction returnDeposit(CreditCard creditCard, double amount, String content) {
 		return null;
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public PaymentTransaction payRental(CreditCard creditCard, int amount, String content) {
+	public PaymentTransaction payRental(CreditCard creditCard, double amount, String content) {
 		return null;
 		// TODO Auto-generated method stub
 		

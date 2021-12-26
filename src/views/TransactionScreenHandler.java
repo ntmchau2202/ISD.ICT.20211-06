@@ -1,5 +1,6 @@
 package views;
 
+import boundaries.RentBikeServiceBoundary;
 import controllers.EcoBikeBaseController;
 import entities.CreditCard;
 import entities.PaymentTransaction;
@@ -12,16 +13,22 @@ import exceptions.ecobike.RentBikeException;
  *
  */
 public class TransactionScreenHandler extends EcoBikeBaseScreenHandler {
-	/**
-	 * Initialize handler for transaction screen of EcoBike application
-	 * @param screenTitle Title of the screen
-	 * @param controller Controller for handling request from the screen
-	 * @param prevScreen An instance to the screen that called this screen
-	 */
-	protected TransactionScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
+	private static TransactionScreenHandler transactionScreenHandler;
+	private PaymentTransaction transaction;
+	protected TransactionScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
+		super(screenTitle, prevScreen);
 		// TODO Auto-generated constructor stub
 	}
+
+	public static TransactionScreenHandler getTransactionScreenHandler(PaymentTransaction transaction, EcoBikeBaseScreenHandler prevScreen) {
+		if (transactionScreenHandler == null) {
+			transactionScreenHandler = new TransactionScreenHandler("Transaction details", prevScreen);
+		}
+		transactionScreenHandler.prevScreen = prevScreen;
+		transactionScreenHandler.transaction = transaction;
+		return transactionScreenHandler;
+	}
+
 
 	@Override
 	protected void initialize() {
@@ -35,8 +42,16 @@ public class TransactionScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void confirmTransaction(PaymentTransaction transaction) throws  RentBikeException, EcoBikeUndefinedException {
-		boolean check = validationTransaction(transaction);
+	public void confirmTransaction(String transactionType) throws  RentBikeException, EcoBikeUndefinedException {
+		if (validationTransaction(transaction)) {
+			if (transactionType.compareToIgnoreCase("RENT") == 0) {
+//				RentBikeServiceBoundary.getRentBikeService().rentBike(null);
+			}
+			// show confirmation dialog here
+			// then return to main screen
+			EcoBikeMainScreenHandler mainScreenHandler = EcoBikeMainScreenHandler.getMainScreenHandler(this);
+			// mainScreenHandler.show();
+		}
 	}
 	
 	public boolean validationTransaction(PaymentTransaction transaction) {

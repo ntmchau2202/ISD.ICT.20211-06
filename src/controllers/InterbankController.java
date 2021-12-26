@@ -5,6 +5,8 @@ package controllers;
  * @author chauntm
  *
  */
-public class InterbankController {
-
+public class InterbankController {	
+	public InterbankController() {
+		super();
+	}
 }

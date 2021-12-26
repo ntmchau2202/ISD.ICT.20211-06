@@ -1,5 +1,6 @@
 package interfaces;
 
+import entities.Bike;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 
@@ -16,7 +17,7 @@ public interface RentBikeServiceInterface {
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void rentBike(String bikeBarcode) throws RentBikeException, EcoBikeUndefinedException;
+	public void rentBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException;
 	
 	/**
 	 * Calls the Return bike sequence of operations for customers to return bike
@@ -24,7 +25,7 @@ public interface RentBikeServiceInterface {
 	 * @throws RentBikeException If the bike is not currently available or the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void returnBike(String bikeBarcode) throws RentBikeException, EcoBikeUndefinedException;
+	public void returnBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException;
 	
 	/**
 	 * Calls the Pause bike rental sequence of operations for customers to pause bike rental
@@ -32,5 +33,5 @@ public interface RentBikeServiceInterface {
 	 * @throws RentBikeException If the bike is not currently available, not being rented or the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void pauseBikeRental(String bikeBarcode) throws RentBikeException, EcoBikeUndefinedException;
+	public void pauseBikeRental(Bike bike) throws RentBikeException, EcoBikeUndefinedException;
 }

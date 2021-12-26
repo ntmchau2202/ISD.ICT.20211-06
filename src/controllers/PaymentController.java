@@ -27,16 +27,14 @@ import interfaces.InterbankInterface;
 public class PaymentController {
 	
 	/**
-	 * Represent the card used for payment.
-	 */
-	private CreditCard card;
-	
-	/**
 	 * Represent the Interbank subsystem.
 	 */
 	private InterbankInterface interbank;
 	
-	public PaymentController() {}
+	public PaymentController(InterbankInterface interbank) {
+		super();
+		this.interbank = interbank;
+	}
 	
 	/**
 	 * Pay for the deposit for the rental bike and return message result.
@@ -50,15 +48,10 @@ public class PaymentController {
 	 */
 	@SuppressWarnings("unused")
 	public Map<String, String> payDeposit(int amount, String content, 
-			String cardNumber, String cardHolderName, 
-			String issueBank, String expirationDate, 
-			String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+			CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
 		Map<String, String> result = new Hashtable<String, String>();
 		result.put("RESULT", "PAYMENT FAILED!");
 		try {
-			this.card = new CreditCard(cardNumber, cardHolderName, issueBank, 
-					getExpirationDate(expirationDate), securityCode);
-			this.interbank = new InterbankBoundary();
 			PaymentTransaction transaction = interbank.payDeposit(card, amount, content);
 			result.put("RESULT", "PAYMENT SUCCESSFUL!");
 			result.put("MESSAGE", "You have succesffully paid the deposit!");
@@ -80,15 +73,10 @@ public class PaymentController {
 	 */
 	@SuppressWarnings("unused")
 	public Map<String, String> returnDeposit(int amount, String content, 
-			String cardNumber, String cardHolderName, 
-			String issueBank, String expirationDate, 
-			String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+			CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
 		Map<String, String> result = new Hashtable<String, String>();
 		result.put("RESULT", "RETURN FAILED!");
 		try {
-			this.card = new CreditCard(cardNumber, cardHolderName, issueBank, 
-					getExpirationDate(expirationDate), securityCode);
-			this.interbank = new InterbankBoundary();
 			PaymentTransaction transaction = interbank.returnDeposit(card, amount, content);
 			result.put("RESULT", "RETURN SUCCESSFUL!");
 			result.put("MESSAGE", "You have succesffully receive the deposit!");
@@ -110,15 +98,12 @@ public class PaymentController {
 	 */
 	@SuppressWarnings("unused")
 	public Map<String, String> payRental(int amount, String content, 
-			String cardNumber, String cardHolderName, 
-			String issueBank, String expirationDate, 
-			String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+			CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
 		Map<String, String> result = new Hashtable<String, String>();
 		result.put("RESULT", "PAYMENT FAILED!");
 		try {
-			this.card = new CreditCard(cardNumber, cardHolderName, issueBank, 
-					getExpirationDate(expirationDate), securityCode);
-			this.interbank = new InterbankBoundary();
+//			CreditCard card = new CreditCard(cardNumber, cardHolderName, issueBank, 
+//					expirationDate, securityCode);
 			PaymentTransaction transaction = interbank.payRental(card, amount, content);
 			result.put("RESULT", "PAYMNET SUCCESSFUL!");
 			result.put("MESSAGE", "You have succesffully pay the rental!");
@@ -180,12 +165,31 @@ public class PaymentController {
 		
 	}
 	
-	public boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
+	private boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
+		if (!validateCardNumber(card.getCardNumber())) {
+			return false;
+		}
+		
+		if (!validateCardHolderName(card.getCardHolderName())) {
+			return false;
+		}
+		
+		if (!validateIssueBank(card.getIssueBank())) {
+			return false;
+		}
+		
+		if (!validateExprirationDate(card.getExpirationDate().toString())) {
+			return false;
+		}
+		
+		if (!validateCardSecurity(card.getCardSecurity())) {
+			return false;
+		}
 		
 		return true;
 	}
 	
-	public boolean validateCardNumber(String cardNumber) {
+	private boolean validateCardNumber(String cardNumber) {
 		if(cardNumber.length()!=10) return false;
 		try {
 			Integer.parseInt(cardNumber);
@@ -195,60 +199,30 @@ public class PaymentController {
 		return true;
 	}
 	
-	public boolean validateCardHolderName(String cardHolderName) {
-		return cardHolderName.matches("^[\\p{L} .'-]+$");
+	private boolean validateCardHolderName(String cardHolderName) {
+//		return cardHolderName.matches("^[\\p{L} .'-]+$");
+		return true;
 	}
 	
-	public boolean validateIssueBank(String issueBank) {
-		return issueBank.equalsIgnoreCase("VCB") || issueBank.equalsIgnoreCase("AGB");
+	private boolean validateIssueBank(String issueBank) {
+//		return issueBank.equalsIgnoreCase("VCB") || issueBank.equalsIgnoreCase("AGB");
+		return true;
 	}
 	
-	public boolean validateExdpirationDate(String expirationDate) {
-		SimpleDateFormat format = new java.text.SimpleDateFormat("mm/yy");
-        try {
-            format.parse(expirationDate);
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
+	private boolean validateExprirationDate(String expirationDate) {
+//		SimpleDateFormat format = new java.text.SimpleDateFormat("mm/yy");
+//        try {
+//            format.parse(expirationDate);
+//            return true;
+//        } catch (ParseException e) {
+//            return false;
+//        }
+		return true;
 	}
 	
 	public boolean validateCardSecurity(String cardSecurity) {
-		return cardSecurity.matches("^[0-9]{3,4}$");
-	}
-	
-	/**
-	 * Validate the input date which should be in the format "mm/yy", and then
-	 * return a {@link java.lang.String String} representing the date in the
-	 * required format "mmyy".
-	 * 
-	 * <br>@param date - the {@link java.lang.String String} represents the input date
-	 * <br>@return {@link java.lang.String String} - date in the required format
-	 * <br>@throws InvalidCardException - If the string does not represent a valid date
-	 * in the expected format
-	 */
-	public String getExpirationDate(String date) throws InvalidCardException {
-		String strs[] = date.split("/");
-		if(strs.length != 2) {
-			throw new InvalidCardException();
-		}
-		
-		String expirationDate = null;
-		int month = -1;
-		int year = -1;
-		
-		try {
-			month = Integer.parseInt(strs[0]);
-			year = Integer.parseInt(strs[1]);
-			if(month < 1 || month > 12 || year < Calendar.getInstance()
-					.get(Calendar.YEAR) % 100 || year > 100) {
-				throw new InvalidCardException();
-			}
-			expirationDate = strs[0] + strs[1];
-		} catch (Exception e) {
-			throw new InvalidCardException();
-		}
-		return expirationDate;
-	}
-	
+//		return cardSecurity.matches("^[0-9]{3,4}$");
+		return true;
+	}	
 }
+

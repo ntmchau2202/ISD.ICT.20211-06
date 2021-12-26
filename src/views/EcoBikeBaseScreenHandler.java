@@ -24,9 +24,9 @@ public abstract class EcoBikeBaseScreenHandler {
 	 * Constructs a screen handler base
 	 * @param screenTitle Title of the screen to be created
 	 */
-	protected EcoBikeBaseScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
+	protected EcoBikeBaseScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
 		this.screenTitle = screenTitle;
-		this.controller = controller;
+//		this.controller = controller;
 		this.prevScreen = prevScreen;
 	}
 	
