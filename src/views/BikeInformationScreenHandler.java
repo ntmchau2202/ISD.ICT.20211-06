@@ -3,6 +3,8 @@ package views;
 import boundaries.RentBikeServiceBoundary;
 import controllers.EcoBikeBaseController;
 import entities.Bike;
+import exceptions.ecobike.EcoBikeUndefinedException;
+import exceptions.ecobike.RentBikeException;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
@@ -42,23 +44,28 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
 	/**
 	 * Request the controller to start rent bike process for the currently selected bike
+	 * @throws EcoBikeUndefinedException 
+	 * @throws RentBikeException 
 	 */
-	public void rentBike() {
-		PaymentMethodScreenHandler paymentScreenHandler = PaymentMethodScreenHandler.getPaymentMethodScreenHandler(currentBike, this);
-		// paymentScreenHandler.show();
+	public void rentBike() throws RentBikeException, EcoBikeUndefinedException {
+		RentBikeServiceBoundary.getRentBikeService(this).rentBike(currentBike);
 	}
 	
 	/**
 	 * Request the controller to start return bike process for the currently selected bike
+	 * @throws EcoBikeUndefinedException 
+	 * @throws RentBikeException 
 	 */
-	public void returnBike() {
-		
+	public void returnBike() throws RentBikeException, EcoBikeUndefinedException {
+		RentBikeServiceBoundary.getRentBikeService(this).returnBike(currentBike);
 	}
 	
 	/**
 	 * Request the controller to pause renting the currently selected bike
+	 * @throws EcoBikeUndefinedException 
+	 * @throws RentBikeException 
 	 */
-	public void pauseBikeRental() {
-		
+	public void pauseBikeRental() throws RentBikeException, EcoBikeUndefinedException {
+		RentBikeServiceBoundary.getRentBikeService(this).pauseBikeRental(currentBike);
 	}
 }

@@ -19,8 +19,7 @@ public class RentBikeServiceController {
 	/**
 	 * Initialize the controller for EcoBike rent bike service
 	 */
-	public RentBikeServiceController(InterbankInterface interbankSystem) {
-		this.interbankSystem = interbankSystem;
+	public RentBikeServiceController() {
 	}
 
 	/**
