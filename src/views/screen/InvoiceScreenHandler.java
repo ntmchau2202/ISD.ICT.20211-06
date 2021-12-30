@@ -1,9 +1,12 @@
-package views;
+package views.screen;
+
+import java.io.IOException;
 
 import controllers.EcoBikeBaseController;
 import entities.Invoice;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
+import javafx.stage.Stage;
 
 /**
  * This is the class handler for invoice screen
@@ -11,15 +14,9 @@ import exceptions.ecobike.RentBikeException;
  *
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-	protected InvoiceScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-		
+	protected InvoiceScreenHandler(Stage stage,String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
+		super(stage, screenPath);
+		this.setPreviousScreen(prevScreen);
 	}
 	
 	/**

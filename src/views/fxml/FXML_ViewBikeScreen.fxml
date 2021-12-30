@@ -32,7 +32,7 @@
                         <Image url="@../images/data/electric-bike.jpg" />
                      </image>
                   </ImageView>
-                  <Label layoutX="265.0" layoutY="104.0" text="Electric bike 1236">
+                  <Label fx:id="bikeName" layoutX="265.0" layoutY="104.0" text="Electric bike 1236">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
@@ -72,37 +72,37 @@
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="343.0" layoutY="143.0" text="Electric bike">
+                  <Label fx:id="bikeType" layoutX="343.0" layoutY="143.0" text="Electric bike">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="344.0" layoutY="174.0" text="Free">
+                  <Label fx:id="bikeStatus" layoutX="344.0" layoutY="174.0" text="Free">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="343.0" layoutY="204.0" text="90.5%">
+                  <Label fx:id="bikeBattery" layoutX="343.0" layoutY="204.0" text="90.5%">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="344.0" layoutY="297.0" text="120,000 VND">
+                  <Label fx:id="deposit" layoutX="344.0" layoutY="297.0" text="120,000 VND">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="480.0" layoutY="266.0" text="3,000 VND">
+                  <Label fx:id="rentingPrice" layoutX="480.0" layoutY="266.0" text="3,000 VND">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="443.0" layoutY="234.0" text="30 km">
+                  <Label fx:id="distanceEstimated" layoutX="443.0" layoutY="234.0" text="30 km">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="416.0" layoutY="329.0" text="Dai Co Viet dock bike">
+                  <Label fx:id="location" layoutX="416.0" layoutY="329.0" text="Dai Co Viet dock bike">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
@@ -111,17 +111,17 @@
             </Pane>
             <Pane prefHeight="500.0" prefWidth="450.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Button layoutX="119.0" layoutY="138.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="213.0" text="Rent this bike">
+                  <Button fx:id="rentBike" layoutX="119.0" layoutY="138.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="213.0" text="Rent this bike">
                      <font>
                         <Font name="Segoe UI Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button disable="true" layoutX="119.0" layoutY="196.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="213.0" text="Pause rental">
+                  <Button fx:id="pauseRental" disable="true" layoutX="119.0" layoutY="196.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="213.0" text="Pause rental">
                      <font>
                         <Font name="Segoe UI Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button disable="true" layoutX="119.0" layoutY="257.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="213.0" text="Return bike">
+                  <Button fx:id="returnBike" disable="true" layoutX="119.0" layoutY="257.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="213.0" text="Return bike">
                      <font>
                         <Font name="Segoe UI Bold" size="20.0" />
                      </font>

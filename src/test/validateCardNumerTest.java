@@ -13,7 +13,7 @@ class validateCardNumerTest {
 	private PaymentController controllers;
 	@BeforeEach
 	void setUp() throws Exception {
-		controllers = new PaymentController();
+		controllers = new PaymentController(null);
 	}
 
 	@ParameterizedTest

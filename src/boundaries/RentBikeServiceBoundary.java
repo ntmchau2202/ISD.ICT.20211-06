@@ -4,8 +4,8 @@ import entities.Bike;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.RentBikeServiceInterface;
-import views.EcoBikeBaseScreenHandler;
-import views.PaymentMethodScreenHandler;
+import views.screen.EcoBikeBaseScreenHandler;
+import views.screen.PaymentMethodScreenHandler;
 
 /**
  * This class is a real communicator of the interbank subsystem

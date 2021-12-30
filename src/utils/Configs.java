@@ -28,6 +28,22 @@ public class Configs {
 
     public static float chargeTimeIntervalInMinute = 15f;
     public static float chargeTimeIntervalCost = 3000f;
+    
+    public static String CURRENCY = "VND";
+    public static float PERCENT_VAT = 10;
+    
+    // static resource
+    public static final String IMAGE_PATH = "assets/images";
+    public static final String DEPOSIT_SCREEN_PATH = "/views/fxml/FXML_DepositScreen.fxml";
+    public static final String LIST_DOCK_SCREEN_PATH = "/views/fxml/FXML_ListDockScreen.fxml";
+    public static final String MAIN_SCREEN_PATH = "/views/fxml/FXML_MainScreen.fxml";
+    public static final String PAYING_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
+    public static final String PAYMENT_SCREEN_PATH = "/views/fxml/FXML_PaymentScreen.fxml";
+    public static final String POPUP_SCREEN_PATH = "/views/fxml/FXML_PopupScreen.fxml";
+    public static final String RETURN_BIKE_SCREEN_PATH = "/views/fxml/FXML_ReturnBikeScreen.fxml";
+    public static final String SPLASH_SCREEN_PATH = "/views/fxml/FXML_SplashScreen.fxml";
+    public static final String VIEW_BIKE_SCREEN_PATH = "/views/fxml/FXML_ViewBikeScreen.fxml";
+    public static final String VIEW_DOCK_SCREEN_PATH = "/views/fxml/FXML_ViewDockScreen.fxml";
 
 	public enum BIKE_STATUS {
 		FREE,

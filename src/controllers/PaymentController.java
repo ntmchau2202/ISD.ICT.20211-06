@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,6 +9,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import boundaries.InterbankBoundary;
 import entities.CreditCard;
@@ -18,6 +20,7 @@ import exceptions.ecobike.RentBikeException;
 import exceptions.interbank.InterbankException;
 import exceptions.interbank.InvalidCardException;
 import interfaces.InterbankInterface;
+import views.screen.popup.PopupScreen;
 
 /**
  * This is the class controller including all the methods and operations for payment use case.
@@ -25,6 +28,11 @@ import interfaces.InterbankInterface;
  *
  */
 public class PaymentController {
+	
+	  /**
+	   * Just for logging purpose.
+	   */
+	  private static Logger LOGGER = utils.FunctionalUtils.getLogger(PaymentController.class.getName());
 	
 	/**
 	 * Represent the Interbank subsystem.
@@ -164,65 +172,6 @@ public class PaymentController {
 	public void saveInvoice(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
 		
 	}
-	
-	private boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-		if (!validateCardNumber(card.getCardNumber())) {
-			return false;
-		}
 		
-		if (!validateCardHolderName(card.getCardHolderName())) {
-			return false;
-		}
-		
-		if (!validateIssueBank(card.getIssueBank())) {
-			return false;
-		}
-		
-		if (!validateExprirationDate(card.getExpirationDate().toString())) {
-			return false;
-		}
-		
-		if (!validateCardSecurity(card.getCardSecurity())) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	private boolean validateCardNumber(String cardNumber) {
-		if(cardNumber.length()!=10) return false;
-		try {
-			Integer.parseInt(cardNumber);
-		} catch (NumberFormatException e) {
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean validateCardHolderName(String cardHolderName) {
-//		return cardHolderName.matches("^[\\p{L} .'-]+$");
-		return true;
-	}
-	
-	private boolean validateIssueBank(String issueBank) {
-//		return issueBank.equalsIgnoreCase("VCB") || issueBank.equalsIgnoreCase("AGB");
-		return true;
-	}
-	
-	private boolean validateExprirationDate(String expirationDate) {
-//		SimpleDateFormat format = new java.text.SimpleDateFormat("mm/yy");
-//        try {
-//            format.parse(expirationDate);
-//            return true;
-//        } catch (ParseException e) {
-//            return false;
-//        }
-		return true;
-	}
-	
-	public boolean validateCardSecurity(String cardSecurity) {
-//		return cardSecurity.matches("^[0-9]{3,4}$");
-		return true;
-	}	
 }
 

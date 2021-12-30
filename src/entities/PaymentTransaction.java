@@ -46,6 +46,10 @@ public class PaymentTransaction {
 	 */
 	private String errorMessage;
 	
+	public PaymentTransaction() {
+		
+	}
+	
 	public PaymentTransaction(String transactionId, String creditCardNumber, double amount, String content, String transactionTime) throws InvalidEcoBikeInformationException {
 		this.setAmount(amount);
 		this.setTransactionId(transactionId);

@@ -5,9 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import exceptions.ecobike.InvalidEcoBikeInformationException;
-import utils.FunctionalUtils;
 
 /**
  * This is the class for object entity Invoice including all information of an invoice
@@ -43,10 +41,6 @@ public class Invoice {
 	 */
 	private Timestamp endTime;
 	
-	/**
-	 * The total time customers rent the bike calculated in minute
-	 */
-	private int totalRentTime;
 	
 	/**
 	 * The sub-total money customers have to pay which is the value calculated based on the total rental time 
@@ -77,14 +71,15 @@ public class Invoice {
 		listTransaction = new ArrayList<PaymentTransaction>();
 	}
 
-	public Invoice(String invoiceID, String bikeName, double deposit, String startTime, String endTime, double subTotal, double total, String timeCreate) throws InvalidEcoBikeInformationException {
+	public Invoice(String invoiceID, String bikeName, double deposit, String startTime,
+			String endTime, double subTotal, double total, String timeCreate) throws InvalidEcoBikeInformationException {
 		listTransaction = new ArrayList<PaymentTransaction>();
-		this.setBikeName(bikeName);
-		this.setDeposit(deposit);
+		this.bikeName = bikeName;
+		this.deposit = deposit;
 		this.setStartTime(startTime);
 		this.setEndTime(endTime);
-		this.setsubTotal(subTotal);
-		this.setTotal(total);
+		this.subTotal = subTotal;
+		this.total = total;
 		this.setTimeCreate(timeCreate);
 	}
 	
@@ -109,42 +104,12 @@ public class Invoice {
 		return invoiceID;
 	}
 
-	public void setInvoiceID(String invoiceID) {
-		this.invoiceID = invoiceID;
-	}
-
 	public String getBikeName() {
 		return bikeName;
 	}
 
-	public void setBikeName(String name) throws InvalidEcoBikeInformationException {
-		if (name == null) {
-			throw new InvalidEcoBikeInformationException("name parameter must not be null");
-		}
-		
-		if (name.length() == 0) {
-			throw new InvalidEcoBikeInformationException("bike must have a name");
-		}
-		
-		if (!Character.isLetter(name.charAt(0))) {
-			throw new InvalidEcoBikeInformationException("bike name must start with a letter");
-		} 
-		
-		if (FunctionalUtils.contains(name, "[^a-z0-9 -_]")) {
-			throw new InvalidEcoBikeInformationException("bike name can only contain letters, digits, space, hypen and underscore");
-		}
-		this.bikeName = name;
-	}
-
 	public double getDeposit() {
 		return deposit;
-	}
-
-	public void setDeposit(double deposit) throws InvalidEcoBikeInformationException {
-		if (deposit <= 0) {
-			throw new InvalidEcoBikeInformationException("bike deposit price must be greater than 0");
-		}
-		this.deposit = deposit;
 	}
 
 	public Timestamp getStartTime() {
@@ -180,41 +145,23 @@ public class Invoice {
 	}
 
 	public int getTotalRentTime() {
-		return totalRentTime;
-	}
-
-	public void setTotalRentTime() {
 		
-		this.totalRentTime = (int)endTime.getTime()- (int)startTime.getTime();
+		return (int)endTime.getTime()- (int)startTime.getTime();
 	}
 
 	public double getsubTotal() {
 		return subTotal;
 	}
 
-	public void setsubTotal(double subTotal) throws InvalidEcoBikeInformationException {
-		if (subTotal < 0) {
-			throw new InvalidEcoBikeInformationException("subTotal must not be less than 0");
-		}
-		this.subTotal = subTotal;
-	}
-
 	public double getTotal() {
 		return total;
-	}
-
-	public void setTotal(double total) throws InvalidEcoBikeInformationException {
-		if (total < 0) {
-			throw new InvalidEcoBikeInformationException("total must not be less than 0");
-		}
-		this.total = total;
 	}
 
 	public Timestamp getTimeCreate() {
 		return timeCreate;
 	}
 
-	public void setTimeCreate(String timeCreate) throws InvalidEcoBikeInformationException {
+	private void setTimeCreate(String timeCreate) throws InvalidEcoBikeInformationException {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
 			Date date = dateFormat.parse(timeCreate);
