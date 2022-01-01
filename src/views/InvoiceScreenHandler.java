@@ -4,6 +4,7 @@ import controllers.EcoBikeBaseController;
 import entities.Invoice;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
+import javafx.stage.Stage;
 
 /**
  * This is the class handler for invoice screen
@@ -11,8 +12,8 @@ import exceptions.ecobike.RentBikeException;
  *
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-	protected InvoiceScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
+	protected InvoiceScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
+		super(stage, screenTitle, controller, prevScreen, screenPath);
 		// TODO Auto-generated constructor stub
 	}
 

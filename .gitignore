@@ -5,3 +5,4 @@
 *.iml
 .idea/
 out/
+/src/lib/javafx-sdk-17.0.1

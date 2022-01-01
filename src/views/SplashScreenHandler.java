@@ -1,6 +1,7 @@
 package views;
 
 import controllers.EcoBikeBaseController;
+import javafx.stage.Stage;
 
 /**
  * This class spawns a handler for the first splash screen of the EcoBike application
@@ -15,8 +16,8 @@ public class SplashScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected SplashScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
+	protected SplashScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
+		super(stage, screenTitle, controller, prevScreen, screenPath);
 		// TODO Auto-generated constructor stub
 	}
 

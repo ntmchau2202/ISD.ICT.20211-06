@@ -12,9 +12,16 @@ import java.sql.SQLException;
 /**
  * This class handles rent bike, return bike and pause bike rental request from customers
  */
-public class RentBikeServiceController {
+public class RentBikeServiceController extends EcoBikeBaseController {
 	private InterbankInterface interbankSystem;
-	
+
+	private static RentBikeServiceController rentBikeServiceController;
+
+	public static RentBikeServiceController getRentBikeServiceController(){
+		if (rentBikeServiceController == null)
+			rentBikeServiceController = new RentBikeServiceController();
+		return rentBikeServiceController;
+	}
 	/**
 	 * Initialize the controller for EcoBike rent bike service
 	 */

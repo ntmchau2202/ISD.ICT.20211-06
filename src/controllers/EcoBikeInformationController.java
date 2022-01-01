@@ -16,6 +16,14 @@ import utils.DBUtils;
  *
  */
 public class EcoBikeInformationController extends EcoBikeBaseController {
+	private static EcoBikeInformationController ecoBikeInformationController;
+
+	public static EcoBikeInformationController getEcoBikeInformationController() {
+		if (ecoBikeInformationController == null)
+			ecoBikeInformationController = new EcoBikeInformationController();
+		return ecoBikeInformationController;
+	}
+
 	public EcoBikeInformationController() {
 
 	}

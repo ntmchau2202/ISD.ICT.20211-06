@@ -1,17 +1,23 @@
 package views;
 
 import controllers.EcoBikeBaseController;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * This class is the base for all screen handler class of the EcoBike application
  * @author chauntm
  *
  */
-public abstract class EcoBikeBaseScreenHandler {
+public abstract class EcoBikeBaseScreenHandler extends FXMLScreenHandler {
 	/**
 	 * Title of the screen
 	 */
 	protected String screenTitle;
+	private Scene scene;
+	protected final Stage stage;
 	
 	/**
 	 * The screen that called this current screen
@@ -24,12 +30,25 @@ public abstract class EcoBikeBaseScreenHandler {
 	 * Constructs a screen handler base
 	 * @param screenTitle Title of the screen to be created
 	 */
-	protected EcoBikeBaseScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
+	public EcoBikeBaseScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
+		super(screenPath);
 		this.screenTitle = screenTitle;
 		this.controller = controller;
 		this.prevScreen = prevScreen;
+		this.stage = stage;
 	}
-	
+
+
+	public void show() {
+		if (this.scene == null) {
+			this.scene = new Scene(this.content);
+		}
+		this.stage.setScene(this.scene);
+		//initialize();
+		System.out.println("hi");
+		this.stage.show();
+	}
+
 	/**
 	 * Initialize the views and components of the screen
 	 */

@@ -1,6 +1,7 @@
 package views;
 
 import controllers.EcoBikeBaseController;
+import javafx.stage.Stage;
 
 /**
  * This class creates a handler for displaying the map and getting customer's activities on the main screen
@@ -15,8 +16,8 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	protected EcoBikeMainScreenHandler(String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, controller, prevScreen);
+	protected EcoBikeMainScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
+		super(stage, screenTitle, controller, prevScreen, screenPath);
 	}
 
 	@Override
