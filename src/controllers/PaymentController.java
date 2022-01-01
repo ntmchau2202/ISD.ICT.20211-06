@@ -8,6 +8,7 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import exceptions.interbank.InvalidCardException;
 import interfaces.InterbankInterface;
+import views.screen.popup.PopupScreen;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class PaymentController extends EcoBikeBaseController {
 
     private static PaymentController paymentController;
+    private static Logger LOGGER = utils.FunctionalUtils.getLogger(PaymentController.class.getName());
     /**
      * Represent the card used for payment.
      */
@@ -31,7 +33,7 @@ public class PaymentController extends EcoBikeBaseController {
      */
     private InterbankInterface interbank;
 
-    public PaymentController() {
+    private PaymentController() {
     }
 
     public static PaymentController getPaymentController() {

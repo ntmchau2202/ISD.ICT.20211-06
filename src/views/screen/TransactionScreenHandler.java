@@ -1,4 +1,4 @@
-package views;
+package views.screen;
 
 import boundaries.RentBikeServiceBoundary;
 import controllers.EcoBikeBaseController;

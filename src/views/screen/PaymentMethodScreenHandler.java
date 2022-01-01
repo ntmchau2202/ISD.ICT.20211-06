@@ -1,14 +1,20 @@
-package views;
+package views.screen;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import controllers.EcoBikeBaseController;
 import controllers.PaymentController;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeUndefinedException;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import exceptions.ecobike.RentBikeException;
 import javafx.stage.Stage;
+import utils.Configs;
 
 /**
  * This is the class handler for payment method screen

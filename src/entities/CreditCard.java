@@ -5,15 +5,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import exceptions.ecobike.InvalidEcoBikeInformationException;
-import exceptions.interbank.InvalidCardException;
 import utils.FunctionalUtils;
+import exceptions.interbank.InvalidCardException;
 
 /**
  * This is the class for object entity Credit card including all information of a card 
  * @author Duong
  *
  */
+@SuppressWarnings("unused")
 public class CreditCard {
 	
 	/**
@@ -109,5 +109,5 @@ public class CreditCard {
 	public void setCardSecurity(String cardSecurity) {
 		this.cardSecurity = cardSecurity;
 	}
-	
+
 }

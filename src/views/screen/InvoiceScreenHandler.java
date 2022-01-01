@@ -1,4 +1,6 @@
-package views;
+package views.screen;
+
+import java.io.IOException;
 
 import controllers.EcoBikeBaseController;
 import entities.Invoice;

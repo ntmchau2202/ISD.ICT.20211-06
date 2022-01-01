@@ -3,6 +3,7 @@ package utils;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,19 @@ import exceptions.ecobike.EcoBikeException;
  */
 
 public class FunctionalUtils {
+	
+	  @SuppressWarnings("unused")
+	  private static Logger LOGGER = getLogger(FunctionalUtils.class.getName());
+
+	  static {
+	    System.setProperty("java.util.logging.SimpleFormatter.format", 
+	        "[%4$-4s] [%1$tF %1$tT] [%2$-7s] %5$s %n");
+	  }
+
+	  public static Logger getLogger(String className) {
+	    return Logger.getLogger(className);
+	  }
+	
 	public static boolean contains(String str, String regex) {
 		Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(str);

@@ -14,7 +14,7 @@ class validateExpirationDateTest {
 	private PaymentController controllers;
 	@BeforeEach
 	void setUp() throws Exception {
-		controllers = new PaymentController();
+		controllers = new PaymentController(null);
 	}
 
 	@ParameterizedTest
@@ -24,7 +24,7 @@ class validateExpirationDateTest {
 	})
 	public void test(String expirationDate, boolean expected) {
 		//when
-		boolean isValid = controllers.validateExdpirationDate(expirationDate);
+		boolean isValid = controllers.validateExprirationDate(expirationDate);
 		
 		//then
 		assertEquals(expected, isValid);

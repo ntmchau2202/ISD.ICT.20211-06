@@ -19,8 +19,8 @@ import exceptions.ecobike.InvalidEcoBikeInformationException;
 
 public class DBUtils {
 	private static Connection connection;
-	public static void initializeDBInstance() throws EcoBikeException {
-        if (connection != null) return;
+	public static Connection getConnection() throws EcoBikeException {
+        if (connection != null) return connection;
         try {
             Class.forName("org.sqlite.JDBC");
             String url = "jdbc:sqlite:src/ecobikedb.db";
@@ -29,46 +29,10 @@ public class DBUtils {
         } catch (Exception e) {
         	throw new EcoBikeException("Error when initialize database for EcoBike:"+e.getMessage());
         }
+        return connection;
 	}
 	
-	public static String getBikeInformation(String bikeBarcode) throws EcoBikeException, SQLException {
-		if (connection == null) {
-			initializeDBInstance();
-		}
-		PreparedStatement stm = connection.prepareStatement(
-				"SELECT * FROM Bike WHERE bike_barcode=?");
-		stm.setString(1, bikeBarcode);
-		ResultSet result = stm.executeQuery();
-		Bike bikeRes = new Bike(result.getString("name"), 
-				result.getString("bike_type"), 
-				result.getString("bike_image"), 
-				result.getString("bike_barcode"), 
-				result.getDouble("bike_rental_price"),
-				result.getDouble("deposit_price"), 
-				result.getString("currency_unit"), 
-				result.getString("create_date"));
-		// get and set bike current status
-		stm = connection.prepareStatement(
-				"SELECT * from BikeStatus WHERE bike_barcode=?");
-		stm.setString(1, bikeBarcode);
-		result = stm.executeQuery();
-		String bikeStatus = result.getString("current_status");
-		Configs.BIKE_STATUS bikeStat;
-		if(bikeStatus.equalsIgnoreCase("FREE")) {
-			bikeStat = Configs.BIKE_STATUS.FREE;
-		} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
-			bikeStat = Configs.BIKE_STATUS.RENTED;
-		} else {
-			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
-		}
-		bikeRes.setCurrentStatus(bikeStat);
-		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
-		String strRes = JSONUtils.serializeBikeInformation(bikeRes);
-		return strRes;
-	}
-	
-	public static String getDockInformation(String dockID) throws SQLException, EcoBikeException {
+	public static Dock getDockInformation(String dockID) throws SQLException, EcoBikeException {
 		if (connection == null) {
 			initializeDBInstance();
 		}
@@ -82,8 +46,7 @@ public class DBUtils {
 				result.getDouble("dock_area"),
 				result.getInt("num_available_bike"),
 				result.getInt("num_free_dock"));
-		String strRes = JSONUtils.serializeDockInformation(dockRes);
-		return strRes;
+		return dockRes;
 	}
 	
 	public static String getInvoiceInformation(String invoiceID) throws EcoBikeException, SQLException {
@@ -122,8 +85,8 @@ public class DBUtils {
 				"SELECT * FROM RentBike WHERE rent_id=?");
 		stmR.setInt(1, rentID);
 		ResultSet resultR = stmR.executeQuery();
-		invoiceRes.setStart_time(resultR.getTimestamp("start_time"));
-		invoiceRes.setEnd_time(resultR.getTimestamp("end_time"));
+		invoiceRes.setStartTime(resultR.getString("start_time"));
+		invoiceRes.setEndTime(resultR.getString("end_time"));
 		String strRes = JSONUtils.serializeInvoiceInformation(invoiceRes);
 		return strRes;
 	}	
