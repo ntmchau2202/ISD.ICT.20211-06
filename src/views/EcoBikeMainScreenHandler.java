@@ -3,11 +3,7 @@ package views;
 import java.sql.SQLException;
 
 import controllers.EcoBikeBaseController;
-import controllers.EcoBikeInformationController;
-import entities.Bike;
-import entities.Dock;
-import exceptions.ecobike.EcoBikeException;
-import utils.JSONUtils;
+import javafx.stage.Stage;
 
 /**
  * This class creates a handler for displaying the map and getting customer's activities on the main screen
@@ -22,19 +18,8 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-	
-	private static EcoBikeMainScreenHandler mainScreenHandler;
-	
-	protected EcoBikeMainScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, prevScreen);
-	}
-	
-	public static EcoBikeMainScreenHandler getMainScreenHandler(EcoBikeBaseScreenHandler prevScreen) {
-		if (mainScreenHandler == null) {
-			mainScreenHandler = new EcoBikeMainScreenHandler("EcoBike Main", null);
-		}
-		mainScreenHandler.prevScreen = prevScreen;
-		return mainScreenHandler;
+	protected EcoBikeMainScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
+		super(stage, screenTitle, controller, prevScreen, screenPath);
 	}
 	@Override
 	protected void initialize() {

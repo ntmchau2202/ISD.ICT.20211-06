@@ -6,6 +6,7 @@ import entities.CreditCard;
 import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
+import javafx.stage.Stage;
 
 /**
  * This is the class handler for transaction screen
@@ -13,10 +14,14 @@ import exceptions.ecobike.RentBikeException;
  *
  */
 public class TransactionScreenHandler extends EcoBikeBaseScreenHandler {
-	private static TransactionScreenHandler transactionScreenHandler;
-	private PaymentTransaction transaction;
-	protected TransactionScreenHandler(String screenTitle, EcoBikeBaseScreenHandler prevScreen) {
-		super(screenTitle, prevScreen);
+	/**
+	 * Initialize handler for transaction screen of EcoBike application
+	 * @param screenTitle Title of the screen
+	 * @param controller Controller for handling request from the screen
+	 * @param prevScreen An instance to the screen that called this screen
+	 */
+	protected TransactionScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
+		super(stage, screenTitle, controller, prevScreen, screenPath);
 		// TODO Auto-generated constructor stub
 	}
 

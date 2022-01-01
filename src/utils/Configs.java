@@ -29,6 +29,13 @@ public class Configs {
     public static float chargeTimeIntervalInMinute = 15f;
     public static float chargeTimeIntervalCost = 3000f;
 
+	// static resource
+	public static final String IMAGE_PATH = "assets/images";
+	public static final String BIKE_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewBikeScreen.fxml";
+	public static final String DOCK_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewDockScreen.fxml";
+	public static final String BIKE_IN_DOCK_PATH = "/views/screens/BikeInDock.fxml";
+	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/screens/FXML_PayingMethodScreen.fxml";
+
 	public enum BIKE_STATUS {
 		FREE,
 		RENTED,		
