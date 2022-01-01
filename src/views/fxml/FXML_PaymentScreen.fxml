@@ -75,27 +75,17 @@
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="603.0" layoutY="257.0" text="No">
+                  <Label layoutX="602.0" layoutY="260.0" text="30,300 VND">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="387.0" layoutY="257.0" text="Deposit returned:">
+                  <Label layoutX="386.0" layoutY="260.0" text="Total:">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="603.0" layoutY="290.0" text="30,300 VND">
-                     <font>
-                        <Font name="Segoe UI" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="387.0" layoutY="290.0" text="Total:">
-                     <font>
-                        <Font name="Segoe UI Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="717.0" layoutY="290.0" text="(VAT: 10%)" textFill="RED">
+                  <Label layoutX="716.0" layoutY="260.0" text="(VAT: 10%)" textFill="RED">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
