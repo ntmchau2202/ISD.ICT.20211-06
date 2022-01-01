@@ -71,4 +71,8 @@ public class Configs {
 			return this.transactionType;
 		}
 	}
+	
+	public static final String API_BASE_URL = "https://ecopark-system-api.herokuapp.com";
+	public static final String API_TRANSACTION = "/api/card/processTransaction";
+	public static final String API_RESET_BALANCE = "/api/card/reset-balance";
 }

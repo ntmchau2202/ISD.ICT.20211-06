@@ -91,8 +91,8 @@ public class CreditCard {
 		}
 		this.issueBank = issueBank;
 	}
-	public Timestamp getExpirationDate() {
-		return expirationDate;
+	public String getExpirationDate() {
+		return expirationDate.toString();
 	}
 	public void setExpirationDate(String expirationDate) {
 		try {

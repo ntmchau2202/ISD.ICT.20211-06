@@ -171,5 +171,10 @@ public class Invoice {
 		}
 	}
 
+	public void setInvoiceID(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

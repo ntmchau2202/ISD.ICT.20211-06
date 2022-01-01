@@ -192,5 +192,4 @@ public class JSONUtils {
 				result.getString("customer_name"),
 				result.getString("customer_email")); 
 	}
-	
 }

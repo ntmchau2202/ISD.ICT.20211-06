@@ -77,10 +77,10 @@ public class Bike {
 	 */
 	private int totalRentTime;
 	
-	private String dockName;
+//	private String dockName;
 
 	public Bike(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
-			double deposit, String currency, String create_date, String dockName) throws InvalidEcoBikeInformationException {
+			double deposit, String currency, String create_date) throws InvalidEcoBikeInformationException {
 		this.setName(name); 
 		this.setBikeType(bike_type);
 		this.setBikeImage(bike_image);
@@ -92,7 +92,7 @@ public class Bike {
 		this.setTotalRentTime(0);
 		this.setCurrentStatus(Configs.BIKE_STATUS.FREE);
 		this.setCurrentBattery(100);
-		this.dockName = dockName;
+//		this.dockName = dockName;
 	}
 
 	public String getName() {
@@ -242,83 +242,78 @@ public class Bike {
 		return JSONUtils.serializeBikeInformation(this);
 	}
 	
-	public Bike getBikeByBarcode(String bikeBarcode) throws EcoBikeException, SQLException {
-		String sql = "SELECT * FROM Bike WHERE bike_barcode=?";
-		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
-		stm.setString(1, bikeBarcode);
-		ResultSet result = stm.executeQuery();
-		Bike bikeRes = new Bike(result.getString("name"), 
-				result.getString("bike_type"), 
-				result.getString("bike_image"), 
-				result.getString("bike_barcode"), 
-				result.getDouble("bike_rental_price"),
-				result.getDouble("deposit_price"), 
-				result.getString("currency_unit"), 
-				result.getString("create_date"),
-				result.getString("dock_name"));
-		// get and set bike current status
-		stm = DBUtils.getConnection().prepareStatement(
-				"SELECT * from BikeStatus WHERE bike_barcode=?");
-		stm.setString(1, bikeBarcode);
-		result = stm.executeQuery();
-		String bikeStatus = result.getString("current_status");
-		Configs.BIKE_STATUS bikeStat;
-		if(bikeStatus.equalsIgnoreCase("FREE")) {
-			bikeStat = Configs.BIKE_STATUS.FREE;
-		} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
-			bikeStat = Configs.BIKE_STATUS.RENTED;
-		} else {
-			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
-		}
-		bikeRes.setCurrentStatus(bikeStat);
-		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
-		return bikeRes;
-//		String strRes = JSONUtils.serializeBikeInformation(bikeRes);
-//		return strRes;
-	}
+//	public Bike getBikeByBarcode(String bikeBarcode) throws EcoBikeException, SQLException {
+//		String sql = "SELECT * FROM Bike WHERE bike_barcode=?";
+//		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+//		stm.setString(1, bikeBarcode);
+//		ResultSet result = stm.executeQuery();
+//		Bike bikeRes = new Bike(result.getString("name"), 
+//				result.getString("bike_type"), 
+//				result.getString("bike_image"), 
+//				result.getString("bike_barcode"), 
+//				result.getDouble("bike_rental_price"),
+//				result.getDouble("deposit_price"), 
+//				result.getString("currency_unit"), 
+//				result.getString("create_date"));
+//		// get and set bike current status
+//		stm = DBUtils.getConnection().prepareStatement(
+//				"SELECT * from BikeStatus WHERE bike_barcode=?");
+//		stm.setString(1, bikeBarcode);
+//		result = stm.executeQuery();
+//		String bikeStatus = result.getString("current_status");
+//		Configs.BIKE_STATUS bikeStat;
+//		if(bikeStatus.equalsIgnoreCase("FREE")) {
+//			bikeStat = Configs.BIKE_STATUS.FREE;
+//		} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
+//			bikeStat = Configs.BIKE_STATUS.RENTED;
+//		} else {
+//			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
+//		}
+//		bikeRes.setCurrentStatus(bikeStat);
+//		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
+//		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
+//		return bikeRes;
+////		String strRes = JSONUtils.serializeBikeInformation(bikeRes);
+////		return strRes;
+//	}
 	
-	public java.util.List<Bike> getAllBike() throws SQLException, EcoBikeException {
-		Statement stm = DBUtils.getConnection().createStatement();
-		ResultSet result = stm.executeQuery("Select * from Bike");
-		ArrayList<Bike> list = new ArrayList<Bike>();
-		while(result.next()) {
-			Bike bikeRes = new Bike(result.getString("name"), 
-					result.getString("bike_type"), 
-					result.getString("bike_image"), 
-					result.getString("bike_barcode"), 
-					result.getDouble("bike_rental_price"),
-					result.getDouble("deposit_price"), 
-					result.getString("currency_unit"), 
-					result.getString("create_date"),
-					result.getString("dock_name"));
-			bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-			bikeRes.setCurrentBattery(result.getFloat("current_battery"));
-			list.add(bikeRes);
-		}
-		
-		ResultSet result2 = stm.executeQuery("Select * from BikeStatus");
-		int i = 0;
-		while(result2.next()) {
-			String bikeStatus = result2.getString("current_status");
-			Configs.BIKE_STATUS bikeStat;
-			if(bikeStatus.equalsIgnoreCase("FREE")) {
-				bikeStat = Configs.BIKE_STATUS.FREE;
-			} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
-				bikeStat = Configs.BIKE_STATUS.RENTED;
-			} else {
-				throw new InvalidEcoBikeInformationException("invalid status of bike in database");
-			}
-			list.get(i).setCurrentStatus(bikeStat);
-			i++;
-		}
-		return list;
-	}
+//	public java.util.List<Bike> getAllBike() throws SQLException, EcoBikeException {
+//		Statement stm = DBUtils.getConnection().createStatement();
+//		ResultSet result = stm.executeQuery("Select * from Bike");
+//		ArrayList<Bike> list = new ArrayList<Bike>();
+//		while(result.next()) {
+//			Bike bikeRes = new Bike(result.getString("name"), 
+//					result.getString("bike_type"), 
+//					result.getString("bike_image"), 
+//					result.getString("bike_barcode"), 
+//					result.getDouble("bike_rental_price"),
+//					result.getDouble("deposit_price"), 
+//					result.getString("currency_unit"), 
+//					result.getString("create_date"),
+//					result.getString("dock_name"));
+//			bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
+//			bikeRes.setCurrentBattery(result.getFloat("current_battery"));
+//			list.add(bikeRes);
+//		}
+//		
+//		ResultSet result2 = stm.executeQuery("Select * from BikeStatus");
+//		int i = 0;
+//		while(result2.next()) {
+//			String bikeStatus = result2.getString("current_status");
+//			Configs.BIKE_STATUS bikeStat;
+//			if(bikeStatus.equalsIgnoreCase("FREE")) {
+//				bikeStat = Configs.BIKE_STATUS.FREE;
+//			} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
+//				bikeStat = Configs.BIKE_STATUS.RENTED;
+//			} else {
+//				throw new InvalidEcoBikeInformationException("invalid status of bike in database");
+//			}
+//			list.get(i).setCurrentStatus(bikeStat);
+//			i++;
+//		}
+//		return list;
+//	}
 
-	public String getDockName() {
-		return dockName;
-	}
-	
 	public float getDistanceEstimated() {
 		return this.currentBattery * 10;
 	}

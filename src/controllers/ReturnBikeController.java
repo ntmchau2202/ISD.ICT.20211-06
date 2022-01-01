@@ -35,7 +35,7 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
 	public void returnBike(String bikeBarcode) throws EcoBikeException, SQLException {
-		Bike bike = DBUtils.getBike(bikeBarcode);
+		Bike bike = DBUtils.getBikeInformation(bikeBarcode);
 	}
 	
 	/**

@@ -47,9 +47,9 @@ public class TransactionScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @throws RentBikeException If the transaction is invalid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void confirmTransaction(String transactionType) throws  RentBikeException, EcoBikeUndefinedException {
+	public void confirmTransaction(PaymentTransaction transaction) throws  RentBikeException, EcoBikeUndefinedException {
 		if (validationTransaction(transaction)) {
-			if (transactionType.compareToIgnoreCase("RENT") == 0) {
+			if (transaction.getContent().contains("RENT")) {
 //				RentBikeServiceBoundary.getRentBikeService().rentBike(null);
 			}
 			// show confirmation dialog here

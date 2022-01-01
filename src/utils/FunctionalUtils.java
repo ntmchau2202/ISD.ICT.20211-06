@@ -1,5 +1,8 @@
 package utils;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -46,5 +49,22 @@ public class FunctionalUtils {
 		} catch(Exception e) { 
 			throw new EcoBikeException(e.getMessage());
 		}
+	}
+	
+	public static String md5(String message) {
+		String digest = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] hash = md.digest(message.getBytes("UTF-8"));
+			// converting byte array to Hexadecimal String
+			StringBuilder sb = new StringBuilder(2 * hash.length);
+			for (byte b : hash) {
+				sb.append(String.format("%02x", b & 0xff));
+			}
+			digest = sb.toString();
+		} catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+			digest = "";
+		}
+		return digest;
 	}
 }

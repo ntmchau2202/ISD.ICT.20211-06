@@ -28,12 +28,6 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 
 	}
 	
-	public static EcoBikeInformationController getEcoBikeInformationController()  {
-		if (ecobikeInfoController == null) {
-			ecobikeInfoController = new EcoBikeInformationController();
-		}
-		return ecobikeInfoController;
-	}
 	
 	/**
 	 * Gets information about a given dock
@@ -43,7 +37,7 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @throws EcoBikeException 
 	 * @throws SQLException 
 	 */
-	public String getDockInformation(String dockID) throws SQLException, EcoBikeException {
+	public Dock getDockInformation(String dockID) throws SQLException, EcoBikeException {
 		if (dockID == null) {
 			throw new NoInformationException("no keyword to search");
 		}
@@ -63,7 +57,7 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @throws SQLException 
 	 * @throws EcoBikeException 
 	 */
-	public String getBikeInformation(String bikeID) throws EcoBikeException, SQLException {
+	public Bike getBikeInformation(String bikeID) throws EcoBikeException, SQLException {
 		if (bikeID == null) {
 			throw new NoInformationException("no keyword to search");
 		}

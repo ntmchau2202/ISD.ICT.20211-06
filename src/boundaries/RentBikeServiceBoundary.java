@@ -28,6 +28,7 @@ public class RentBikeServiceBoundary implements RentBikeServiceInterface {
 		
 	}
 	public void rentBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException {
+		// call rent bike screen?
 		PaymentMethodScreenHandler paymentScreenHandler = PaymentMethodScreenHandler.getPaymentMethodScreenHandler(bike, rentBikeService.prevScreen);
 	
 	}
