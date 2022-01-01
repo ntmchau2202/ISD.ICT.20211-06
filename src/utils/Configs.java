@@ -45,8 +45,7 @@ public class Configs {
     public static final String VIEW_BIKE_SCREEN_PATH = "/views/fxml/FXML_ViewBikeScreen.fxml";
     public static final String VIEW_DOCK_SCREEN_PATH = "/views/fxml/FXML_ViewDockScreen.fxml";
 
-	// static resource
-	public static final String IMAGE_PATH = "assets/images";
+
 	public static final String BIKE_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewBikeScreen.fxml";
 	public static final String DOCK_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewDockScreen.fxml";
 	public static final String BIKE_IN_DOCK_PATH = "/views/screens/BikeInDock.fxml";

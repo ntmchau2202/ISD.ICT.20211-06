@@ -32,9 +32,9 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 		super(stage, screenPath);
 	}
 	
-	public static EcoBikeMainScreenHandler getMainScreenHandler() throws IOException {
+	public static EcoBikeMainScreenHandler getMainScreenHandler(Stage stage, String screenPath) throws IOException {
 		if (mainScreenHandler == null) {
-			mainScreenHandler = new EcoBikeMainScreenHandler(new Stage(), Configs.MAIN_SCREEN_PATH);
+			mainScreenHandler = new EcoBikeMainScreenHandler(stage, Configs.MAIN_SCREEN_PATH);
 			mainScreenHandler.setScreenTitle("Main Screen");
 		}
 		return mainScreenHandler;

@@ -73,7 +73,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 		// init bike to render
 		try{
 		currentBike =  new entities.Bike("name", "bike_type", "bike_image", "bar_code", 1,
-		1, "currency", "13/02/2000");
+		1, "currency", "13/02/2000", "");
 
 			bikeImage.setImage(new Image((new File(currentBike.getBikeImage())).toURI().toString()));
 			bikeNameText.setText(currentBike.getName());
@@ -121,7 +121,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	 */
 	public void returnBike() {
 		try {
-			RentBikeServiceController.getRentBikeServiceController().returnBike(currentBike.getBarCode());
+			RentBikeServiceController.getRentBikeServiceController().returnBike(currentBike);
 		} catch (Exception e){
 			e.printStackTrace();
 		}

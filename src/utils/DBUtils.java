@@ -19,6 +19,7 @@ import exceptions.ecobike.InvalidEcoBikeInformationException;
 
 public class DBUtils {
 	private static Connection connection;
+	
 	public static Connection getConnection() throws EcoBikeException {
         if (connection != null) return connection;
         try {
@@ -49,6 +50,11 @@ public class DBUtils {
 		return dockRes;
 	}
 	
+	public static void initializeDBInstance() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public static String getInvoiceInformation(String invoiceID) throws EcoBikeException, SQLException {
 		if (connection == null) {
 			initializeDBInstance();
@@ -152,7 +158,8 @@ public class DBUtils {
 			initializeDBInstance();
 		}
 		//todo: return bike entities
-		return new Bike();
+//		return new Bike();
+		return null;
 	}
 
 	public static void updateBikeStatus(String bike) throws EcoBikeException, SQLException {
