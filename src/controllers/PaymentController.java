@@ -1,20 +1,21 @@
 package controllers;
 
-import boundaries.InterbankBoundary;
+import boundaries.InterbankBoundary; 
 import entities.CreditCard;
 import entities.Invoice;
 import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeUndefinedException;
+import exceptions.ecobike.InvalidEcoBikeInformationException;
 import exceptions.ecobike.RentBikeException;
 import exceptions.interbank.InvalidCardException;
 import interfaces.InterbankInterface;
-import views.screen.popup.PopupScreen;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This is the class controller including all the methods and operations for payment use case.
@@ -23,7 +24,8 @@ import java.util.Map;
 public class PaymentController extends EcoBikeBaseController {
 
     private static PaymentController paymentController;
-    private static Logger LOGGER = utils.FunctionalUtils.getLogger(PaymentController.class.getName());
+    @SuppressWarnings("unused")
+	private static Logger LOGGER = utils.FunctionalUtils.getLogger(PaymentController.class.getName());
     /**
      * Represent the card used for payment.
      */
@@ -62,7 +64,7 @@ public class PaymentController extends EcoBikeBaseController {
         try {
             this.card = new CreditCard(cardNumber, cardHolderName, issueBank,
                     getExpirationDate(expirationDate), securityCode);
-            this.interbank = new InterbankBoundary();
+            this.interbank = new InterbankBoundary(issueBank);
             PaymentTransaction transaction = interbank.payDeposit(card, amount, content);
             result.put("RESULT", "PAYMENT SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully paid the deposit!");
@@ -93,7 +95,7 @@ public class PaymentController extends EcoBikeBaseController {
         try {
             this.card = new CreditCard(cardNumber, cardHolderName, issueBank,
                     getExpirationDate(expirationDate), securityCode);
-            this.interbank = new InterbankBoundary();
+            this.interbank = new InterbankBoundary(issueBank);
             PaymentTransaction transaction = interbank.returnDeposit(card, amount, content);
             result.put("RESULT", "RETURN SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully receive the deposit!");
@@ -124,7 +126,7 @@ public class PaymentController extends EcoBikeBaseController {
         try {
             this.card = new CreditCard(cardNumber, cardHolderName, issueBank,
                     getExpirationDate(expirationDate), securityCode);
-            this.interbank = new InterbankBoundary();
+            this.interbank = new InterbankBoundary(issueBank);
             PaymentTransaction transaction = interbank.payRental(card, amount, content);
             result.put("RESULT", "PAYMNET SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully pay the rental!");
@@ -142,7 +144,7 @@ public class PaymentController extends EcoBikeBaseController {
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
     public void requestToUpdatePaymentMethod(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-
+    	
     }
 
     /**
@@ -153,7 +155,7 @@ public class PaymentController extends EcoBikeBaseController {
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
     public void displayTransactionInfo(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
-
+    	
     }
 
     /**
@@ -164,7 +166,7 @@ public class PaymentController extends EcoBikeBaseController {
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
     public void saveTransaction(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
-
+    	
     }
 
     /**
@@ -174,9 +176,16 @@ public class PaymentController extends EcoBikeBaseController {
      * @return The invoice entity ({@link entities.Invoice}
      * @throws RentBikeException         If the transaction is not valid
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+     * @throws InvalidEcoBikeInformationException 
      */
-    public Invoice createInvoice(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
-        return null;
+    public Invoice createInvoice(String invoiceID, String bikeName, double deposit, String startTime,
+			String endTime, double subTotal, double total, String timeCreate, List<PaymentTransaction> transactions) 
+					throws RentBikeException, EcoBikeUndefinedException, InvalidEcoBikeInformationException {
+    	Invoice invoice = new Invoice(invoiceID, bikeName, deposit, startTime, endTime, subTotal, total, timeCreate);
+    	for(PaymentTransaction transaction : transactions) {
+    		invoice.addTransaction(transaction);
+    	}
+    	return invoice;
     }
 
     /**
@@ -188,7 +197,7 @@ public class PaymentController extends EcoBikeBaseController {
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
     public void displayInvoiceScreen(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
-
+    	
     }
 
     /**
@@ -199,7 +208,7 @@ public class PaymentController extends EcoBikeBaseController {
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
     public void saveInvoice(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
-
+    	
     }
 
     public boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
@@ -252,7 +261,7 @@ public class PaymentController extends EcoBikeBaseController {
     public String getExpirationDate(String date) throws InvalidCardException {
         String strs[] = date.split("/");
         if (strs.length != 2) {
-            throw new InvalidCardException();
+            throw new InvalidCardException("Invalid format of date");
         }
 
         String expirationDate = null;
@@ -264,11 +273,11 @@ public class PaymentController extends EcoBikeBaseController {
             year = Integer.parseInt(strs[1]);
             if (month < 1 || month > 12 || year < Calendar.getInstance()
                     .get(Calendar.YEAR) % 100 || year > 100) {
-                throw new InvalidCardException();
+                throw new InvalidCardException("Invalid date");
             }
             expirationDate = strs[0] + strs[1];
         } catch (Exception e) {
-            throw new InvalidCardException();
+            throw new InvalidCardException("Invalid date");
         }
         return expirationDate;
     }
