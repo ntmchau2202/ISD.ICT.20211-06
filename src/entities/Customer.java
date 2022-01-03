@@ -2,6 +2,8 @@ package entities;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+
 import utils.JSONUtils;
 
 /**
@@ -42,7 +44,7 @@ public class Customer {
 		return customerName;
 	}
 
-	public String getCustomerEmail() {
+	public String getCustomerEmail() throws JSONException {
 		return JSONUtils.serializeCustomerInformation(this);
 	}
 	

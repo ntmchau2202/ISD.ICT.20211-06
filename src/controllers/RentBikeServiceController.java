@@ -1,6 +1,6 @@
 package controllers;
 
-import exceptions.ecobike.EcoBikeException; 
+import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.InterbankInterface;
@@ -10,6 +10,8 @@ import views.screen.popup.PopupScreen;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalTime;
 
 /**
  * This class handles rent bike, return bike and pause bike rental request from customers
@@ -39,7 +41,7 @@ public class RentBikeServiceController extends EcoBikeBaseController {
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void rentBike(String bikeBarcode) throws EcoBikeException, SQLException, IOException {
+	public void rentBike(int bikeBarcode) throws EcoBikeException, SQLException, IOException {
 		//get bike from repository
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
 		
@@ -49,37 +51,32 @@ public class RentBikeServiceController extends EcoBikeBaseController {
 			return;
 		}
 		
-		//show payment method screen
+		// create new customerRent record
+		
+		// create new rentBike record
 		startCountingRentTime(bike);
+		String sql = "Insert into RentBike(rent_id, bike_barcode, start_time) values(?, ?, ?)";
+		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+		stm.setString(1, null); // unknown
+		stm.setInt(2, bikeBarcode);
+		stm.setTime(3, Time.valueOf(LocalTime.now()));
+		stm.executeUpdate();
 
 		//Update status
-		try {
-			String sql = "Update BikeStatus set current_status = ? where bike_barcode = ?";
-			PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
-			stm.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
-			stm.setString(2, bikeBarcode);
-			stm.executeUpdate();
-		} catch (Exception e) {
-			throw e;
-		};
-		
-		//update table rent bike
-		try {
-			String sql = "";
-			PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
-			stm.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
-			stm.setString(2, bikeBarcode);
-			stm.executeUpdate();
-		} catch (Exception e) {
-			throw e;
-		};
+		String sql2 = "Update BikeStatus set current_status = ? where bike_barcode = ?";
+		PreparedStatement stm2 = DBUtils.getConnection().prepareStatement(sql2);
+		stm2.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
+		stm2.setInt(2, bikeBarcode);
+		stm2.executeUpdate();
+
 	}
 	
 	/**
 	 * Start pausing bike rental process
 	 * @param bikeBarcode barCode of the bike to be rented
 	 */
-	public void pauseBikeRental(String bikeBarcode) throws EcoBikeException, SQLException {
+	@SuppressWarnings("unused")
+	public void pauseBikeRental(int bikeBarcode) throws EcoBikeException, SQLException {
 
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
 	}

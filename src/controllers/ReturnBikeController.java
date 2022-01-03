@@ -34,7 +34,8 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void returnBike(String bikeBarcode) throws EcoBikeException, SQLException {
+	@SuppressWarnings("unused")
+	public void returnBike(int bikeBarcode) throws EcoBikeException, SQLException {
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
 	}
 	
@@ -52,6 +53,7 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	 * @param  bike Barcode of the bike to be rented
 	 * @return a float value expresses the money have to pay in currency VND
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public float calculateFee(String bikeType, float rentTime) {
 		//renting cost
 		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute

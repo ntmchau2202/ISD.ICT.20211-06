@@ -1,10 +1,8 @@
 package entities;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import java.sql.Date;
 import utils.FunctionalUtils;
 import exceptions.interbank.InvalidCardException;
 
@@ -13,13 +11,7 @@ import exceptions.interbank.InvalidCardException;
  * @author Duong
  *
  */
-@SuppressWarnings("unused")
 public class CreditCard {
-	
-	/**
-	 * The valid number of the card 
-	 */
-	private String cardNumber;
 	
 	/**
 	 * The name of the holder of the card
@@ -27,27 +19,39 @@ public class CreditCard {
 	private String cardHolderName;
 	
 	/**
+	 * The valid number of the card 
+	 */
+	private String cardNumber;
+	
+	/**
 	 * The bank responsible for the card
 	 */
 	private String issueBank;
-	
-	/**
-	 * The expired date of the card in defined time format
-	 */
-	private Timestamp expirationDate;
 	
 	/**
 	 * The security code of the card
 	 */
 	private String cardSecurity;
 	
-	public CreditCard(String cardNumber, String cardHolderName, String issueBank, String expirationDate,
-			String cardSecurity) {
+	/**
+	 * The money left in the card.
+	 */
+	private double balance;
+	
+	/**
+	 * The expired date of the card in defined time format
+	 */
+	private Date expirationDate;
+	
+	
+	public CreditCard(String cardHolderName,String cardNumber, String issueBank, String cardSecurity, 
+			double balance,String expirationDate) {
 		super();
-		this.setCardNumber(cardNumber);
 		this.setCardHolderName(cardHolderName);
+		this.setCardNumber(cardNumber);
 		this.setIssueBank(issueBank);
 		this.setCardSecurity(cardSecurity);
+		this.setBalance(balance);
 		this.setExpirationDate(expirationDate);
 	}
 	public String getCardNumber() {
@@ -91,14 +95,14 @@ public class CreditCard {
 		}
 		this.issueBank = issueBank;
 	}
-	public Timestamp getExpirationDate() {
+	public Date getExpirationDate() {
 		return expirationDate;
 	}
 	public void setExpirationDate(String expirationDate) {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("MM/yyyy");	
-			Date date = dateFormat.parse(expirationDate);
-			this.expirationDate = new Timestamp(date.getTime());
+			Date date = (Date) dateFormat.parse(expirationDate);
+			this.expirationDate = new Date(date.getTime());
 		} catch (Exception e) {
 			throw new InvalidCardException("invalid expiration date");
 		}
@@ -109,5 +113,13 @@ public class CreditCard {
 	public void setCardSecurity(String cardSecurity) {
 		this.cardSecurity = cardSecurity;
 	}
+	public double getBalance() {
+		return balance;
+	}
+	private void setBalance(double balance) {
+		this.balance = balance;
+	}
+	
+	
 
 }

@@ -1,6 +1,6 @@
 package entities;
 
-import java.sql.Timestamp;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,9 +20,9 @@ public class Invoice {
 	private String invoiceID;
 	
 	/**
-	 * The name of the bike customers rent
+	 * The barcode of the bike customers rent
 	 */
-	private String bikeName;
+	private String bikeBarCode;
 	
 	private ArrayList<PaymentTransaction> listTransaction;
 	
@@ -34,28 +34,17 @@ public class Invoice {
 	/**
 	 * The time customers begin to rent bike 
 	 */
-	private Timestamp startTime;
+	private Time startTime;
 	
 	/**
 	 * The time customers return bike
 	 */
-	private Timestamp endTime;
-	
-	
-	/**
-	 * The sub-total money customers have to pay which is the value calculated based on the total rental time 
-	 */
-	private double subTotal;
+	private Time endTime;
 	
 	/**
 	 * The total money customers have to pay including sub-total and VAT
 	 */
 	private double total;
-	
-	/**
-	 * The time customers pay for rental bike in defined time format
-	 */
-	private Timestamp timeCreate;
 	
 	private int rentID;
 	
@@ -71,16 +60,12 @@ public class Invoice {
 		listTransaction = new ArrayList<PaymentTransaction>();
 	}
 
-	public Invoice(String invoiceID, String bikeName, double deposit, String startTime,
-			String endTime, double subTotal, double total, String timeCreate) throws InvalidEcoBikeInformationException {
+	public Invoice(String invoiceID, String bikeBarCode, String startTime,
+			String endTime) throws InvalidEcoBikeInformationException {
 		listTransaction = new ArrayList<PaymentTransaction>();
-		this.bikeName = bikeName;
-		this.deposit = deposit;
+		this.bikeBarCode = bikeBarCode;
 		this.setStartTime(startTime);
 		this.setEndTime(endTime);
-		this.subTotal = subTotal;
-		this.total = total;
-		this.setTimeCreate(timeCreate);
 	}
 	
 	public void addTransaction(PaymentTransaction transaction) {
@@ -104,15 +89,19 @@ public class Invoice {
 		return invoiceID;
 	}
 
-	public String getBikeName() {
-		return bikeName;
+	public String getBikeBarcode() {
+		return bikeBarCode;
 	}
 
 	public double getDeposit() {
 		return deposit;
 	}
+	
+	public void setDeposit(double deposit) {
+		this.deposit = deposit;
+	}
 
-	public Timestamp getStartTime() {
+	public Time getStartTime() {
 		return startTime;
 	}
 
@@ -120,13 +109,13 @@ public class Invoice {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
 			Date date = dateFormat.parse(startTime);
-			this.startTime = new Timestamp(date.getTime());
+			this.startTime = new Time(date.getTime());
 		} catch (Exception e) {
 			throw new InvalidEcoBikeInformationException("invalid date format");
 		}
 	}
 
-	public Timestamp getEndTime() {
+	public Time getEndTime() {
 		return endTime;
 	}
 
@@ -134,7 +123,7 @@ public class Invoice {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
 			Date date = dateFormat.parse(endTime);
-			Timestamp tmpEnd = new Timestamp(date.getTime());
+			Time tmpEnd = new Time(date.getTime());
 			if (tmpEnd.getTime() < this.startTime.getTime()) {
 				throw new InvalidEcoBikeInformationException("end time must be later than start time");
 			}
@@ -149,27 +138,17 @@ public class Invoice {
 		return (int)endTime.getTime()- (int)startTime.getTime();
 	}
 
-	public double getsubTotal() {
-		return subTotal;
-	}
 
 	public double getTotal() {
 		return total;
 	}
 
-	public Timestamp getTimeCreate() {
-		return timeCreate;
+	public void setTotal(double total) {
+		this.total = total;
 	}
 
-	private void setTimeCreate(String timeCreate) throws InvalidEcoBikeInformationException {
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
-			Date date = dateFormat.parse(timeCreate);
-			this.timeCreate = new Timestamp(date.getTime());
-		} catch (Exception e) {
-			throw new InvalidEcoBikeInformationException("invalid date format");
-		}
+	public void setInvoiceID(String invoiceID) {
+		this.invoiceID = invoiceID;
 	}
-
 	
 }
