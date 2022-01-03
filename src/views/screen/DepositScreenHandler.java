@@ -1,86 +1,83 @@
 package views.screen;
 
-import java.awt.Label;
-import java.io.IOException;
-import java.sql.SQLException;
-import controllers.EcoBikeInformationController;
-import controllers.ReturnBikeController;
+import controllers.PaymentController;
 import entities.Bike;
 import entities.CreditCard;
-import entities.Dock;
-import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import utils.Configs;
-import utils.JSONUtils;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * This class creates a handler for deposit screen
- * @author longnt
  *
+ * @author longnt
  */
 public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
 
+    private static DepositScreenHandler depositScreenHandler;
+    private Bike currentBike;
+    private CreditCard currentCreditCard;
+
     @FXML
     private Label customerName;
-
     @FXML
     private Label bikeToRent;
-
     @FXML
     private Label bikeType;
-
     @FXML
     private Label deposit;
-
     @FXML
     private Button confirmDepositButton;
-
     @FXML
     private Button changeCardInformationButton;
 
-
-    private static DepositScreenHandler depositScreenHandler;
-
-    private Bike bike;
-    private CreditCard card;
-
-    protected DepositScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev) throws IOException {
-        super(stage, sreenPath);
-        this.setPreviousScreen(prev);
+    private DepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
+        super(stage, screenPath, prevScreen);
     }
 
+    public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Bike bike) {
+        if (depositScreenHandler == null) {
+            try {
+                depositScreenHandler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH, prevScreen);
+                depositScreenHandler.setbController(PaymentController.getPaymentController());
+                depositScreenHandler.setScreenTitle("Deposit screen");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-//	public static DockInformationScreenHandler getDockInformationScreenHandler(Dock dockToDisplay, EcoBikeBaseScreenHandler prevScreen) {
-//		if (dockInformationScreenHandler == null) {
-//			dockInformationScreenHandler = new DockInformationScreenHandler("EcoBike Dock " + dockToDisplay.getName() + " information", prevScreen);
-//		}
-//		dockInformationScreenHandler.prevScreen = prevScreen;
-//		return dockInformationScreenHandler;
-//	}
+        if(creditCard != null){
+            depositScreenHandler.currentCreditCard = creditCard;
+        }
 
-    public void initialize() {
-        customerName.setText(card.getCardHolderName());
-        bikeToRent.setText(bike.getName());
-        bikeType.setText(bike.getBikeType());
-        deposit.setText(bike.getDeposit() + " " + bike.getCurrency());
+        if(bike != null){
+            depositScreenHandler.currentBike = bike;
+        }
+
+        depositScreenHandler.initializeDepositScreen();
+
+        return depositScreenHandler;
+    }
+
+    private void initializeDepositScreen() {
+        customerName.setText(currentCreditCard.getCardHolderName());
+        bikeToRent.setText(currentBike.getName());
+        bikeType.setText(currentBike.getBikeType());
+        deposit.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());
 
         confirmDepositButton.setOnMouseClicked(e -> confirmDeposit());
         changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
     }
 
-    private void confirmDeposit(){
+    private void confirmDeposit() {
 
     }
 
-    private void changeCardInformation(){
+    private void changeCardInformation() {
 
-    }
-
-    public void updateCardInfo(CreditCard card) {
-        this.card = card;
-        customerName.setText(card.getCardHolderName());
     }
 }

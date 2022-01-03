@@ -14,26 +14,5 @@ import javafx.scene.layout.Pane;
  *
  */
 public class EcoBikeFxmlScreenHandler {
-	protected FXMLLoader loader;
-	protected Pane content;
-	
-	public EcoBikeFxmlScreenHandler(String screenPath) throws IOException {
-		this.loader = new FXMLLoader(getClass().getResource(screenPath));
-		this.loader.setController(this);
-		this.content = (Pane) loader.load();
-	}
-	
-	public Pane getContent() {
-		return this.content;
-	}
-	
-	public FXMLLoader getLoader() {
-		return this.loader;
-	}
-	
-	public void setImage(ImageView imv, String path) {
-	    File file = new File(path);
-	    Image img = new Image(file.toURI().toString());
-	    imv.setImage(img);
-	  }
+
 }

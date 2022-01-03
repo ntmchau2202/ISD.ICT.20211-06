@@ -15,7 +15,15 @@ import utils.DBUtils;
 public class ReturnBikeController extends EcoBikeBaseController {
 	
 	private InterbankInterface interbankSystem;
-	
+
+	private static ReturnBikeController returnBikeController;
+
+	public static ReturnBikeController getReturnBikeController(){
+		if (returnBikeController == null)
+			returnBikeController = new ReturnBikeController();
+		return returnBikeController;
+	}
+
 	/**
 	 * Check if the dock have free spaces.
 	 * <br>@param dock
