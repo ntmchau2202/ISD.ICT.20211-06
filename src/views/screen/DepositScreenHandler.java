@@ -35,42 +35,56 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button changeCardInformationButton;
 
-    private DepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
-        super(stage, screenPath, prevScreen);
+    private DepositScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
     }
 
     public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Bike bike) {
         if (depositScreenHandler == null) {
             try {
-                depositScreenHandler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH, prevScreen);
+                depositScreenHandler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH);
                 depositScreenHandler.setbController(PaymentController.getPaymentController());
                 depositScreenHandler.setScreenTitle("Deposit screen");
+                depositScreenHandler.initializeDepositScreen();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if(creditCard != null){
+        if (prevScreen != null) {
+            depositScreenHandler.setPreviousScreen(prevScreen);
+        }
+
+        if (creditCard != null) {
             depositScreenHandler.currentCreditCard = creditCard;
         }
 
-        if(bike != null){
+        if (bike != null) {
             depositScreenHandler.currentBike = bike;
         }
 
-        depositScreenHandler.initializeDepositScreen();
+        depositScreenHandler.renderDepositScreen();
 
         return depositScreenHandler;
     }
 
+    /**
+     * This is the method to do initialization and register button event.
+     */
     private void initializeDepositScreen() {
+        confirmDepositButton.setOnMouseClicked(e -> confirmDeposit());
+        changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
+    }
+
+    /**
+     * This is the method to do render the screen with data.
+     */
+    private void renderDepositScreen() {
         customerName.setText(currentCreditCard.getCardHolderName());
         bikeToRent.setText(currentBike.getName());
         bikeType.setText(currentBike.getBikeType());
         deposit.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());
 
-        confirmDepositButton.setOnMouseClicked(e -> confirmDeposit());
-        changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
     }
 
     private void confirmDeposit() {

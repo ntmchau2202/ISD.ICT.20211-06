@@ -1,96 +1,110 @@
 package views.screen;
 
-import java.awt.Label;
-import java.io.IOException;
-import java.sql.SQLException;
-import controllers.EcoBikeInformationController;
-import controllers.RentBikeServiceController;
+import controllers.PaymentController;
 import controllers.ReturnBikeController;
 import entities.Bike;
 import entities.CreditCard;
-import entities.Dock;
-import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import utils.Configs;
-import utils.JSONUtils;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * This class creates a handler for deposit screen
- * @author longnt
  *
+ * @author longnt
  */
 public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
 
+    private static PaymentScreenHandler paymentScreenHandler;
+    private Bike currentBike;
+    private CreditCard currentCreditCard;
+
     @FXML
     private Label customerName;
-
     @FXML
     private Label bikeRented;
-
     @FXML
     private Label bikeType;
-
     @FXML
     private Label timeRented;
-
     @FXML
     private Label cost;
-
     @FXML
     private Label total;
-
     @FXML
     private Button confirmPaymentButton;
-
     @FXML
     private Button changeCardInformationButton;
 
 
-    private static DepositScreenHandler depositScreenHandler;
-
-    private Bike bike;
-    private CreditCard card;
-    private ReturnBikeController returnBikeController;
-
-    protected PaymentScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev) throws IOException {
-        super(stage, sreenPath);
-        this.setPreviousScreen(prev);
+    private PaymentScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
     }
 
+    public static PaymentScreenHandler getPaymentScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Bike bike) {
+        if (paymentScreenHandler == null) {
+            try {
+                paymentScreenHandler = new PaymentScreenHandler(stage, Configs.PAYMENT_METHOD_SCREEN_PATH);
+                paymentScreenHandler.setbController(ReturnBikeController.getReturnBikeController());
+                paymentScreenHandler.setScreenTitle("Payment method screen");
+                paymentScreenHandler.initializePaymentScreen();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-//	public static DockInformationScreenHandler getDockInformationScreenHandler(Dock dockToDisplay, EcoBikeBaseScreenHandler prevScreen) {
-//		if (dockInformationScreenHandler == null) {
-//			dockInformationScreenHandler = new DockInformationScreenHandler("EcoBike Dock " + dockToDisplay.getName() + " information", prevScreen);
-//		}
-//		dockInformationScreenHandler.prevScreen = prevScreen;
-//		return dockInformationScreenHandler;
-//	}
+        if (prevScreen != null) {
+            paymentScreenHandler.setPreviousScreen(prevScreen);
+        }
 
-    public void initialize() {
-        customerName.setText(card.getCardHolderName());
-        bikeRented.setText(bike.getName());
-        bikeType.setText(bike.getBikeType());
-        timeRented.setText(bike.getTotalRentTime() + " hour");
-        cost.setText(returnBikeController.calculateFee(bike.getBikeType(), bike.getTotalRentTime()) + " " + bike.getCurrency());
-        total.setText(returnBikeController.calculateFee(bike.getBikeType(), bike.getTotalRentTime()) * 1.1 + " " + bike.getCurrency());
+        if (creditCard != null) {
+            paymentScreenHandler.currentCreditCard = creditCard;
+        }
 
+        if (bike != null) {
+            paymentScreenHandler.currentBike = bike;
+        }
+
+        paymentScreenHandler.renderPaymentScreen();
+
+        return paymentScreenHandler;
+    }
+
+    /**
+     * This is the method to do initialization and register button event.
+     */
+    private void initializePaymentScreen() {
         confirmPaymentButton.setOnMouseClicked(e -> setConfirmPaymentButton());
         changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
     }
 
-    private void setConfirmPaymentButton(){
+    /**
+     * This is the method to render payment method if a card is provided.
+     */
+    private void renderPaymentScreen() {
+        customerName.setText(currentCreditCard.getCardHolderName());
+        bikeRented.setText(currentBike.getName());
+        bikeType.setText(currentBike.getBikeType());
+        timeRented.setText(currentBike.getTotalRentTime() + " hour");
+        cost.setText(ReturnBikeController.getReturnBikeController().calculateFee(currentBike.getBikeType(), currentBike.getTotalRentTime()) + " " + currentBike.getCurrency());
+        total.setText(ReturnBikeController.getReturnBikeController().calculateFee(currentBike.getBikeType(), currentBike.getTotalRentTime()) * 1.1 + " " + currentBike.getCurrency());
 
     }
 
-    private void changeCardInformation(){
+    private void setConfirmPaymentButton() {
+
+    }
+
+    private void changeCardInformation() {
 
     }
 
     public void updateCardInfo(CreditCard card) {
-        this.card = card;
+        this.currentCreditCard = card;
         customerName.setText(card.getCardHolderName());
     }
 }

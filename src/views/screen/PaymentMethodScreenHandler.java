@@ -1,18 +1,8 @@
 package views.screen;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import controllers.EcoBikeBaseController;
 import controllers.PaymentController;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeUndefinedException;
-import exceptions.ecobike.RentBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -20,12 +10,18 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utils.Configs;
 
+import java.io.IOException;
+
 /**
  * This is the class handler for payment method screen
  *
  * @author Duong
  */
 public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
+
+    private static PaymentMethodScreenHandler paymentMethodScreenHandler;
+    private CreditCard currentCreditCard = null;
+
     @FXML
     private TextField cardHolderName;
     @FXML
@@ -37,56 +33,91 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button confirmPaymentButton;
 
+
+    private PaymentMethodScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
+    }
+
+    public static PaymentMethodScreenHandler getPaymentMethodScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard) {
+        if (paymentMethodScreenHandler == null) {
+            try {
+                paymentMethodScreenHandler = new PaymentMethodScreenHandler(stage, Configs.PAYMENT_METHOD_SCREEN_PATH);
+                paymentMethodScreenHandler.setbController(PaymentController.getPaymentController());
+                paymentMethodScreenHandler.setScreenTitle("Payment method screen");
+                paymentMethodScreenHandler.initializePaymentScreen();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (prevScreen != null) {
+            paymentMethodScreenHandler.setPreviousScreen(prevScreen);
+        }
+
+        if (creditCard != null) {
+            paymentMethodScreenHandler.currentCreditCard = creditCard;
+        }
+
+        paymentMethodScreenHandler.renderPaymentMethod();
+
+        return paymentMethodScreenHandler;
+    }
+
     /**
-     * Initialize handler for paying method screen of EcoBike application
-     *
-     * @param screenTitle Title of the screen
-     * @param controller  Controller for handling request from the screen
-     * @param prevScreen  An instance to the screen that called this screen
+     * This is the method to do initialization and register button event.
      */
-    public PaymentMethodScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
-        super(stage, screenTitle, controller, prevScreen, screenPath);
-        initialize();
-    }
-
-    @Override
-    protected void initialize() {
+    private void initializePaymentScreen() {
         confirmPaymentButton.setOnMouseClicked(e -> validateInput());
-
     }
 
-	public void validateInput() {
-		if(PaymentController.getPaymentController().validateCardHolderName(cardHolderName.getText()) == false){
+    /**
+     * This is the method to render payment method if a card is provided.
+     */
+    private void renderPaymentMethod() {
+        if (currentCreditCard != null) {
+            cardHolderName.setText(currentCreditCard.getCardHolderName());
+            cardNumber.setText(currentCreditCard.getCardNumber());
+            securityCode.setText(currentCreditCard.getCardSecurity());
+            expirationDate.setText(currentCreditCard.getExpirationDate().toString());
+        }
+    }
+
+    /**
+     * This is the method to call when user click confirm payment method button.
+     */
+    private void validateInput() {
+        if (PaymentController.getPaymentController().validateCardHolderName(cardHolderName.getText()) == false) {
             popUpError("Invalid card holder name!");
             return;
         }
-        if(PaymentController.getPaymentController().validateCardNumber(cardNumber.getText()) == false){
+        if (PaymentController.getPaymentController().validateCardNumber(cardNumber.getText()) == false) {
             popUpError("Invalid card number!");
             return;
         }
-        if(PaymentController.getPaymentController().validateExdpirationDate(expirationDate.getText()) == false){
+        if (PaymentController.getPaymentController().validateExdpirationDate(expirationDate.getText()) == false) {
             popUpError("Invalid expiration date!");
             return;
         }
-        if(PaymentController.getPaymentController().validateCardSecurity(securityCode.getText()) == false){
+        if (PaymentController.getPaymentController().validateCardSecurity(securityCode.getText()) == false) {
             popUpError("Invalid security code!");
             return;
         }
 
+        //if all information provided is valid, create new credit card and show
         CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "acb", expirationDate.getText(), securityCode.getText());
-        try{
+        try {
             confirmPaymentMethod(card);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-	}
+    }
 
     /**
      * Get payment method information from the form and go to transaction screen
      *
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
-    public void confirmPaymentMethod(CreditCard card) throws EcoBikeUndefinedException {
+    private void confirmPaymentMethod(CreditCard card) throws EcoBikeUndefinedException {
 
     }
 

@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -18,7 +17,7 @@ import java.util.Hashtable;
  *
  * @author chauntm
  */
-public abstract class EcoBikeBaseScreenHandler extends EcoBikeFxmlScreenHandler {
+public abstract class EcoBikeBaseScreenHandler {
 
     protected final Stage stage;
     protected EcoBikeMainScreenHandler mainScreenHandler;
@@ -30,10 +29,9 @@ public abstract class EcoBikeBaseScreenHandler extends EcoBikeFxmlScreenHandler 
     private EcoBikeBaseController baseController;
 
 
-    public EcoBikeBaseScreenHandler(Stage newStage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
+    public EcoBikeBaseScreenHandler(Stage newStage, String screenPath) throws IOException {
         this.loader = new FXMLLoader(getClass().getResource(screenPath));
         this.loader.setController(this);
-        this.prev = prevScreen;
         this.content = (AnchorPane) loader.load();
         this.stage = newStage;
     }
@@ -73,6 +71,14 @@ public abstract class EcoBikeBaseScreenHandler extends EcoBikeFxmlScreenHandler 
 
     public void setbController(EcoBikeBaseController newBaseController) {
         this.baseController = newBaseController;
+    }
+
+    public void setPreviousScreen(EcoBikeBaseScreenHandler prev) {
+        this.prev = prev;
+    }
+
+    public EcoBikeBaseScreenHandler getPreviousScreen() {
+        return this.prev;
     }
 
     @SuppressWarnings("rawtypes")

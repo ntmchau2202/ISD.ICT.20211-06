@@ -22,14 +22,6 @@ import java.io.IOException;
  */
 public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
-    /**
-     * Initialize the handler for bike information screen
-     *
-     * @param screenTitle Title of the screen
-     * @param controller Controller for handling request from the screen
-     * @param prevScreen An instance to the screen that called this screen
-     */
-
     private static BikeInformationScreenHandler bikeInformationScreenHandler;
     private Bike currentBike;
 
@@ -56,33 +48,47 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private ImageView bikeImage;
 
-    private BikeInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
-        super(stage, screenPath, prevScreen);
+    private BikeInformationScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
     }
 
     public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
         if (bikeInformationScreenHandler == null) {
             try {
-                bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.BIKE_INFORMATION_SCREEN_PATH, prevScreen);
+                bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.BIKE_INFORMATION_SCREEN_PATH);
                 bikeInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
                 bikeInformationScreenHandler.setScreenTitle("Bike information screen");
+                bikeInformationScreenHandler.initializeBikeScreen();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if (bike != null) {
-            bikeInformationScreenHandler.currentBike = bike;
-            bikeInformationScreenHandler.initializeBike();
+        if (prevScreen != null) {
+            bikeInformationScreenHandler.setPreviousScreen(prevScreen);
         }
 
-        bikeInformationScreenHandler.initializeBike();
+        if (bike != null) {
+            bikeInformationScreenHandler.currentBike = bike;
+        }
+
+        bikeInformationScreenHandler.renderBikeScreen();
 
         return bikeInformationScreenHandler;
     }
 
-    private void initializeBike() {
+    /**
+     * This is the method to do initialization and register button event.
+     */
+    private void initializeBikeScreen(){
+        rentBikeButton.setOnMouseClicked(e -> rentBike());
+        returnBikeButton.setOnMouseClicked(e -> returnBike());
+    }
 
+    /**
+     * This is the method to do render the screen with the data.
+     */
+    private void renderBikeScreen() {
         super.setImage(bikeImage, currentBike.getBikeImage());
         bikeNameText.setText(currentBike.getName());
         bikeTypeText.setText(currentBike.getBikeType());
@@ -95,10 +101,6 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
         rentBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? false : true);
         returnBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? true : false);
-
-        rentBikeButton.setOnMouseClicked(e -> rentBike());
-
-        returnBikeButton.setOnMouseClicked(e -> returnBike());
     }
 
 
@@ -126,4 +128,5 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
             e.printStackTrace();
         }
     }
+
 }
