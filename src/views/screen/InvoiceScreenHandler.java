@@ -14,9 +14,15 @@ import javafx.stage.Stage;
  *
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-	protected InvoiceScreenHandler(Stage stage,String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
-		super(stage, screenPath);
-		this.setPreviousScreen(prevScreen);
+	protected InvoiceScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
+		super(stage, screenTitle, controller, prevScreen, screenPath);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void initialize() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**

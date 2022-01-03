@@ -1,6 +1,6 @@
 package entities;
 
-import exceptions.ecobike.InvalidEcoBikeInformationException; 
+import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.FunctionalUtils;
 import utils.JSONUtils;
 
@@ -146,6 +146,5 @@ public class Dock {
 	public String toString() {
 		return JSONUtils.serializeDockInformation(this);
 	}
-	
 	
 }

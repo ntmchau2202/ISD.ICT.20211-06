@@ -1,8 +1,6 @@
 package controllers;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import entities.Bike;
 import entities.Dock;
 import exceptions.ecobike.EcoBikeException;
@@ -16,19 +14,18 @@ import utils.DBUtils;
  *
  */
 public class EcoBikeInformationController extends EcoBikeBaseController {
-	
-	private static EcoBikeInformationController ecobikeInfoController;
-	
-	private EcoBikeInformationController() {
-		super();
+	private static EcoBikeInformationController ecoBikeInformationController;
+
+	public static EcoBikeInformationController getEcoBikeInformationController() {
+		if (ecoBikeInformationController == null)
+			ecoBikeInformationController = new EcoBikeInformationController();
+		return ecoBikeInformationController;
+	}
+
+	public EcoBikeInformationController() {
+
 	}
 	
-	public static EcoBikeInformationController getEcoBikeInformationController()  {
-		if (ecobikeInfoController == null) {
-			ecobikeInfoController = new EcoBikeInformationController();
-		}
-		return ecobikeInfoController;
-	}
 	
 	/**
 	 * Gets information about a given dock
@@ -38,7 +35,7 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @throws EcoBikeException 
 	 * @throws SQLException 
 	 */
-	public String getDockInformation(String dockID) throws SQLException, EcoBikeException {
+	public Dock getDockInformation(String dockID) throws SQLException, EcoBikeException {
 		if (dockID == null) {
 			throw new NoInformationException("no keyword to search");
 		}
@@ -58,16 +55,16 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @throws SQLException 
 	 * @throws EcoBikeException 
 	 */
-	public String getBikeInformation(String bikeID) throws EcoBikeException, SQLException {
-		if (bikeID == null) {
+	public Bike getBikeInformation(String barCode) throws EcoBikeException, SQLException {
+		if (barCode == null) {
 			throw new NoInformationException("no keyword to search");
 		}
 		
-		if (bikeID.length() == 0) {
+		if (barCode.length() == 0) {
 			throw new NoInformationException("no keyword to search");
 		}
 
-		return DBUtils.getBikeInformation(bikeID);
+		return DBUtils.getBikeByBarcode(barCode);
 	}
 	
 }
