@@ -107,7 +107,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     public void rentBike() {
         try {
             System.out.println("rent bike");
-            RentBikeServiceController.getRentBikeServiceController().rentBike(currentBike.getBarCode());
+            //show deposit screen
+            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,7 +116,9 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
     public void returnBike() {
         try {
-            ReturnBikeController.getReturnBikeController().returnBike(currentBike.getBarCode());
+            System.out.println("return bike");
+            //show deposit screen
+            PaymentScreenHandler.getPaymentScreenHandler(this.stage, this, null, currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }

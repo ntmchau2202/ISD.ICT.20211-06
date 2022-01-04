@@ -68,6 +68,18 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
         return depositScreenHandler;
     }
 
+    @Override
+    public void show() {
+        if(currentCreditCard != null) {
+            //if already provided a credit card, just show the screen
+            super.show();
+        }
+        else{
+            //show payment method
+            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null).show();
+        }
+    }
+
     /**
      * This is the method to do initialization and register button event.
      */
@@ -80,11 +92,12 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
      * This is the method to do render the screen with data.
      */
     private void renderDepositScreen() {
-        customerName.setText(currentCreditCard.getCardHolderName());
+        if (currentCreditCard != null) {
+            customerName.setText(currentCreditCard.getCardHolderName());
+        }
         bikeToRent.setText(currentBike.getName());
         bikeType.setText(currentBike.getBikeType());
         deposit.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());
-
     }
 
     private void confirmDeposit() {

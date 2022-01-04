@@ -51,6 +51,7 @@ public class Configs {
 	public static final String BIKE_IN_DOCK_PATH = "/views/screens/BikeInDock.fxml";
 	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/screens/FXML_PayingMethodScreen.fxml";
 
+
 	public enum BIKE_STATUS {
 		FREE,
 		RENTED,		

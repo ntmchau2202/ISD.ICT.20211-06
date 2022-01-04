@@ -74,6 +74,18 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
         return paymentScreenHandler;
     }
 
+    @Override
+    public void show() {
+        if(currentCreditCard != null) {
+            //if already provided a credit card, just show the screen
+            super.show();
+        }
+        else{
+            //show payment method
+            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null).show();
+        }
+    }
+
     /**
      * This is the method to do initialization and register button event.
      */
