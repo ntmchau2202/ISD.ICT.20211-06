@@ -2,17 +2,14 @@ package views.screen;
 
 import controllers.EcoBikeInformationController;
 import controllers.RentBikeServiceController;
-import controllers.ReturnBikeController;
 import entities.Bike;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -22,8 +19,8 @@ import java.io.IOException;
  */
 public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static BikeInformationScreenHandler bikeInformationScreenHandler;
-    private Bike currentBike;
+    private static BikeInformationScreenHandler bikeInformationScreenHandler = null;
+    private Bike currentBike = null;
 
     @FXML
     private Label bikeNameText;
@@ -52,6 +49,14 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         super(stage, screenPath);
     }
 
+    /**
+     * This class return an instance of bike information screen handler, initialize it with the stage, prevScreen and bike
+     *
+     * @param stage         the stage to show this screen
+     * @param prevScreen    the screen that call to this screen
+     * @param bike          the bike to render this screen, provide null if update is not needed
+     *
+     */
     public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
         if (bikeInformationScreenHandler == null) {
             try {

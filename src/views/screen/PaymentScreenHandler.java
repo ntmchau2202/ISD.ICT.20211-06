@@ -19,9 +19,9 @@ import java.io.IOException;
  */
 public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static PaymentScreenHandler paymentScreenHandler;
-    private Bike currentBike;
-    private CreditCard currentCreditCard;
+    private static PaymentScreenHandler paymentScreenHandler = null;
+    private Bike currentBike = null;
+    private CreditCard currentCreditCard = null;
 
     @FXML
     private Label customerName;
@@ -40,11 +40,19 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button changeCardInformationButton;
 
-
     private PaymentScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
     }
 
+    /**
+     * This class return an instance of payment screen handler, initialize it with the stage, prevScreen, creditCard and transactionType
+     *
+     * @param stage             the stage to show this screen
+     * @param prevScreen        the screen that call to this screen
+     * @param creditCard        the credit card to render this screen, provide null if update is not needed
+     * @param bike              the bike to render this screen, provide null if update is not needed
+     *
+     */
     public static PaymentScreenHandler getPaymentScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Bike bike) {
         if (paymentScreenHandler == null) {
             try {
@@ -82,7 +90,7 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
         }
         else{
             //show payment method
-            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null).show();
+            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null, Configs.TransactionType.PAY_RENTAL).show();
         }
     }
 
@@ -107,16 +115,18 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
 
     }
 
+    /**
+     * This is the method to be called when user press confirm payment button.
+     */
     private void setConfirmPaymentButton() {
-
+        //todo: call controller to proceed payment transaction with current credit card and bike
     }
 
+    /**
+     * This is the method to be called when user press change card information button.
+     */
     private void changeCardInformation() {
-
+        PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, currentCreditCard, Configs.TransactionType.PAY_RENTAL).show();
     }
 
-    public void updateCardInfo(CreditCard card) {
-        this.currentCreditCard = card;
-        customerName.setText(card.getCardHolderName());
-    }
 }

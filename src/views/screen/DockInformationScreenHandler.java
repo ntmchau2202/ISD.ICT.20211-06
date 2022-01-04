@@ -22,9 +22,9 @@ import java.util.ArrayList;
  */
 public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static DockInformationScreenHandler dockInformationScreenHandler;
-    private Dock currentDock;
-    private ArrayList<Bike> currentBikeList;
+    private static DockInformationScreenHandler dockInformationScreenHandler = null;
+    private Dock currentDock = null;
+    private ArrayList<Bike> currentBikeList = null;
 
     @FXML
     private ImageView dockImageView;
@@ -53,6 +53,15 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
         super(stage, screenPath);
     }
 
+    /**
+     * This class return an instance of dock screen handler, initialize it with the stage, prevScreen, dock and bikeList
+     *
+     * @param stage         the stage to show this screen
+     * @param prevScreen    the screen that call to this screen
+     * @param dock          the dock to render this screen, provide null if update is not needed
+     * @param bikeList      the bikeList to render this screen, provide null if update is not needed
+     *
+     */
     public static DockInformationScreenHandler getDockInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Dock dock, ArrayList<Bike> bikeList) {
         if (dockInformationScreenHandler == null) {
             try {

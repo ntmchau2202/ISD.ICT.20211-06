@@ -18,7 +18,7 @@ import utils.Configs;
  *
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-	private static InvoiceScreenHandler invoiceScreenHandler;
+	private static InvoiceScreenHandler invoiceScreenHandler = null;
 
 	private InvoiceScreenHandler(Stage stage, String screenPath) throws IOException {
 		super(stage, screenPath);

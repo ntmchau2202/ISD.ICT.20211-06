@@ -18,9 +18,9 @@ import java.io.IOException;
  */
 public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static DepositScreenHandler depositScreenHandler;
-    private Bike currentBike;
-    private CreditCard currentCreditCard;
+    private static DepositScreenHandler depositScreenHandler = null;
+    private Bike currentBike = null;
+    private CreditCard currentCreditCard = null;
 
     @FXML
     private Label customerName;
@@ -39,6 +39,14 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
         super(stage, screenPath);
     }
 
+    /**
+     * This class return an instance of deposit screen handler, initialize it with the stage, prevScreen, creditCard and bike
+     *
+     * @param stage      the stage to show this screen
+     * @param prevScreen the screen that call to this screen
+     * @param creditCard the credit card to render this screen, provide null if update is not needed
+     * @param bike       the bike to render this screen, provide null if update is not needed
+     */
     public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Bike bike) {
         if (depositScreenHandler == null) {
             try {
@@ -70,13 +78,12 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
 
     @Override
     public void show() {
-        if(currentCreditCard != null) {
+        if (currentCreditCard != null) {
             //if already provided a credit card, just show the screen
             super.show();
-        }
-        else{
+        } else {
             //show payment method
-            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null).show();
+            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null, Configs.TransactionType.PAY_DEPOSIT).show();
         }
     }
 
@@ -100,11 +107,17 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
         deposit.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());
     }
 
+    /**
+     * This is the method to be called when user press confirm deposit.
+     */
     private void confirmDeposit() {
-
+        //todo: call payment controller to proceed deposit transaction with current bike and credit card
     }
 
+    /**
+     * This is the method to be called when user press change card information.
+     */
     private void changeCardInformation() {
-
+        PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, currentCreditCard, Configs.TransactionType.PAY_DEPOSIT);
     }
 }

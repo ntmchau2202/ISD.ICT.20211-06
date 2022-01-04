@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static PaymentMethodScreenHandler paymentMethodScreenHandler;
+    private static PaymentMethodScreenHandler paymentMethodScreenHandler = null;
     private CreditCard currentCreditCard = null;
     private Configs.TransactionType currentTransactionType = null;
 
@@ -34,11 +34,19 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button confirmPaymentButton;
 
-
     private PaymentMethodScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
     }
 
+    /**
+     * This class return an instance of payment method screen handler, initialize it with the stage, prevScreen, creditCard and transactionType
+     *
+     * @param stage             the stage to show this screen
+     * @param prevScreen        the screen that call to this screen
+     * @param creditCard        the credit card to render this screen, provide null if update is not needed
+     * @param transactionType   the transaction type of the process
+     *
+     */
     public static PaymentMethodScreenHandler getPaymentMethodScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Configs.TransactionType transactionType) {
         if (paymentMethodScreenHandler == null) {
             try {

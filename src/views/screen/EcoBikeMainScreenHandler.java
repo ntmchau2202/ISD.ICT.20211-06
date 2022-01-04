@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static EcoBikeMainScreenHandler ecoBikeMainScreenHandler;
+    private static EcoBikeMainScreenHandler ecoBikeMainScreenHandler = null;
     @FXML
     private ImageView dock1;
     @FXML
@@ -38,6 +38,13 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
         super(stage, screenPath);
     }
 
+    /**
+     * This class return an instance of main screen handler, initialize it with the stage and prevScreen
+     *
+     * @param stage         the stage to show this screen
+     * @param prevScreen    the screen that call to this screen
+     *
+     */
     public static EcoBikeMainScreenHandler getEcoBikeMainScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen) {
         if (ecoBikeMainScreenHandler == null) {
             try {
