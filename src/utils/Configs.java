@@ -1,7 +1,5 @@
 package utils;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 
 /**
  * This class provides constants, literals and related functions for generation to use in classes
@@ -15,7 +13,8 @@ public class Configs {
         TWINBIKE
     }
 
-    public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
+    @SuppressWarnings("serial")
+	public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
         put(BikeType.STANDARDBIKE, 1f);
         put(BikeType.STANDARDEBIKE, 1.5f);
         put(BikeType.TWINBIKE, 1.5f);

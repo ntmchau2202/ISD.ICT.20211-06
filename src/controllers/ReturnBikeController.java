@@ -61,6 +61,7 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	 * @param  bike Barcode of the bike to be rented
 	 * @return a float value expresses the money have to pay in currency VND
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public float calculateFee(String bikeType, float rentTime) {
 		//renting cost
 		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute

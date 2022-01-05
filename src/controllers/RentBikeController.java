@@ -1,6 +1,6 @@
 package controllers;
 
-import exceptions.ecobike.EcoBikeException; 
+import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.InterbankInterface;
@@ -11,6 +11,8 @@ import views.screen.popup.PopupScreen;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalTime;
 
 /**
  * This class handles rent bike, return bike and pause bike rental request from customers
@@ -53,30 +55,24 @@ public class RentBikeController extends EcoBikeBaseController {
 			return;
 		}
 		
-		//show payment method screen
+		// create new customerRent record
+		
+		// create new rentBike record
 		startCountingRentTime(bike);
+		String sql = "Insert into RentBike(rent_id, bike_barcode, start_time) values(?, ?, ?)";
+		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+		stm.setString(1, null); // unknown
+		stm.setInt(2, bikeBarcode);
+		stm.setTime(3, Time.valueOf(LocalTime.now()));
+		stm.executeUpdate();
 
 		//Update status
-		try {
-			String sql = "Update BikeStatus set current_status = ? where bike_barcode = ?";
-			PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
-			stm.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
-			stm.setString(2, bikeToRent.getBarCode());
-			stm.executeUpdate();
-		} catch (Exception e) {
-			throw e;
-		};
-		
-		//update table rent bike
-		try {
-			String sql = "";
-			PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
-			stm.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
-			stm.setString(2, bikeToRent.getBarCode());
-			stm.executeUpdate();
-		} catch (Exception e) {
-			throw e;
-		};
+		String sql2 = "Update BikeStatus set current_status = ? where bike_barcode = ?";
+		PreparedStatement stm2 = DBUtils.getConnection().prepareStatement(sql2);
+		stm2.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
+		stm2.setInt(2, bikeBarcode);
+		stm2.executeUpdate();
+
 	}
 	
 	/**

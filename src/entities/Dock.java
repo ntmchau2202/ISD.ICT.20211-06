@@ -1,5 +1,7 @@
 package entities;
 
+import org.json.JSONException;
+
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.FunctionalUtils;
 import utils.JSONUtils;
@@ -19,7 +21,7 @@ public class Dock {
 	/**
 	 * An unique string describes the id of the dock
 	 */
-	private String dockID;
+	private int dockID;
 	
 	/**
 	 * The address of the dock
@@ -41,18 +43,29 @@ public class Dock {
 	 */
 	private int numDockSpaceFree;
 	
+	private String dockImage;
+	
 	public Dock() {
 		
 	}
 
-	public Dock(String name, String dockID, String dock_address, double dock_area, int num_available_bike,
-			int num_dock_space_free) throws InvalidEcoBikeInformationException {
+	public Dock(String name, int dockID, String dock_address, double dock_area, int num_available_bike,
+			int num_dock_space_free, String dockImage) throws InvalidEcoBikeInformationException {
 		this.setName(name);
 		this.setDockID(dockID);
 		this.setDockAddress(dock_address);
 		this.setDockArea(dock_area);
 		this.setNumAvailableBike(num_available_bike);
 		this.setNumDockSpaceFree(num_dock_space_free);
+		this.setDockImage(dockImage);
+	}
+
+	public String getDockImage() {
+		return dockImage;
+	}
+
+	private void setDockImage(String dockImage) {
+		this.dockImage = dockImage;
 	}
 
 	public String getName() {
@@ -78,11 +91,11 @@ public class Dock {
 		this.name = name;
 	}
 
-	public String getDockID() {
+	public int getDockID() {
 		return dockID;
 	}
 
-	public void setDockID(String dockID) {
+	public void setDockID(int dockID) {
 		this.dockID = dockID;
 	}
 
@@ -144,7 +157,13 @@ public class Dock {
 	}
 	
 	public String toString() {
-		return JSONUtils.serializeDockInformation(this);
+		try {
+			return JSONUtils.serializeDockInformation(this);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

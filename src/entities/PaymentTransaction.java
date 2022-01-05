@@ -1,10 +1,6 @@
 package entities;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import java.sql.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import exceptions.interbank.InvalidCardException;
 import utils.FunctionalUtils;
@@ -34,7 +30,7 @@ public class PaymentTransaction {
 	/**
 	 * The time transaction is made with the a defined format
 	 */
-	private Timestamp transactionTime;
+	private Date transactionTime;
 	
 	/**
 	 * The content of the transaction
@@ -50,7 +46,8 @@ public class PaymentTransaction {
 		
 	}
 	
-	public PaymentTransaction(String transactionId, String creditCardNumber, double amount, String content, String transactionTime) throws InvalidEcoBikeInformationException {
+	public PaymentTransaction(String transactionId, String creditCardNumber, double amount, String content, 
+			String transactionTime) throws InvalidEcoBikeInformationException {
 		this.setAmount(amount);
 		this.setTransactionId(transactionId);
 		this.setCreditCardNumber(creditCardNumber);
@@ -83,12 +80,12 @@ public class PaymentTransaction {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	public Timestamp getTransactionTime() {
+	public Date getTransactionTime() {
 		return transactionTime;
 	}
 	public void setTransactionTime(String transactionTime) throws InvalidEcoBikeInformationException {
 		try {
-			this.transactionTime = FunctionalUtils.stringToTimeStamp(transactionTime);
+			this.transactionTime = FunctionalUtils.stringToDate(transactionTime);
 		} catch (Exception e) {
 			throw new InvalidEcoBikeInformationException("invalid date format");
 		}
