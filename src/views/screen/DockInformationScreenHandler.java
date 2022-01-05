@@ -1,107 +1,143 @@
 package views.screen;
 
-import java.awt.Label;
-import java.io.IOException;
-import java.sql.SQLException;
 import controllers.EcoBikeInformationController;
-import controllers.ReturnBikeController;
 import entities.Bike;
 import entities.Dock;
-import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.Configs;
-import utils.JSONUtils;
+import views.BikeInDockHandler;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
- * This class creates a handler for getting behaviors of customer on dock information screen 
- * @author chauntm
+ * This class creates a handler for getting behaviors of customer on dock information screen
  *
+ * @author chauntm
  */
 public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
-	
-	@FXML
-	Label dockName;
-	
-	@FXML
-	Label address;
 
-	@FXML
-	Label dockArea;
+    private static DockInformationScreenHandler dockInformationScreenHandler = null;
+    private Dock currentDock = null;
+    private ArrayList<Bike> currentBikeList = null;
 
-	@FXML
-	Label distance;
-	
-	@FXML
-	Label numDockSpaceFree;
-	
-	@FXML
-	Label numAvailableBike;
-	
-	@FXML
-	Label estimatedWalkingTime;
-	
-	private static DockInformationScreenHandler dockInformationScreenHandler;
-	private Dock currentDock;
-	private DockInformationScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev, Dock dock) throws IOException {
-		super(stage, sreenPath, prev);
-		if(dock != null) {
-			this.currentDock = dock;			
-		}
-		this.setPreviousScreen(prev);
-	}
+    @FXML
+    private ImageView dockImageView;
+    @FXML
+    private Label dockNameText;
+    @FXML
+    private Label dockAddressText;
+    @FXML
+    private Label dockAreaText;
+    @FXML
+    private Label dockCount;
+    @FXML
+    private Label availableBikeCount;
+    @FXML
+    private Label availableDocksCount;
+    @FXML
+    private Label distance;
+    @FXML
+    private Label estimateWalkTime;
+    @FXML
+    private Button returnBikeButton;
+    @FXML
+    private VBox bikeVBox;
+
+    private DockInformationScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
+    }
+
+    /**
+     * This class return an instance of dock screen handler, initialize it with the stage, prevScreen, dock and bikeList
+     *
+     * @param stage         the stage to show this screen
+     * @param prevScreen    the screen that call to this screen
+     * @param dock          the dock to render this screen, provide null if update is not needed
+     * @param bikeList      the bikeList to render this screen, provide null if update is not needed
+     *
+     */
+    public static DockInformationScreenHandler getDockInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Dock dock, ArrayList<Bike> bikeList) {
+        if (dockInformationScreenHandler == null) {
+            try {
+                dockInformationScreenHandler = new DockInformationScreenHandler(stage, Configs.VIEW_DOCK_SCREEN_PATH);
+                dockInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
+                dockInformationScreenHandler.setScreenTitle("Dock information screen");
+                dockInformationScreenHandler.initializeDockInformationScreen();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (prevScreen != null) {
+            dockInformationScreenHandler.setPreviousScreen(prevScreen);
+        }
+
+        if (dock != null) {
+            dockInformationScreenHandler.currentDock = dock;
+        }
+
+        if (bikeList != null) {
+            dockInformationScreenHandler.currentBikeList = bikeList;
+        }
+
+        dockInformationScreenHandler.renderDockInformation();
+
+        return dockInformationScreenHandler;
+    }
+
+    /**
+     * This is the method to do initialization and register button event.
+     */
+    private void initializeDockInformationScreen() {
+        returnBikeButton.setOnMouseClicked(e -> returnBike());
+    }
+
+    /**
+     * This is the method to render the screen with data.
+     */
+    private void renderDockInformation() {
+        // provide dock image
+        //super.setImage(dockImageView, currentDock.getDockImage);
+        dockNameText.setText(currentDock.getName());
+        dockAddressText.setText(currentDock.getDockAddress());
+        dockAreaText.setText(currentDock.getDockArea() + " km2");
+        dockCount.setText(currentDock.getNumDockSpaceFree() + currentDock.getNumAvailableBike() + "");
+        availableBikeCount.setText(currentDock.getNumAvailableBike() + "");
+        availableDocksCount.setText(currentDock.getNumDockSpaceFree() + "");
+        distance.setText("100 km");
+        estimateWalkTime.setText("100 minutes");
+
+        addBike(currentBikeList);
+    }
+
+    /**
+     * This is the method called when the user press button return bike.
+     */
+    private void returnBike() {
+
+    }
+
+    /**
+     * This is the method to render bike list in the dock screen.
+     */
+    private void addBike(ArrayList<Bike> bikeList) {
+        while (!bikeList.isEmpty()) {
+            try {
+                BikeInDockHandler bike = new BikeInDockHandler(bikeList.get(0), Configs.BIKE_IN_DOCK_PATH);
+                bikeVBox.getChildren().add(bike.getContent());
+                bikeList.remove(bikeList.get(0));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
-	public static DockInformationScreenHandler getDockInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prev, Dock dockToDisplay) throws IOException {
-		if (dockInformationScreenHandler == null) {
-			dockInformationScreenHandler = new DockInformationScreenHandler(stage, screenPath, prev, dockToDisplay);
-			dockInformationScreenHandler.setScreenTitle("Dock "+dockToDisplay.getName()+" information");
-		}
-		return dockInformationScreenHandler;
-	}
-
-	/**
-	 * Initialize handler for dock information screen
-	 * @param screenTitle Title of the screen
-	 * @param controller Controller for handling request from the screen
-	 * @param prevScreen An instance to the screen that called this screen
-	 */
-	
-//	@Override
-//	protected void initialize() {
-//		// TODO Auto-generated method stub
-//		
-//	}
-	
-	public void processDockInfo() {
-		dockName.setText(currentDock.getName());
-		address.setText(currentDock.getDockAddress());
-		dockArea.setText(String.valueOf(currentDock.getDockArea()));
-		distance.setText("1.5km"); // TODO: Can we do a real distance estimation here?
-		numDockSpaceFree.setText(String.valueOf(currentDock.getNumDockSpaceFree()));
-		numAvailableBike.setText(String.valueOf(currentDock.getNumAvailableBike()));
-		estimatedWalkingTime.setText("25 mins"); // TODO: Can we do a real estimation here?
-	}
-	
-	/**
-	 * Request the controller to return information about the bike selected and call the screen for displaying data
-	 * @throws SQLException 
-	 * @throws EcoBikeException 
-	 * @throws IOException 
-	 */
-	public void viewBikeInformation(String bikeBarcode) throws EcoBikeException, SQLException, IOException {
-		Bike bike = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
-		BikeInformationScreenHandler bikeScreen = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, Configs.VIEW_BIKE_SCREEN_PATH, this, bike);
-		bikeScreen.show();
-	}
-	
-	@FXML
-	public void returnBikeHere(MouseEvent event) throws EcoBikeException, SQLException {
-		ReturnBikeController controller = getbController();
-	}
-	
-	public ReturnBikeController getbController() {
-	    return (ReturnBikeController) super.getbController();
-	  }
 }

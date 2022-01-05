@@ -16,15 +16,15 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	
 	private static ReturnBikeController returnController;	
 	private InterbankInterface interbankSystem;
-	
-	public static ReturnBikeController getReturnBikeController() {
-		if (returnController == null) {
-			returnController = ReturnBikeController();
-		}
-		
-		return returnController;
+
+	private static ReturnBikeController returnBikeController;
+
+	public static ReturnBikeController getReturnBikeController(){
+		if (returnBikeController == null)
+			returnBikeController = new ReturnBikeController();
+		return returnBikeController;
 	}
-	
+
 	/**
 	 * Check if the dock have free spaces.
 	 * <br>@param dock

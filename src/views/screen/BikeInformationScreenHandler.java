@@ -1,111 +1,140 @@
 package views.screen;
 
-import java.awt.Label;
-import java.io.IOException;
-
-import boundaries.RentBikeServiceBoundary;
-import controllers.EcoBikeBaseController;
+import controllers.EcoBikeInformationController;
+import controllers.RentBikeServiceController;
 import entities.Bike;
-import entities.Dock;
-import exceptions.ecobike.EcoBikeUndefinedException;
-import exceptions.ecobike.RentBikeException;
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import utils.Configs;
+
+import java.io.IOException;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
- * @author chauntm
  *
+ * @author chauntm
  */
 public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
-	
-	@FXML
-	Label bikeName;
-	
-	@FXML
-	Label bikeType;
-	
-	@FXML
-	Label bikeStatus;
-	
-	@FXML
-	Label bikeBattery;
-	
-	@FXML
-	Label distanceEstimated;
-	
-	@FXML
-	Label rentingPrice;
-	
-	@FXML
-	Label deposit;
-	
-	@FXML
-	Label location;
-	
-	private static BikeInformationScreenHandler bikeInfoHandler;
-	private Bike currentBike;
-	private BikeInformationScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev, Bike bike) throws IOException {
-		super(stage, sreenPath, prev);
-		if(bike != null) {
-			this.currentBike = bike;			
-		}
-	}
 
-	/**
-	 * Initialize the handler for bike information screen
-	 * @param screenTitle Title of the screen
-	 * @param controller Controller for handling request from the screen
-	 * @param prevScreen An instance to the screen that called this screen
-	 */
-	public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prev, Bike bikeToDisplay) throws IOException {
-		if (bikeInfoHandler == null) {
-			bikeInfoHandler = new BikeInformationScreenHandler(stage, screenPath, prev, bikeToDisplay);
-			bikeInfoHandler.setScreenTitle("Bike "+bikeToDisplay.getName()+" information");
-		}
-		return bikeInfoHandler;
-	}
-	
-	public void processBikeInfo() {
-		bikeName.setText(currentBike.getName());
-		bikeType.setText(currentBike.getCurrency());
-		bikeStatus.setText(currentBike.getCurrentStatus().toString());
-		bikeBattery.setText(currentBike.getCurrentBattery() + "%");
-		distanceEstimated.setText(String.valueOf(currentBike.getDistanceEstimated()));
-		rentingPrice.setText(String.valueOf(currentBike.getBikeRentalPrice()));
-		deposit.setText(String.valueOf(currentBike.getDeposit()));
-		location.setText(currentBike.getName());
-	}
+    private static BikeInformationScreenHandler bikeInformationScreenHandler = null;
+    private Bike currentBike = null;
+
+    @FXML
+    private Label bikeNameText;
+    @FXML
+    private Label bikeTypeText;
+    @FXML
+    private Label bikeStatusText;
+    @FXML
+    private Label bikeBatteryText;
+    @FXML
+    private Label bikeDistanceText;
+    @FXML
+    private Label bikeRentingText;
+    @FXML
+    private Label bikeDepositText;
+    @FXML
+    private Label bikeLocationText;
+    @FXML
+    private Button rentBikeButton;
+    @FXML
+    private Button returnBikeButton;
+    @FXML
+    private ImageView bikeImage;
+
+    private BikeInformationScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
+    }
+
+    /**
+     * This class return an instance of bike information screen handler, initialize it with the stage, prevScreen and bike
+     *
+     * @param stage         the stage to show this screen
+     * @param prevScreen    the screen that call to this screen
+     * @param bike          the bike to render this screen, provide null if update is not needed
+     *
+     */
+    public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
+        if (bikeInformationScreenHandler == null) {
+            try {
+                bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.BIKE_INFORMATION_SCREEN_PATH);
+                bikeInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
+                bikeInformationScreenHandler.setScreenTitle("Bike information screen");
+                bikeInformationScreenHandler.initializeBikeScreen();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (prevScreen != null) {
+            bikeInformationScreenHandler.setPreviousScreen(prevScreen);
+        }
+
+        if (bike != null) {
+            bikeInformationScreenHandler.currentBike = bike;
+        }
+
+        bikeInformationScreenHandler.renderBikeScreen();
+
+        return bikeInformationScreenHandler;
+    }
+
+    /**
+     * This is the method to do initialization and register button event.
+     */
+    private void initializeBikeScreen(){
+        rentBikeButton.setOnMouseClicked(e -> rentBike());
+        returnBikeButton.setOnMouseClicked(e -> returnBike());
+    }
+
+    /**
+     * This is the method to do render the screen with the data.
+     */
+    private void renderBikeScreen() {
+        super.setImage(bikeImage, currentBike.getBikeImage());
+        bikeNameText.setText(currentBike.getName());
+        bikeTypeText.setText(currentBike.getBikeType());
+        bikeStatusText.setText(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? "Free" : "Rented");
+        bikeBatteryText.setText(currentBike.getCurrentBattery() + "%");
+        bikeDistanceText.setText("30 km");
+        bikeRentingText.setText(currentBike.getBikeRentalPrice() + " " + currentBike.getCurrency());
+        bikeDepositText.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());
+        bikeLocationText.setText("Dai Co Viet");
+
+        rentBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? false : true);
+        returnBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? true : false);
+    }
 
 
-	/**
-	 * Request the controller to start rent bike process for the currently selected bike
-	 * @throws EcoBikeUndefinedException 
-	 * @throws RentBikeException 
-	 */
-	@FXML
-	public void rentBike(MouseEvent event) throws RentBikeException, EcoBikeUndefinedException {
-		RentBikeServiceBoundary.getRentBikeService(this).rentBike(currentBike);
-	}
-	
-//	/**
-//	 * Request the controller to start return bike process for the currently selected bike
-//	 * @throws EcoBikeUndefinedException 
-//	 * @throws RentBikeException 
-//	 */
-	@FXML
-	public void returnBike(MouseEvent event) throws RentBikeException, EcoBikeUndefinedException {
-		RentBikeServiceBoundary.getRentBikeService(this).returnBike(currentBike);
-	}
-	
-	/**
-	 * Request the controller to pause renting the currently selected bike
-	 * @throws EcoBikeUndefinedException 
-	 * @throws RentBikeException 
-	 */
-	@FXML
-	public void pauseRental(MouseEvent event) throws RentBikeException, EcoBikeUndefinedException {
-		RentBikeServiceBoundary.getRentBikeService(this).pauseBikeRental(currentBike);
-	}
+    public void rentBike() {
+        try {
+            System.out.println("rent bike");
+            //show deposit screen
+            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void returnBike() {
+        try {
+            System.out.println("return bike");
+            //show deposit screen
+            PaymentScreenHandler.getPaymentScreenHandler(this.stage, this, null, currentBike);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pauseBikeRental() {
+        try {
+            RentBikeServiceController.getRentBikeServiceController().pauseBikeRental(currentBike.getBarCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -3,10 +3,14 @@ package views.screen;
 import java.io.IOException;
 
 import controllers.EcoBikeBaseController;
+import controllers.EcoBikeInformationController;
+import controllers.PaymentController;
+import entities.Bike;
 import entities.Invoice;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import javafx.stage.Stage;
+import utils.Configs;
 
 /**
  * This is the class handler for invoice screen
@@ -14,24 +18,42 @@ import javafx.stage.Stage;
  *
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-	protected InvoiceScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
-		super(stage, screenTitle, controller, prevScreen, screenPath);
-		// TODO Auto-generated constructor stub
+	private static InvoiceScreenHandler invoiceScreenHandler = null;
+
+	private InvoiceScreenHandler(Stage stage, String screenPath) throws IOException {
+		super(stage, screenPath);
 	}
 
-	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-		
+	public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen) {
+		if (invoiceScreenHandler == null) {
+			try {
+				invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.BIKE_INFORMATION_SCREEN_PATH);
+				invoiceScreenHandler.setbController(PaymentController.getPaymentController());
+				invoiceScreenHandler.setScreenTitle("Bike information screen");
+				invoiceScreenHandler.initializeBikeScreen();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (prevScreen != null) {
+			invoiceScreenHandler.setPreviousScreen(prevScreen);
+		}
+
+		invoiceScreenHandler.renderBikeScreen();
+
+		return invoiceScreenHandler;
 	}
-	
+
 	/**
-	 * Display the invoice and allow customer to accept if the invoice is correct, request update if there is any mismatch
-	 * @param invoice  The invoice entity ({@link entities.Invoice}
-	 * @throws RentBikeException If the invoice is invalid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 * This is the method to do initialization and register button event.
 	 */
-	public void confirmInvoice(Invoice invoice) throws  RentBikeException, EcoBikeUndefinedException {
-		
+	private void initializeBikeScreen(){
+	}
+
+	/**
+	 * This is the method to do render the screen with the data.
+	 */
+	private void renderBikeScreen() {
 	}
 }

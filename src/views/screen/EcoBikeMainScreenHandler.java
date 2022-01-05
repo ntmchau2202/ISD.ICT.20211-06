@@ -1,76 +1,126 @@
 package views.screen;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import controllers.EcoBikeBaseController;
-import controllers.EcoBikeInformationController;
 import entities.Bike;
 import entities.Dock;
-import exceptions.ecobike.EcoBikeException;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
-import utils.JSONUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This class creates a handler for displaying the map and getting customer's activities on the main screen
- * @author chauntm
  *
+ * @author chauntm
  */
 public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 
-	/**
-	 * Initialize handler for main screen of EcoBike application
-	 * @param screenTitle Title of the screen
-	 * @param controller Controller for handling request from the screen
-	 * @param prevScreen An instance to the screen that called this screen
-	 */
-	
-	private static EcoBikeMainScreenHandler mainScreenHandler;
-	
-	protected EcoBikeMainScreenHandler(Stage stage, String screenPath) throws IOException {
-		super(stage, screenPath, null);
-	}
-	
-	public static EcoBikeMainScreenHandler getMainScreenHandler(Stage stage, String screenPath) throws IOException {
-		if (mainScreenHandler == null) {
-			mainScreenHandler = new EcoBikeMainScreenHandler(stage, Configs.MAIN_SCREEN_PATH);
-			mainScreenHandler.setScreenTitle("EcoBike Main");
-		}
-		return mainScreenHandler;
-	}
-	
-	/**
-	 * View map of the current location of user in the main screen
-	 */
-	public void viewMap() {
-		
-	}
-	
-	/**
-	 * Request the information controller to get information about the selected dock
-	 * @throws EcoBikeException 
-	 * @throws SQLException 
-	 * @throws IOException 
-	 */
-	public void viewDockInformation(String dockID) throws SQLException, EcoBikeException, IOException {
-		Dock dock = EcoBikeInformationController.getEcoBikeInformationController().getDockInformation(dockID);
-		// use the dock entity to display on the screen here
-		DockInformationScreenHandler dockScreen = DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, Configs.VIEW_DOCK_SCREEN_PATH, this, dock);
-		 dockScreen.show();
-	}
-	
-	/**
-	 * Open the scanner for user to scan bike barcode and get bike information, as well as services related to the bike
-	 */
-	public void scanBarcode() {
-		
-	}
-	
-	public void viewBikeInformation(String bikeBarcode) throws EcoBikeException, SQLException, IOException {
-		Bike bike = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
-		BikeInformationScreenHandler bikeScreen = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, Configs.VIEW_BIKE_SCREEN_PATH, this, bike);
-		bikeScreen.show();		
-	}
-	
+    private static EcoBikeMainScreenHandler ecoBikeMainScreenHandler = null;
+    @FXML
+    private ImageView dock1;
+    @FXML
+    private ImageView dock2;
+    @FXML
+    private ImageView dock3;
+    @FXML
+    private ChoiceBox choiceBox;
+    @FXML
+    private TextField searchBarField;
+    @FXML
+    private Button searchButton;
+
+    private EcoBikeMainScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
+    }
+
+    /**
+     * This class return an instance of main screen handler, initialize it with the stage and prevScreen
+     *
+     * @param stage         the stage to show this screen
+     * @param prevScreen    the screen that call to this screen
+     *
+     */
+    public static EcoBikeMainScreenHandler getEcoBikeMainScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen) {
+        if (ecoBikeMainScreenHandler == null) {
+            try {
+                ecoBikeMainScreenHandler = new EcoBikeMainScreenHandler(stage, Configs.MAIN_SCREEN_PATH);
+                ecoBikeMainScreenHandler.setScreenTitle("Main screen");
+                ecoBikeMainScreenHandler.initializeMainScreen();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (prevScreen != null) {
+            ecoBikeMainScreenHandler.setPreviousScreen(prevScreen);
+        }
+
+        return ecoBikeMainScreenHandler;
+    }
+
+    /**
+     * This is the method to do initialization and register button event.
+     */
+    private void initializeMainScreen() {
+        choiceBox.getItems().add("Bike");
+        choiceBox.getItems().add("Dock");
+
+        searchButton.setOnMouseClicked(e -> search());
+
+        //todo: assign dock id for each dock icon on the map
+        dock1.setOnMouseClicked(e -> showDock("dockid1"));
+        dock2.setOnMouseClicked(e -> showDock("dockid2"));
+        dock3.setOnMouseClicked(e -> showDock("dockid3"));
+    }
+
+    /**
+     * This is the method called when the user press search button.
+     */
+    private void search() {
+        String searchString = searchBarField.getText();
+
+        //check if user is finding bike or dock
+        if (choiceBox.getValue() == "Bike") {
+            //todo : search bike from somewhere
+            Bike bike = null;
+
+            if (bike != null) {
+                //render bike screen
+                BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this, bike).show();
+            } else {
+                //todo: popup can not find bike
+            }
+        } else if (choiceBox.getValue() == "Dock") {
+            //todo : search bike from somewhere
+            Dock dock = null;
+
+            if (dock != null) {
+                //todo : if have dock, get bikes of the dock, too!
+                ArrayList<Bike> bikeList = new ArrayList<Bike>();
+
+                //render dock screen
+                DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock, bikeList).show();
+            } else {
+                //todo: popup can not find dock
+            }
+        }
+    }
+
+    /**
+     * This is the method called when the user press dock icons on the map to view specific dock.
+     */
+    private void showDock(String dockID) {
+        //todo : get dock with dock id from somewhere
+        Dock dock = null;
+        //todo : get bikes of the dock, too!
+        ArrayList<Bike> bikeList = new ArrayList<Bike>();
+
+        //render dock screen (always find the dock because it is shown on the map!!!)
+        DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock, bikeList).show();
+    }
 }
