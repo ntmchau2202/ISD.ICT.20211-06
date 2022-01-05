@@ -6,6 +6,7 @@ import java.io.IOException;
 import boundaries.RentBikeServiceBoundary;
 import controllers.EcoBikeBaseController;
 import entities.Bike;
+import entities.Dock;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import javafx.fxml.FXML;
@@ -45,10 +46,11 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	
 	private static BikeInformationScreenHandler bikeInfoHandler;
 	private Bike currentBike;
-	public BikeInformationScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev, Bike bike) throws IOException {
-		super(stage, sreenPath);
-		this.currentBike = bike;
-		this.setPreviousScreen(prev);
+	private BikeInformationScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev, Bike bike) throws IOException {
+		super(stage, sreenPath, prev);
+		if(bike != null) {
+			this.currentBike = bike;			
+		}
 	}
 
 	/**
@@ -57,16 +59,13 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @param controller Controller for handling request from the screen
 	 * @param prevScreen An instance to the screen that called this screen
 	 */
-//	public static BikeInformationScreenHandler getBikeInformationScreenHandler(Bike bikeToView, EcoBikeBaseScreenHandler prevScreen) {
-//		if (bikeInfoHandler == null) {
-//			bikeInfoHandler = new BikeInformationScreenHandler("EcoBike bike "+ bikeToView.getName() + "information", prevScreen);
-//		}
-//		bikeInfoHandler.prevScreen = prevScreen;
-//		if (bikeToView != null) {
-//			bikeInfoHandler.currentBike = bikeToView;
-//		}
-//		return bikeInfoHandler;
-//	}
+	public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prev, Bike bikeToDisplay) throws IOException {
+		if (bikeInfoHandler == null) {
+			bikeInfoHandler = new BikeInformationScreenHandler(stage, screenPath, prev, bikeToDisplay);
+			bikeInfoHandler.setScreenTitle("Bike "+bikeToDisplay.getName()+" information");
+		}
+		return bikeInfoHandler;
+	}
 	
 	public void processBikeInfo() {
 		bikeName.setText(currentBike.getName());
@@ -76,7 +75,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 		distanceEstimated.setText(String.valueOf(currentBike.getDistanceEstimated()));
 		rentingPrice.setText(String.valueOf(currentBike.getBikeRentalPrice()));
 		deposit.setText(String.valueOf(currentBike.getDeposit()));
-		location.setText(currentBike.getDockName());
+		location.setText(currentBike.getName());
 	}
 
 
@@ -95,10 +94,10 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 //	 * @throws EcoBikeUndefinedException 
 //	 * @throws RentBikeException 
 //	 */
-//	@FXML
-//	public void returnBike(MouseEvent event) throws RentBikeException, EcoBikeUndefinedException {
-//		RentBikeServiceBoundary.getRentBikeService(this).returnBike(currentBike);
-//	}
+	@FXML
+	public void returnBike(MouseEvent event) throws RentBikeException, EcoBikeUndefinedException {
+		RentBikeServiceBoundary.getRentBikeService(this).returnBike(currentBike);
+	}
 	
 	/**
 	 * Request the controller to pause renting the currently selected bike

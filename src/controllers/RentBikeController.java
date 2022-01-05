@@ -5,6 +5,7 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.InterbankInterface;
 import entities.Bike;
+import entities.CreditCard;
 import utils.*;
 import views.screen.popup.PopupScreen;
 import java.io.IOException;
@@ -14,34 +15,37 @@ import java.sql.SQLException;
 /**
  * This class handles rent bike, return bike and pause bike rental request from customers
  */
-public class RentBikeServiceController extends EcoBikeBaseController {
+public class RentBikeController extends EcoBikeBaseController {
 	@SuppressWarnings("unused")
 	private InterbankInterface interbankSystem;
 
-	private static RentBikeServiceController rentBikeServiceController;
+	private static RentBikeController rentBikeServiceController;
 
-	public static RentBikeServiceController getRentBikeServiceController(){
+	public static RentBikeController getRentBikeServiceController(){
 		if (rentBikeServiceController == null)
-			rentBikeServiceController = new RentBikeServiceController();
+			rentBikeServiceController = new RentBikeController();
 		return rentBikeServiceController;
 	}
 	/**
 	 * Initialize the controller for EcoBike rent bike service
 	 */
-	public RentBikeServiceController() {
+	public RentBikeController() {
 	}
 
 	/**
 	 * Start renting bike process, including calling the interbank subsystem for performing transaction
 	 *
-	 * @param bikeBarcode barCode of the bike to be rented
+	 * @param bikeToRent barCode of the bike to be rented
 	 * @throws IOException 
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void rentBike(String bikeBarcode) throws EcoBikeException, SQLException, IOException {
+	public void rentBike(Bike bikeToRent, CreditCard card) throws EcoBikeException, SQLException, IOException {
+		
+		// TODO: process the payment before updating the database;
+		
 		//get bike from repository
-		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
+		Bike bike = DBUtils.getBikeByBarcode(bikeToRent.getBarCode());
 		
 		//check status
 		if(bike.getCurrentStatus() == Configs.BIKE_STATUS.RENTED) {
@@ -57,7 +61,7 @@ public class RentBikeServiceController extends EcoBikeBaseController {
 			String sql = "Update BikeStatus set current_status = ? where bike_barcode = ?";
 			PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
 			stm.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
-			stm.setString(2, bikeBarcode);
+			stm.setString(2, bikeToRent.getBarCode());
 			stm.executeUpdate();
 		} catch (Exception e) {
 			throw e;
@@ -68,7 +72,7 @@ public class RentBikeServiceController extends EcoBikeBaseController {
 			String sql = "";
 			PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
 			stm.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
-			stm.setString(2, bikeBarcode);
+			stm.setString(2, bikeToRent.getBarCode());
 			stm.executeUpdate();
 		} catch (Exception e) {
 			throw e;
@@ -79,9 +83,12 @@ public class RentBikeServiceController extends EcoBikeBaseController {
 	 * Start pausing bike rental process
 	 * @param bikeBarcode barCode of the bike to be rented
 	 */
-	public void pauseBikeRental(String bikeBarcode) throws EcoBikeException, SQLException {
+	public boolean pauseBikeRental(String bikeBarcode) throws EcoBikeException, SQLException {
 
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
+		// do st
+		// return
+		return false;
 	}
 	
 	/**

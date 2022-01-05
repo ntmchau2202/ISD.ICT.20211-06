@@ -2,7 +2,8 @@ package views;
 
 import boundaries.RentBikeServiceBoundary;
 import controllers.EcoBikeBaseController;
-import controllers.RentBikeServiceController;
+import controllers.RentBikeController;
+import entities.Bike;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -20,7 +21,7 @@ import java.io.IOException;
  */
 public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
-	private entities.Bike currentBike;
+	private Bike currentBike;
 	/**
 	 * Initialize the handler for bike information screen
 	 * @param screenTitle Title of the screen
@@ -108,7 +109,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	public void rentBike() {
 		try {
 			System.out.println("rent bike");
-			RentBikeServiceController.getRentBikeServiceController().rentBike(currentBike.getBarCode());
+			RentBikeController.getRentBikeServiceController().rentBike(currentBike.getBarCode());
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -121,7 +122,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	 */
 	public void returnBike() {
 		try {
-			RentBikeServiceController.getRentBikeServiceController().returnBike(currentBike);
+			RentBikeController.getRentBikeServiceController().returnBike(currentBike);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -134,7 +135,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	 */
 	public void pauseBikeRental() {
 		try {
-			RentBikeServiceController.getRentBikeServiceController().pauseBikeRental(currentBike.getBarCode());
+			RentBikeController.getRentBikeServiceController().pauseBikeRental(currentBike.getBarCode());
 		} catch (Exception e){
 			e.printStackTrace();
 		}

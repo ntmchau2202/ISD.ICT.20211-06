@@ -29,13 +29,13 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	private static EcoBikeMainScreenHandler mainScreenHandler;
 	
 	protected EcoBikeMainScreenHandler(Stage stage, String screenPath) throws IOException {
-		super(stage, screenPath);
+		super(stage, screenPath, null);
 	}
 	
 	public static EcoBikeMainScreenHandler getMainScreenHandler(Stage stage, String screenPath) throws IOException {
 		if (mainScreenHandler == null) {
 			mainScreenHandler = new EcoBikeMainScreenHandler(stage, Configs.MAIN_SCREEN_PATH);
-			mainScreenHandler.setScreenTitle("Main Screen");
+			mainScreenHandler.setScreenTitle("EcoBike Main");
 		}
 		return mainScreenHandler;
 	}
@@ -54,11 +54,10 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @throws IOException 
 	 */
 	public void viewDockInformation(String dockID) throws SQLException, EcoBikeException, IOException {
-		String dockInf = EcoBikeInformationController.getEcoBikeInformationController().getDockInformation(dockID);
-		Dock dock = JSONUtils.toDock(dockInf);
+		Dock dock = EcoBikeInformationController.getEcoBikeInformationController().getDockInformation(dockID);
 		// use the dock entity to display on the screen here
-		DockInformationScreenHandler dockScreen = new DockInformationScreenHandler(this.stage, Configs.VIEW_DOCK_SCREEN_PATH, this, dock);
-		// dockScreen.show();
+		DockInformationScreenHandler dockScreen = DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, Configs.VIEW_DOCK_SCREEN_PATH, this, dock);
+		 dockScreen.show();
 	}
 	
 	/**
@@ -69,10 +68,9 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 	}
 	
 	public void viewBikeInformation(String bikeBarcode) throws EcoBikeException, SQLException, IOException {
-		String bikeInf = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
-		Bike bike = JSONUtils.toBike(bikeInf);
-		BikeInformationScreenHandler bikeScreen = new BikeInformationScreenHandler(this.stage, Configs.VIEW_DOCK_SCREEN_PATH, this, bike);
-		// bikeScreen.show();		
+		Bike bike = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
+		BikeInformationScreenHandler bikeScreen = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, Configs.VIEW_BIKE_SCREEN_PATH, this, bike);
+		bikeScreen.show();		
 	}
 	
 }

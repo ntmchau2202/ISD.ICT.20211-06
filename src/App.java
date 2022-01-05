@@ -43,7 +43,6 @@ public class App extends Application {
 			fadeOut.setOnFinished((e) -> {
 				try {
 					EcoBikeMainScreenHandler homeHandler = EcoBikeMainScreenHandler.getMainScreenHandler(primaryStage, Configs.MAIN_SCREEN_PATH);
-					homeHandler.setScreenTitle("Home Screen");
 					homeHandler.show();
 				} catch (IOException e1) {
 					e1.printStackTrace();

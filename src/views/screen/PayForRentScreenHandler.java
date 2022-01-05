@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import controllers.EcoBikeBaseController;
 import controllers.PaymentController;
+import entities.Bike;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
@@ -25,7 +26,7 @@ import utils.Configs;
  *
  * @author Duong
  */
-public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
+public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private TextField cardHolderName;
     @FXML
@@ -36,6 +37,8 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     private TextField securityCode;
     @FXML
     private Button confirmPaymentButton;
+    
+    private static PayForRentScreenHandler paymentScreenHandler;
 
     /**
      * Initialize handler for paying method screen of EcoBike application
@@ -43,17 +46,33 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
      * @param screenTitle Title of the screen
      * @param controller  Controller for handling request from the screen
      * @param prevScreen  An instance to the screen that called this screen
+     * @throws IOException 
      */
-    public PaymentMethodScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
-        super(stage, screenTitle, controller, prevScreen, screenPath);
-        initialize();
+    
+    private Bike bikeToRent;
+    
+    private PayForRentScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
+        super(stage, screenPath, prevScreen);
+//        initialize();
     }
-
-    @Override
-    protected void initialize() {
-        confirmPaymentButton.setOnMouseClicked(e -> validateInput());
-
+    
+    public static PayForRentScreenHandler getPayForRentScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
+    	if (paymentScreenHandler == null) {
+    		paymentScreenHandler = new PayForRentScreenHandler(stage, screenPath, prevScreen);
+    		paymentScreenHandler.setScreenTitle("Register payment method");
+    	}
+    	if (bike != null) {
+    		paymentScreenHandler.bikeToRent = bike;
+    	}
+    	return paymentScreenHandler;
+    	
     }
+    
+//    @Override
+//    protected void initialize() {
+//        confirmPaymentButton.setOnMouseClicked(e -> validateInput());
+//
+//    }
 
 	public void validateInput() {
 		if(PaymentController.getPaymentController().validateCardHolderName(cardHolderName.getText()) == false){
@@ -73,7 +92,7 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
             return;
         }
 
-        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "acb", expirationDate.getText(), securityCode.getText());
+        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "", expirationDate.getText(), securityCode.getText());
         try{
             confirmPaymentMethod(card);
         } catch (Exception e){
@@ -87,7 +106,7 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
     public void confirmPaymentMethod(CreditCard card) throws EcoBikeUndefinedException {
-
+    	
     }
 
     private void popUpError(String errorMessage) {

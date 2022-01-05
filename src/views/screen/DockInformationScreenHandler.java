@@ -44,20 +44,22 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	
 	private static DockInformationScreenHandler dockInformationScreenHandler;
 	private Dock currentDock;
-	protected DockInformationScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev, Dock dock) throws IOException {
-		super(stage, sreenPath);
-		this.currentDock = dock;
+	private DockInformationScreenHandler(Stage stage, String sreenPath, EcoBikeBaseScreenHandler prev, Dock dock) throws IOException {
+		super(stage, sreenPath, prev);
+		if(dock != null) {
+			this.currentDock = dock;			
+		}
 		this.setPreviousScreen(prev);
 	}
 
 
-//	public static DockInformationScreenHandler getDockInformationScreenHandler(Dock dockToDisplay, EcoBikeBaseScreenHandler prevScreen) {
-//		if (dockInformationScreenHandler == null) {
-//			dockInformationScreenHandler = new DockInformationScreenHandler("EcoBike Dock " + dockToDisplay.getName() + " information", prevScreen);
-//		}
-//		dockInformationScreenHandler.prevScreen = prevScreen;
-//		return dockInformationScreenHandler;
-//	}
+	public static DockInformationScreenHandler getDockInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prev, Dock dockToDisplay) throws IOException {
+		if (dockInformationScreenHandler == null) {
+			dockInformationScreenHandler = new DockInformationScreenHandler(stage, screenPath, prev, dockToDisplay);
+			dockInformationScreenHandler.setScreenTitle("Dock "+dockToDisplay.getName()+" information");
+		}
+		return dockInformationScreenHandler;
+	}
 
 	/**
 	 * Initialize handler for dock information screen
@@ -76,10 +78,10 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 		dockName.setText(currentDock.getName());
 		address.setText(currentDock.getDockAddress());
 		dockArea.setText(String.valueOf(currentDock.getDockArea()));
-		distance.setText("1.5km");
+		distance.setText("1.5km"); // TODO: Can we do a real distance estimation here?
 		numDockSpaceFree.setText(String.valueOf(currentDock.getNumDockSpaceFree()));
 		numAvailableBike.setText(String.valueOf(currentDock.getNumAvailableBike()));
-		estimatedWalkingTime.setText("25 mins");
+		estimatedWalkingTime.setText("25 mins"); // TODO: Can we do a real estimation here?
 	}
 	
 	/**
@@ -89,11 +91,8 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 	 * @throws IOException 
 	 */
 	public void viewBikeInformation(String bikeBarcode) throws EcoBikeException, SQLException, IOException {
-		String bikeInf = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
-		Bike bike = JSONUtils.toBike(bikeInf);
-		BikeInformationScreenHandler bikeScreen = new BikeInformationScreenHandler(this.stage, Configs.VIEW_BIKE_SCREEN_PATH, this, bike);
-		bikeScreen.setMainScreenHandler(mainScreenHandler);
-		bikeScreen.setScreenTitle("Bike Information Screen");
+		Bike bike = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformation(bikeBarcode);
+		BikeInformationScreenHandler bikeScreen = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, Configs.VIEW_BIKE_SCREEN_PATH, this, bike);
 		bikeScreen.show();
 	}
 	

@@ -32,9 +32,10 @@ public abstract class EcoBikeBaseScreenHandler extends EcoBikeFxmlScreenHandler 
 		this.prev = prevScreen;
 	}
 
-	public EcoBikeBaseScreenHandler(Stage newStage, String screenPath) throws IOException {
+	public EcoBikeBaseScreenHandler(Stage newStage, String screenPath, EcoBikeBaseScreenHandler prev) throws IOException {
 		super(screenPath);
 		this.stage = newStage;
+		this.prev = prev;
 	}
 
 	/**

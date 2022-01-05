@@ -14,7 +14,16 @@ import utils.DBUtils;
 
 public class ReturnBikeController extends EcoBikeBaseController {
 	
+	private static ReturnBikeController returnController;	
 	private InterbankInterface interbankSystem;
+	
+	public static ReturnBikeController getReturnBikeController() {
+		if (returnController == null) {
+			returnController = ReturnBikeController();
+		}
+		
+		return returnController;
+	}
 	
 	/**
 	 * Check if the dock have free spaces.
@@ -34,7 +43,7 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void returnBike(String bikeBarcode) throws EcoBikeException, SQLException {
+	public void returnBike(String bikeBarcode, CreditCard card) throws EcoBikeException, SQLException {
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
 	}
 	

@@ -211,10 +211,10 @@ public class PaymentController extends EcoBikeBaseController {
     	
     }
 
-    public boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-
-        return true;
-    }
+//    public boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
+//
+//        return true;
+//    }
 
     public boolean validateCardNumber(String cardNumber) {
         if (cardNumber.length() != 10) return false;
