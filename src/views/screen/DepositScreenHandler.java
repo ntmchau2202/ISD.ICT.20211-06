@@ -35,7 +35,7 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button changeCardInformationButton;
 
-    private DepositScreenHandler(Stage stage, String screenPath) throws IOException {
+    private DepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
         super(stage, screenPath);
     }
 
@@ -47,10 +47,10 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
      * @param creditCard the credit card to render this screen, provide null if update is not needed
      * @param bike       the bike to render this screen, provide null if update is not needed
      */
-    public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Bike bike) {
+    public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
         if (depositScreenHandler == null) {
             try {
-                depositScreenHandler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH);
+                depositScreenHandler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH, prevScreen);
                 depositScreenHandler.setbController(PaymentController.getPaymentController());
                 depositScreenHandler.setScreenTitle("Deposit screen");
                 depositScreenHandler.initializeDepositScreen();
@@ -63,9 +63,9 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
             depositScreenHandler.setPreviousScreen(prevScreen);
         }
 
-        if (creditCard != null) {
-            depositScreenHandler.currentCreditCard = creditCard;
-        }
+//        if (creditCard != null) {
+//            depositScreenHandler.currentCreditCard = creditCard;
+//        }
 
         if (bike != null) {
             depositScreenHandler.currentBike = bike;

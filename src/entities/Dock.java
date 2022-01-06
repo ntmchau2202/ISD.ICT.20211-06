@@ -1,8 +1,13 @@
 package entities;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import org.json.JSONException;
 
+import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
+import utils.DBUtils;
 import utils.FunctionalUtils;
 import utils.JSONUtils;
 
@@ -45,12 +50,10 @@ public class Dock {
 	
 	private String dockImage;
 	
-	public Dock() {
-		
-	}
-
+	private ArrayList<Bike> bikeInDock;
+	
 	public Dock(String name, int dockID, String dock_address, double dock_area, int num_available_bike,
-			int num_dock_space_free, String dockImage) throws InvalidEcoBikeInformationException {
+			int num_dock_space_free, String dockImage) throws SQLException, EcoBikeException {
 		this.setName(name);
 		this.setDockID(dockID);
 		this.setDockAddress(dock_address);
@@ -58,6 +61,7 @@ public class Dock {
 		this.setNumAvailableBike(num_available_bike);
 		this.setNumDockSpaceFree(num_dock_space_free);
 		this.setDockImage(dockImage);
+		this.bikeInDock = DBUtils.getAllBikeByDockId(this.dockID);
 	}
 
 	public String getDockImage() {
@@ -164,6 +168,10 @@ public class Dock {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public ArrayList<Bike> getAllBikeInDock() {
+		return this.bikeInDock;
 	}
 	
 }

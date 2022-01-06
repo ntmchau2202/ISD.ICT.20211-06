@@ -54,14 +54,14 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     
     private Bike bikeToRent;
     
-    private PayForDepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
-        super(stage, screenPath, prevScreen);
+    private PayForDepositScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
 //        initialize();
     }
     
     public static PayForDepositScreenHandler getPayForDepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
     	if (paymentScreenHandler == null) {
-    		paymentScreenHandler = new PayForDepositScreenHandler(stage, screenPath, prevScreen);
+    		paymentScreenHandler = new PayForDepositScreenHandler(stage, screenPath);
     		paymentScreenHandler.setScreenTitle("Register payment method");
     	}
     	if (bike != null) {
@@ -71,12 +71,6 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     	
     }
     
-//    @Override
-//    protected void initialize() {
-//        confirmPaymentButton.setOnMouseClicked(e -> validateInput());
-//
-//    }
-
 	public void validateInput() {
 		if(PaymentController.getPaymentController().validateCardHolderName(cardHolderName.getText()) == false){
             popUpError("Invalid card holder name!");
@@ -95,7 +89,9 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
             return;
         }
 
-        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "", expirationDate.getText(), securityCode.getText());
+        // TODO: Create a creditcard here
+        CreditCard card = null;
+//        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "", expirationDate.getText(), securityCode.getText());
         try{
             confirmPaymentMethod(card);
         } catch (Exception e){

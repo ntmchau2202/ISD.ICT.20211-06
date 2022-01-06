@@ -27,7 +27,8 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
 	public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen) {
 		if (invoiceScreenHandler == null) {
 			try {
-				invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.BIKE_INFORMATION_SCREEN_PATH);
+				// TODO: We havent have any INVOICE screen yet!
+				invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.VIEW_BIKE_SCREEN_PATH);
 				invoiceScreenHandler.setbController(PaymentController.getPaymentController());
 				invoiceScreenHandler.setScreenTitle("Bike information screen");
 				invoiceScreenHandler.initializeBikeScreen();

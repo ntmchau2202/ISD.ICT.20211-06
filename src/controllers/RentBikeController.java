@@ -47,7 +47,7 @@ public class RentBikeController extends EcoBikeBaseController {
 		// TODO: process the payment before updating the database;
 		
 		//get bike from repository
-		Bike bike = DBUtils.getBikeByBarcode(bikeToRent.getBarCode());
+		Bike bike = DBUtils.getBikeByBarcode(bikeToRent.getBikeBarCode());
 		
 		//check status
 		if(bike.getCurrentStatus() == Configs.BIKE_STATUS.RENTED) {
@@ -62,7 +62,7 @@ public class RentBikeController extends EcoBikeBaseController {
 		String sql = "Insert into RentBike(rent_id, bike_barcode, start_time) values(?, ?, ?)";
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
 		stm.setString(1, null); // unknown
-		stm.setInt(2, bikeBarcode);
+		stm.setString(2, bikeToRent.getBikeBarCode());
 		stm.setTime(3, Time.valueOf(LocalTime.now()));
 		stm.executeUpdate();
 
@@ -70,7 +70,7 @@ public class RentBikeController extends EcoBikeBaseController {
 		String sql2 = "Update BikeStatus set current_status = ? where bike_barcode = ?";
 		PreparedStatement stm2 = DBUtils.getConnection().prepareStatement(sql2);
 		stm2.setString(1, String.valueOf(Configs.BIKE_STATUS.RENTED));
-		stm2.setInt(2, bikeBarcode);
+		stm2.setString(2, bikeToRent.getBikeBarCode());
 		stm2.executeUpdate();
 
 	}

@@ -1,7 +1,7 @@
 package views.screen;
 
 import controllers.EcoBikeInformationController;
-import controllers.RentBikeServiceController;
+import controllers.RentBikeController;
 import entities.Bike;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 import utils.Configs;
 
 import java.io.IOException;
+
+import boundaries.RentBikeServiceBoundary;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
@@ -60,7 +62,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
         if (bikeInformationScreenHandler == null) {
             try {
-                bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.BIKE_INFORMATION_SCREEN_PATH);
+                bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.VIEW_BIKE_SCREEN_PATH);
                 bikeInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
                 bikeInformationScreenHandler.setScreenTitle("Bike information screen");
                 bikeInformationScreenHandler.initializeBikeScreen();
@@ -94,7 +96,9 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
      * This is the method to do render the screen with the data.
      */
     private void renderBikeScreen() {
-        super.setImage(bikeImage, currentBike.getBikeImage());
+    	if (currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
+    		super.setImage(bikeImage, currentBike.getBikeImage());    		
+    	}
         bikeNameText.setText(currentBike.getName());
         bikeTypeText.setText(currentBike.getBikeType());
         bikeStatusText.setText(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? "Free" : "Rented");
@@ -112,8 +116,9 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     public void rentBike() {
         try {
             System.out.println("rent bike");
-            //show deposit screen
-            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
+            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
+            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.currentBike);
+//            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,8 +127,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     public void returnBike() {
         try {
             System.out.println("return bike");
-            //show deposit screen
-            PaymentScreenHandler.getPaymentScreenHandler(this.stage, this, null, currentBike);
+            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
+            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).returnBike(this.currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,7 +136,9 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
     public void pauseBikeRental() {
         try {
-            RentBikeServiceController.getRentBikeServiceController().pauseBikeRental(currentBike.getBarCode());
+        	System.out.println("pause bike rental");
+            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
+            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).pauseBikeRental(this.currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }

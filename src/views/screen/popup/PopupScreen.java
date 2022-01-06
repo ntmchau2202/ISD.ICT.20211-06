@@ -26,6 +26,7 @@ public class PopupScreen extends EcoBikeBaseScreenHandler {
   Label message;
 
   public PopupScreen(Stage stage) throws IOException {
+	  // TODO: consider this
     super(stage, Configs.POPUP_SCREEN_PATH);
   }
 
