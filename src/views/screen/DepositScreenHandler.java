@@ -5,6 +5,7 @@ import entities.Bike;
 import entities.CreditCard;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
 
@@ -34,6 +35,10 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
     private Button confirmDepositButton;
     @FXML
     private Button changeCardInformationButton;
+    @FXML
+    private ImageView mainScreenIcon;
+    @FXML
+    private ImageView backIcon;
 
     private DepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
         super(stage, screenPath);
@@ -93,6 +98,11 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
     private void initializeDepositScreen() {
         confirmDepositButton.setOnMouseClicked(e -> confirmDeposit());
         changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
+        mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        backIcon.setOnMouseClicked(e -> {
+            if (this.getPreviousScreen() != null)
+                this.getPreviousScreen().show();
+        });
     }
 
     /**

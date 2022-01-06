@@ -69,7 +69,7 @@
             </Pane>
          </center>
          <top>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="800.0" BorderPane.alignment="TOP_LEFT">
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1198.0" BorderPane.alignment="TOP_LEFT">
                <children>
                   <ImageView fx:id="mainScreenIcon" fitHeight="80.0" fitWidth="80.0" layoutX="50.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -81,6 +81,11 @@
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
+                  <ImageView fx:id="backIcon" fitHeight="80.0" fitWidth="80.0" layoutX="1000.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../detailed_design/interface_design/images/icon/back_button.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
          </top>

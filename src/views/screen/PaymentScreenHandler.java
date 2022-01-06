@@ -6,6 +6,7 @@ import entities.Bike;
 import entities.CreditCard;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
 
@@ -32,13 +33,15 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Label timeRented;
     @FXML
-    private Label cost;
-    @FXML
     private Label total;
     @FXML
     private Button confirmPaymentButton;
     @FXML
     private Button changeCardInformationButton;
+    @FXML
+    private ImageView mainScreenIcon;
+    @FXML
+    private ImageView backIcon;
 
     private PaymentScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
@@ -100,6 +103,11 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
     private void initializePaymentScreen() {
         confirmPaymentButton.setOnMouseClicked(e -> setConfirmPaymentButton());
         changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
+        mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        backIcon.setOnMouseClicked(e -> {
+            if (this.getPreviousScreen() != null)
+                this.getPreviousScreen().show();
+        });
     }
 
     /**
@@ -110,9 +118,7 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
         bikeRented.setText(currentBike.getName());
         bikeType.setText(currentBike.getBikeType());
         timeRented.setText(currentBike.getTotalRentTime() + " hour");
-        cost.setText(ReturnBikeController.getReturnBikeController().calculateFee(currentBike.getBikeType(), currentBike.getTotalRentTime()) + " " + currentBike.getCurrency());
-        total.setText(ReturnBikeController.getReturnBikeController().calculateFee(currentBike.getBikeType(), currentBike.getTotalRentTime()) * 1.1 + " " + currentBike.getCurrency());
-
+        total.setText(ReturnBikeController.getReturnBikeController().calculateFee(currentBike.getBikeType(), currentBike.getTotalRentTime()) + " " + currentBike.getCurrency());
     }
 
     /**

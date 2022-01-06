@@ -22,7 +22,7 @@
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="imgv_logo" fitHeight="80.0" fitWidth="80.0" layoutX="43.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="mainScreenIcon" fitHeight="80.0" fitWidth="80.0" layoutX="43.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../detailed_design/interface_design/images/icon/ecobike_logo_transparent.png" />
                      </image>
@@ -130,6 +130,15 @@
                         <Font name="Segoe UI Bold" size="20.0" />
                      </font>
                   </Button>
+               </children>
+            </Pane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <ImageView fx:id="backIcon" fitHeight="80.0" fitWidth="80.0" layoutX="248.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../detailed_design/interface_design/images/icon/back_button.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
          </children>

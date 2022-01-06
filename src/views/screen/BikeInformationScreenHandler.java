@@ -46,6 +46,10 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     private Button returnBikeButton;
     @FXML
     private ImageView bikeImage;
+    @FXML
+    private ImageView mainScreenIcon;
+    @FXML
+    private ImageView backIcon;
 
     private BikeInformationScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
@@ -90,6 +94,11 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     private void initializeBikeScreen(){
         rentBikeButton.setOnMouseClicked(e -> rentBike());
         returnBikeButton.setOnMouseClicked(e -> returnBike());
+        mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        backIcon.setOnMouseClicked(e -> {
+            if (this.getPreviousScreen() != null)
+                this.getPreviousScreen().show();
+        });
     }
 
     /**

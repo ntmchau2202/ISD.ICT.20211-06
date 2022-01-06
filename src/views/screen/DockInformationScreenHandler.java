@@ -48,6 +48,10 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
     private Button returnBikeButton;
     @FXML
     private VBox bikeVBox;
+    @FXML
+    private ImageView mainScreenIcon;
+    @FXML
+    private ImageView backIcon;
 
     private DockInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
         super(stage, screenPath);
@@ -99,6 +103,11 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
      */
     private void initializeDockInformationScreen() {
         returnBikeButton.setOnMouseClicked(e -> returnBike());
+        mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        backIcon.setOnMouseClicked(e -> {
+            if (this.getPreviousScreen() != null)
+                this.getPreviousScreen().show();
+        });
     }
 
     /**
