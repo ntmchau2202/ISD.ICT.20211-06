@@ -2,6 +2,7 @@ package views.screen;
 
 import entities.Bike;
 import entities.Dock;
+import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -9,8 +10,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
+import utils.DBUtils;
+import views.screen.popup.PopupScreen;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -70,57 +74,90 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
         choiceBox.getItems().add("Bike");
         choiceBox.getItems().add("Dock");
 
-        searchButton.setOnMouseClicked(e -> search());
+        searchButton.setOnMouseClicked(e -> {
+			try {
+				search();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 
-        //todo: assign dock id for each dock icon on the map
-        dock1.setOnMouseClicked(e -> showDock("dockid1"));
-        dock2.setOnMouseClicked(e -> showDock("dockid2"));
-        dock3.setOnMouseClicked(e -> showDock("dockid3"));
+        //TODO: assign dock id for each dock icon on the map
+        dock1.setOnMouseClicked(e -> {
+			try {
+				showDock("1");
+			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+        dock2.setOnMouseClicked(e -> {
+			try {
+				showDock("2");
+			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+        dock3.setOnMouseClicked(e -> {
+			try {
+				showDock("3");
+			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
     }
 
     /**
      * This is the method called when the user press search button.
+     * @throws IOException 
      */
-    private void search() {
+    private void search() throws IOException {
         String searchString = searchBarField.getText();
 
         //check if user is finding bike or dock
         if (choiceBox.getValue() == "Bike") {
-            //todo : search bike from somewhere
+        	// TODO: Create a search function, in the bike information controller
             Bike bike = null;
-
+            //TODO : search bike from somewhere
             if (bike != null) {
                 //render bike screen
                 BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this, bike).show();
             } else {
-                //todo: popup can not find bike
+                PopupScreen popup = new PopupScreen(this.stage);
+                popup.error("Cannot find bike matching keyword!");
             }
         } else if (choiceBox.getValue() == "Dock") {
-            //todo : search bike from somewhere
             Dock dock = null;
-
+            //TODO: search bike from somewhere
+            
             if (dock != null) {
-                //todo : if have dock, get bikes of the dock, too!
+                //TODO : if have dock, get bikes of the dock, too!
+            	// ArrayList<Bike> bikeList = bike.getListCurrentBikeInDock();
                 ArrayList<Bike> bikeList = new ArrayList<Bike>();
 
                 //render dock screen
-                DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock, bikeList).show();
+                DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock).show();
             } else {
-                //todo: popup can not find dock
+                PopupScreen popup = new PopupScreen(this.stage);
+                popup.error("Cannot find dock matching keyword!");
             }
         }
     }
 
     /**
      * This is the method called when the user press dock icons on the map to view specific dock.
+     * @throws EcoBikeException 
+     * @throws SQLException 
+     * @throws NumberFormatException 
      */
-    private void showDock(String dockID) {
-        //todo : get dock with dock id from somewhere
-        Dock dock = null;
-        //todo : get bikes of the dock, too!
-        ArrayList<Bike> bikeList = new ArrayList<Bike>();
+    private void showDock(String dockID) throws NumberFormatException, SQLException, EcoBikeException {
+        //TODO: get dock with dock id from somewhere
+        Dock dock = DBUtils.getDockInformation(Integer.parseInt(dockID));
 
         //render dock screen (always find the dock because it is shown on the map!!!)
-        DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock, bikeList).show();
+        DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock).show();
     }
 }

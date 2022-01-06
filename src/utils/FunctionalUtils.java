@@ -1,7 +1,6 @@
 package utils;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.sql.Date; 
 import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -37,12 +36,11 @@ public class FunctionalUtils {
 		return false;
 	}
 	
-	public static Timestamp stringToTimeStamp(String dateString) throws EcoBikeException {
+	public static Date stringToDate(String dateString) throws EcoBikeException {
 		try {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 		    Date parsedDate = (Date) dateFormat.parse(dateString);
-		    Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
-		    return timestamp;
+		    return parsedDate;
 		} catch(Exception e) { 
 			throw new EcoBikeException(e.getMessage());
 		}

@@ -2,11 +2,8 @@ import java.io.IOException;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -41,13 +38,8 @@ public class App extends Application {
 			});
 
 			fadeOut.setOnFinished((e) -> {
-				try {
-					EcoBikeMainScreenHandler homeHandler = EcoBikeMainScreenHandler.getMainScreenHandler(primaryStage, Configs.MAIN_SCREEN_PATH);
-					homeHandler.setScreenTitle("Home Screen");
-					homeHandler.show();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				EcoBikeMainScreenHandler homeHandler = EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(primaryStage, null);
+				homeHandler.show();
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,4 +49,5 @@ public class App extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
 }

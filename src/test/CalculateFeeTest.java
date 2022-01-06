@@ -1,6 +1,6 @@
 package test;
 
-import controllers.RentBikeServiceController;
+import controllers.RentBikeController;
 import entities.Bike;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(value = Parameterized.class)
 public class CalculateFeeTest {
-    private controllers.RentBikeServiceController rentBikeServiceController;
+    private controllers.RentBikeController rentBikeServiceController;
 
     @Before
     public void setUp() throws Exception {
-        rentBikeServiceController = new RentBikeServiceController();
+        rentBikeServiceController = new RentBikeController();
     }
 
     @Parameterized.Parameter(value = 0)

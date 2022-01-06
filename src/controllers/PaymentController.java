@@ -4,11 +4,16 @@ import boundaries.InterbankBoundary;
 import entities.CreditCard;
 import entities.Invoice;
 import entities.PaymentTransaction;
+import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
-import exceptions.ecobike.InvalidEcoBikeInformationException;
 import exceptions.ecobike.RentBikeException;
 import exceptions.interbank.InvalidCardException;
 import interfaces.InterbankInterface;
+import utils.DBUtils;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -56,14 +61,16 @@ public class PaymentController extends EcoBikeBaseController {
      */
     @SuppressWarnings("unused")
     public Map<String, String> payDeposit(int amount, String content,
-                                          String cardNumber, String cardHolderName,
-                                          String issueBank, String expirationDate,
+                                          String cardHolderName,
+                                          String cardNumber,
+                                          String issueBank, float balance,
+                                          String expirationDate,
                                           String securityCode) throws RentBikeException, EcoBikeUndefinedException {
         Map<String, String> result = new Hashtable<String, String>();
         result.put("RESULT", "PAYMENT FAILED!");
         try {
-            this.card = new CreditCard(cardNumber, cardHolderName, issueBank,
-                    getExpirationDate(expirationDate), securityCode);
+            this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
+            		balance, getExpirationDate(expirationDate));
             this.interbank = new InterbankBoundary(issueBank);
             PaymentTransaction transaction = interbank.payDeposit(card, amount, content);
             result.put("RESULT", "PAYMENT SUCCESSFUL!");
@@ -86,15 +93,15 @@ public class PaymentController extends EcoBikeBaseController {
      *                                   message.
      */
     @SuppressWarnings("unused")
-    public Map<String, String> returnDeposit(int amount, String content,
-                                             String cardNumber, String cardHolderName,
-                                             String issueBank, String expirationDate,
-                                             String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+    public Map<String, String> returnDeposit(int amount, String content, String cardHolderName, 
+    		String cardNumber, String issueBank, float balance, 
+    		String expirationDate, String securityCode) 
+    				throws RentBikeException, EcoBikeUndefinedException {
         Map<String, String> result = new Hashtable<String, String>();
         result.put("RESULT", "RETURN FAILED!");
         try {
-            this.card = new CreditCard(cardNumber, cardHolderName, issueBank,
-                    getExpirationDate(expirationDate), securityCode);
+        	this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
+            		balance, getExpirationDate(expirationDate));
             this.interbank = new InterbankBoundary(issueBank);
             PaymentTransaction transaction = interbank.returnDeposit(card, amount, content);
             result.put("RESULT", "RETURN SUCCESSFUL!");
@@ -117,15 +124,14 @@ public class PaymentController extends EcoBikeBaseController {
      *                                   message.
      */
     @SuppressWarnings("unused")
-    public Map<String, String> payRental(int amount, String content,
-                                         String cardNumber, String cardHolderName,
-                                         String issueBank, String expirationDate,
-                                         String securityCode) throws RentBikeException, EcoBikeUndefinedException {
+    public Map<String, String> payRental(int amount, String content, String cardHolderName, 
+    		String cardNumber, String issueBank, float balance, 
+    		String expirationDate, String securityCode) throws RentBikeException, EcoBikeUndefinedException {
         Map<String, String> result = new Hashtable<String, String>();
         result.put("RESULT", "PAYMENT FAILED!");
         try {
-            this.card = new CreditCard(cardNumber, cardHolderName, issueBank,
-                    getExpirationDate(expirationDate), securityCode);
+        	this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
+            		balance, getExpirationDate(expirationDate));
             this.interbank = new InterbankBoundary(issueBank);
             PaymentTransaction transaction = interbank.payRental(card, amount, content);
             result.put("RESULT", "PAYMNET SUCCESSFUL!");
@@ -144,7 +150,7 @@ public class PaymentController extends EcoBikeBaseController {
      * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
      */
     public void requestToUpdatePaymentMethod(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-    	
+    	this.card = card;
     }
 
     /**
@@ -162,11 +168,19 @@ public class PaymentController extends EcoBikeBaseController {
      * save the transaction to the database
      *
      * @param transaction The transaction entity ({@link entities.PaymentTransaction}
-     * @throws RentBikeException         If the transaction is invalid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+     * @throws EcoBikeException 
+     * @throws SQLException 
      */
-    public void saveTransaction(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
+    public void saveTransaction(PaymentTransaction transaction) throws SQLException, EcoBikeException {
+    	String sql = "Insert into EcoBikeTransaction values(?, ?, ?, ?, ?)";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setString(1, transaction.getTransactionId());
+    	stm.setDouble(2, transaction.getAmount());
+    	stm.setDate(3, Date.valueOf(transaction.getTransactionTime().toString()));
+    	stm.setString(4, transaction.getContent());
+    	stm.setString(5, transaction.getCreditCardNumber());
     	
+    	stm.executeUpdate();
     }
 
     /**
@@ -174,17 +188,21 @@ public class PaymentController extends EcoBikeBaseController {
      *
      * @param transaction The transaction entity ({@link entities.PaymentTransaction}
      * @return The invoice entity ({@link entities.Invoice}
-     * @throws RentBikeException         If the transaction is not valid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-     * @throws InvalidEcoBikeInformationException 
+     * @throws EcoBikeException 
+     * @throws SQLException 
      */
-    public Invoice createInvoice(String invoiceID, String bikeName, double deposit, String startTime,
-			String endTime, double subTotal, double total, String timeCreate, List<PaymentTransaction> transactions) 
-					throws RentBikeException, EcoBikeUndefinedException, InvalidEcoBikeInformationException {
-    	Invoice invoice = new Invoice(invoiceID, bikeName, deposit, startTime, endTime, subTotal, total, timeCreate);
+    public Invoice createInvoice(String invoiceID ,int rentId, List<PaymentTransaction> transactions) 
+					throws SQLException, EcoBikeException {
+    	String sql = "Select * from RentBike where rent_id = ?";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setInt(1, rentId);
+    	ResultSet result = stm.executeQuery();
+    	Invoice invoice = new Invoice(invoiceID, result.getString("bike_barcode"), 
+    			result.getTime("start_time").toString(), result.getTime("end_time").toString());
     	for(PaymentTransaction transaction : transactions) {
     		invoice.addTransaction(transaction);
     	}
+    	invoice.setRentID(rentId);
     	return invoice;
     }
 
@@ -193,10 +211,10 @@ public class PaymentController extends EcoBikeBaseController {
      *
      * @param invoice The Invoice entity ({@link entities.Invoice}
      * @return The invoice entity ({@link entities.Invoice}
-     * @throws RentBikeException         If the invoice is not valid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+     * @throws EcoBikeException 
+     * @throws SQLException 
      */
-    public void displayInvoiceScreen(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
+    public void displayInvoiceScreen(Invoice invoice) throws SQLException, EcoBikeException {
     	
     }
 
@@ -204,16 +222,26 @@ public class PaymentController extends EcoBikeBaseController {
      * save the invoice to the database
      *
      * @param transaction The invoice entity ({@link entities.Invoice}
-     * @throws RentBikeException         If the invoice is invalid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+     * @throws EcoBikeException 
+     * @throws SQLException 
      */
-    public void saveInvoice(Invoice invoice) throws RentBikeException, EcoBikeUndefinedException {
-    	
+    public void saveInvoice(Invoice invoice) throws SQLException, EcoBikeException {
+    	for(PaymentTransaction transaction : invoice.getTransactionList()) {
+    		String sql = "Insert into invoice values(?, ?, ?)";
+    		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    		stm.setString(1, invoice.getInvoiceID());
+    		stm.setString(2, transaction.getTransactionId());
+    		stm.setInt(3, invoice.getRentID());
+    		stm.executeUpdate();
+    	}
     }
 
     public boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
 
-        return true;
+        return validateCardNumber(card.getCardNumber()) && validateCardHolderName(card.getCardHolderName())
+        		&& validateCardSecurity(card.getCardSecurity()) && 
+        		validateExdpirationDate(card.getExpirationDate().toString()) && 
+        		validateIssueBank(card.getIssueBank());
     }
 
     public boolean validateCardNumber(String cardNumber) {

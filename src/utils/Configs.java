@@ -1,7 +1,5 @@
 package utils;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 
 /**
  * This class provides constants, literals and related functions for generation to use in classes
@@ -15,7 +13,8 @@ public class Configs {
         TWINBIKE
     }
 
-    public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
+    @SuppressWarnings("serial")
+	public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
         put(BikeType.STANDARDBIKE, 1f);
         put(BikeType.STANDARDEBIKE, 1.5f);
         put(BikeType.TWINBIKE, 1.5f);
@@ -45,12 +44,8 @@ public class Configs {
     public static final String VIEW_BIKE_SCREEN_PATH = "/views/fxml/FXML_ViewBikeScreen.fxml";
     public static final String VIEW_DOCK_SCREEN_PATH = "/views/fxml/FXML_ViewDockScreen.fxml";
     public static final String INVOICE_SCREEN_PATH = "/views/fxml/FXML_InvoiceScreen.fxml";
-
-
-	public static final String BIKE_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewBikeScreen.fxml";
-	public static final String DOCK_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewDockScreen.fxml";
-	public static final String BIKE_IN_DOCK_PATH = "/views/screens/BikeInDock.fxml";
-	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/screens/FXML_PayingMethodScreen.fxml";
+	public static final String BIKE_IN_DOCK_PATH = "/views/fxml/FXML_BikeInDock.fxml";
+	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
 
 
 	public enum BIKE_STATUS {

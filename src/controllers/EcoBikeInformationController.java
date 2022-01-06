@@ -35,12 +35,12 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @throws EcoBikeException 
 	 * @throws SQLException 
 	 */
-	public Dock getDockInformation(String dockID) throws SQLException, EcoBikeException {
-		if (dockID == null) {
+	public Dock getDockInformation(int dockID) throws SQLException, EcoBikeException {
+		if (String.valueOf(dockID) == null) {
 			throw new NoInformationException("no keyword to search");
 		}
 		
-		if (dockID.length() == 0) {
+		if (String.valueOf(dockID).length() == 0) {
 			throw new NoInformationException("no keyword to search");
 		}
 
@@ -56,11 +56,11 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @throws EcoBikeException 
 	 */
 	public Bike getBikeInformation(String barCode) throws EcoBikeException, SQLException {
-		if (barCode == null) {
+		if (String.valueOf(barCode) == null) {
 			throw new NoInformationException("no keyword to search");
 		}
 		
-		if (barCode.length() == 0) {
+		if (String.valueOf(barCode).length() == 0) {
 			throw new NoInformationException("no keyword to search");
 		}
 

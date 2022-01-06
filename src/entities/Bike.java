@@ -1,9 +1,11 @@
 package entities;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
+import java.text.DateFormat; 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import org.json.JSONException;
+
+import java.sql.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.Configs;
 import utils.FunctionalUtils;
@@ -21,39 +23,51 @@ public class Bike {
 	private String name;
 	
 	/**
-	 * type of the bike
+	 * type of the bike.
 	 */
 	private String bikeType;
 	
 	/**
-	 * The link to the image of the bike
+	 * Plate code of the bike.
+	 */
+	private String licensePlateCode;
+	
+	/**
+	 * The link to the image of the bike.
 	 */
 	private String bikeImage;
 	
 	/**
-	 * The unique bar-code of the bike 
+	 * The unique bar-code of the bike.
 	 */
-	private String barCode;
+	private String bikeBarcode;
 	
 	/**
-	 * The rental price of the bike per unit time
+	 * The rental price of the bike per unit time.
 	 */
 	private double bikeRentalPrice;
 	
 	/**
-	 * The amount of deposit customers have to pay before renting the bike
+	 * The currency of money the credit card uses.
+	 */
+	private String currencyUnit;
+	
+	/**
+	 * The amount of deposit customers have to pay before renting the bike.
 	 */
 	private double deposit;
 	
-	/**
-	 * The currency of money the credit card uses
-	 */
-	private String currency;
 	
 	/**
-	 * The time the bike was added to the dock in defined format
+	 * The time the bike was added to the dock in defined format.
 	 */
-	private Timestamp createDate;
+//	private Date createDate;
+	private String createDate;
+	
+	/**
+	 * creator of the bike.
+	 */
+	private String creator;
 	
 	/**
 	 * The current status of the bike
@@ -76,21 +90,21 @@ public class Bike {
 		
 	}
 
-	public Bike(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
-			double deposit, String currency, String create_date, String dockId) throws InvalidEcoBikeInformationException {
-		this.setName(name); 
-		this.setBikeType(bike_type);
-		this.setBikeImage(bike_image);
-		this.setBarCode(bar_code);
-		this.setBikeRentalPrice(bike_rental_price);
+	public Bike(String name, String bikeType, String licensePlateCode, String bikeImage, 
+			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String createDate) throws InvalidEcoBikeInformationException {
+		super();
+		this.setName(name);
+		this.setBikeType(bikeType);
+		this.setLicensePlateCode(licensePlateCode);
+		this.setBikeImage(bikeImage);
+		this.setBikeBarCode(bikeBarcode);
+		this.setBikeRentalPrice(bikeRentalPrice);
+		this.setCurrency(currencyUnit);
 		this.setDeposit(deposit);
-		this.setCurrency(currency);
-		this.setCreateDate(create_date);
-		this.setTotalRentTime(0);
-		this.setCurrentStatus(Configs.BIKE_STATUS.FREE);
-		this.setCurrentBattery(100);
-		this.dockId = dockId;
+		this.setCreateDate(createDate);
 	}
+
 
 	public String getName() {
 		return name;
@@ -138,6 +152,15 @@ public class Bike {
 		
 		this.bikeType = bikeType;
 	}
+	
+
+	public String getLicensePlateCode() {
+		return licensePlateCode;
+	}
+
+	private void setLicensePlateCode(String licensePlateCode) {
+		this.licensePlateCode = licensePlateCode;
+	}
 
 	public String getBikeImage() {
 		return bikeImage;
@@ -147,19 +170,19 @@ public class Bike {
 		this.bikeImage = bikeImage;
 	}
 
-	public String getBarCode() {
-		return barCode;
+	public String getBikeBarCode() {
+		return bikeBarcode;
 	}
 
-	private void setBarCode(String barCode) throws InvalidEcoBikeInformationException {
-		if (barCode == null) {
+	private void setBikeBarCode(String barCode) throws InvalidEcoBikeInformationException {
+		if (String.valueOf(barCode) == null) {
 			throw new InvalidEcoBikeInformationException("bike barcode must not be null");
 		}
 		
-		if (barCode.length() == 0) {
+		if (String.valueOf(barCode).length() == 0) {
 			throw new InvalidEcoBikeInformationException("bike barcode must not be empty");
 		}
-		this.barCode = barCode;
+		this.bikeBarcode = barCode;
 	}
 
 	public double getBikeRentalPrice() {
@@ -185,25 +208,28 @@ public class Bike {
 	}
 
 	public String getCurrency() {
-		return currency;
+		return currencyUnit;
 	}
 
 	private void setCurrency(String currency) {
-		this.currency = currency;
+		this.currencyUnit = currency;
 	}
 
-	public Timestamp getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
 	private void setCreateDate(String createDate) throws InvalidEcoBikeInformationException {
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
-			Date date = dateFormat.parse(createDate);
-			this.createDate = new Timestamp(date.getTime());
-		} catch (Exception e) {
-			throw new InvalidEcoBikeInformationException("invalid date format");
-		}
+		// TODO: Fix bug here
+//		try {
+//			System.out.println(createDate);
+//			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");	
+//			Date date = (Date) dateFormat.parse(createDate);
+//			this.createDate = new java.sql.Date(date.getTime());
+//		} catch (Exception e) {
+//			throw new InvalidEcoBikeInformationException("invalid date format");
+//		}
+		this.createDate = createDate.toString();
 	}
 
 	public Configs.BIKE_STATUS getCurrentStatus() {
@@ -235,8 +261,14 @@ public class Bike {
 	
 	
 	// return a JSON string containing information about the string
-	public String toString() {
-		return JSONUtils.serializeBikeInformation(this);
+	public String toString(){
+		try {
+			return JSONUtils.serializeBikeInformation(this);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public String getdockId() {
@@ -246,6 +278,24 @@ public class Bike {
 	public float getDistanceEstimated() {
 		return this.currentBattery * 5;
 	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public String getDockId() {
+		return dockId;
+	}
+
+	public void setDockId(String dockId) {
+		this.dockId = dockId;
+	}
+	
+	
 }
 
 	

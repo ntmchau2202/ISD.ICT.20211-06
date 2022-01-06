@@ -1,6 +1,7 @@
 package views.screen;
 
 import controllers.PaymentController;
+import entities.Bike;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import javafx.fxml.FXML;
@@ -33,6 +34,8 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     private TextField securityCode;
     @FXML
     private Button confirmPaymentButton;
+    
+    private static PaymentMethodScreenHandler paymentScreenHandler;
 
     private PaymentMethodScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
@@ -94,6 +97,12 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
             expirationDate.setText(currentCreditCard.getExpirationDate().toString());
         }
     }
+    
+//    @Override
+//    protected void initialize() {
+//        confirmPaymentButton.setOnMouseClicked(e -> validateInput());
+//
+//    }
 
     /**
      * This is the method to call when user click confirm payment method button.
@@ -117,7 +126,9 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
         }
 
         //if all information provided is valid, create new credit card and show
-        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "acb", expirationDate.getText(), securityCode.getText());
+        // TODO: create a creditcard here
+        CreditCard card = null;
+//        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "acb", expirationDate.getText(), securityCode.getText());
         try {
             confirmPaymentMethod(card);
         } catch (Exception e) {
