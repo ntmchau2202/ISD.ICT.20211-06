@@ -1,59 +1,83 @@
 package views.screen;
 
-import java.io.IOException;
-
-import controllers.EcoBikeBaseController;
-import controllers.EcoBikeInformationController;
 import controllers.PaymentController;
-import entities.Bike;
 import entities.Invoice;
-import exceptions.ecobike.EcoBikeUndefinedException;
-import exceptions.ecobike.RentBikeException;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import utils.Configs;
 
+import java.io.IOException;
+
 /**
  * This is the class handler for invoice screen
- * @author Duong
  *
+ * @author Duong
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-	private static InvoiceScreenHandler invoiceScreenHandler = null;
+    private static InvoiceScreenHandler invoiceScreenHandler = null;
+    private Invoice currentInvoice = null;
 
-	private InvoiceScreenHandler(Stage stage, String screenPath) throws IOException {
-		super(stage, screenPath);
-	}
+    @FXML
+    private Label invoiceID;
+    @FXML
+    private Label invoiceDate;
+    @FXML
+    private Label bikeName;
+    @FXML
+    private Label startRentTime;
+    @FXML
+    private Label endRentTime;
+    @FXML
+    private Label total;
+    @FXML
+    private Label backToMainScreenButton;
 
-	public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen) {
-		if (invoiceScreenHandler == null) {
-			try {
-				invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.BIKE_INFORMATION_SCREEN_PATH);
-				invoiceScreenHandler.setbController(PaymentController.getPaymentController());
-				invoiceScreenHandler.setScreenTitle("Bike information screen");
-				invoiceScreenHandler.initializeBikeScreen();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+    private InvoiceScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
+    }
 
-		if (prevScreen != null) {
-			invoiceScreenHandler.setPreviousScreen(prevScreen);
-		}
+    public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Invoice invoice) {
+        if (invoiceScreenHandler == null) {
+            try {
+                invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.INVOICE_SCREEN_PATH);
+                invoiceScreenHandler.setbController(PaymentController.getPaymentController());
+                invoiceScreenHandler.setScreenTitle("Invoice screen");
+                invoiceScreenHandler.initializeInvoiceScreen();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-		invoiceScreenHandler.renderBikeScreen();
+        if (invoice != null) {
+            invoiceScreenHandler.currentInvoice = invoice;
+        }
 
-		return invoiceScreenHandler;
-	}
+        if (prevScreen != null) {
+            invoiceScreenHandler.setPreviousScreen(prevScreen);
+        }
 
-	/**
-	 * This is the method to do initialization and register button event.
-	 */
-	private void initializeBikeScreen(){
-	}
+        invoiceScreenHandler.renderInvoiceScreen();
 
-	/**
-	 * This is the method to do render the screen with the data.
-	 */
-	private void renderBikeScreen() {
-	}
+        return invoiceScreenHandler;
+    }
+
+    /**
+     * This is the method to do initialization and register button event.
+     */
+    private void initializeInvoiceScreen() {
+        backToMainScreenButton.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+    }
+
+    /**
+     * This is the method to do render the screen with the data.
+     */
+    private void renderInvoiceScreen() {
+        invoiceID.setText(currentInvoice.getInvoiceID());
+        invoiceDate.setText(currentInvoice.getTimeCreate().toString());
+        bikeName.setText(currentInvoice.getBikeName());
+        startRentTime.setText(currentInvoice.getStartTime().toString());
+        endRentTime.setText(currentInvoice.getEndTime().toString());
+        total.setText(currentInvoice.getTotal() + " VND");
+    }
 }

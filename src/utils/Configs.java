@@ -44,6 +44,7 @@ public class Configs {
     public static final String SPLASH_SCREEN_PATH = "/views/fxml/FXML_SplashScreen.fxml";
     public static final String VIEW_BIKE_SCREEN_PATH = "/views/fxml/FXML_ViewBikeScreen.fxml";
     public static final String VIEW_DOCK_SCREEN_PATH = "/views/fxml/FXML_ViewDockScreen.fxml";
+    public static final String INVOICE_SCREEN_PATH = "/views/fxml/FXML_InvoiceScreen.fxml";
 
 
 	public static final String BIKE_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewBikeScreen.fxml";
