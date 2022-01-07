@@ -43,15 +43,17 @@ public class JSONUtils {
 		if (!result.has("bike_barcode")) {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Bike");
 		}
-		Bike bikeRes = new Bike(result.getString("name"), 
-				result.getString("bike_type"),
-				result.getString("license_plate_code"),
-				result.getString("bike_image"), 
-				result.getInt("bike_barcode"), 
-				result.getDouble("bike_rental_price"),
-				result.getString("currency_unit"),
-				result.getDouble("deposit_price"),  
-				result.getString("create_date"));
+		// TODO: finish constructor here
+		Bike bikeRes = null;
+//		Bike bikeRes = new Bike(result.getString("name"), 
+//				result.getString("bike_type"),
+//				result.getString("license_plate_code"),
+//				result.getString("bike_image"), 
+//				result.getInt("bike_barcode"), 
+//				result.getDouble("bike_rental_price"),
+//				result.getString("currency_unit"),
+//				result.getDouble("deposit_price"),  
+//				result.getString("create_date"));
 		String bikeStatus = result.getString("current_status");
 		Configs.BIKE_STATUS bikeStat;
 		if(bikeStatus.equalsIgnoreCase("FREE")) {

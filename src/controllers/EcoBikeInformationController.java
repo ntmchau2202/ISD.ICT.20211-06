@@ -55,7 +55,7 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 	 * @throws SQLException 
 	 * @throws EcoBikeException 
 	 */
-	public Bike getBikeInformation(int barCode) throws EcoBikeException, SQLException {
+	public Bike getBikeInformation(String barCode) throws EcoBikeException, SQLException {
 		if (String.valueOf(barCode) == null) {
 			throw new NoInformationException("no keyword to search");
 		}

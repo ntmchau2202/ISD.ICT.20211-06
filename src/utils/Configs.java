@@ -43,12 +43,10 @@ public class Configs {
     public static final String SPLASH_SCREEN_PATH = "/views/fxml/FXML_SplashScreen.fxml";
     public static final String VIEW_BIKE_SCREEN_PATH = "/views/fxml/FXML_ViewBikeScreen.fxml";
     public static final String VIEW_DOCK_SCREEN_PATH = "/views/fxml/FXML_ViewDockScreen.fxml";
+    public static final String INVOICE_SCREEN_PATH = "/views/fxml/FXML_InvoiceScreen.fxml";
+	public static final String BIKE_IN_DOCK_PATH = "/views/fxml/FXML_BikeInDock.fxml";
+	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
 
-
-	public static final String BIKE_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewBikeScreen.fxml";
-	public static final String DOCK_INFORMATION_SCREEN_PATH = "/views/screens/FXML_ViewDockScreen.fxml";
-	public static final String BIKE_IN_DOCK_PATH = "/views/screens/BikeInDock.fxml";
-	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/screens/FXML_PayingMethodScreen.fxml";
 
 	public enum BIKE_STATUS {
 		FREE,

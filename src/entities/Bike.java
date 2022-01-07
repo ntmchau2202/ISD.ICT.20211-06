@@ -40,7 +40,7 @@ public class Bike {
 	/**
 	 * The unique bar-code of the bike.
 	 */
-	private int bikeBarcode;
+	private String bikeBarcode;
 	
 	/**
 	 * The rental price of the bike per unit time.
@@ -61,7 +61,8 @@ public class Bike {
 	/**
 	 * The time the bike was added to the dock in defined format.
 	 */
-	private Date createDate;
+//	private Date createDate;
+	private String createDate;
 	
 	/**
 	 * creator of the bike.
@@ -90,7 +91,7 @@ public class Bike {
 	}
 
 	public Bike(String name, String bikeType, String licensePlateCode, String bikeImage, 
-			int bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
 		super();
 		this.setName(name);
@@ -169,11 +170,11 @@ public class Bike {
 		this.bikeImage = bikeImage;
 	}
 
-	public int getBikeBarCode() {
+	public String getBikeBarCode() {
 		return bikeBarcode;
 	}
 
-	private void setBikeBarCode(int barCode) throws InvalidEcoBikeInformationException {
+	private void setBikeBarCode(String barCode) throws InvalidEcoBikeInformationException {
 		if (String.valueOf(barCode) == null) {
 			throw new InvalidEcoBikeInformationException("bike barcode must not be null");
 		}
@@ -214,18 +215,21 @@ public class Bike {
 		this.currencyUnit = currency;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
 	private void setCreateDate(String createDate) throws InvalidEcoBikeInformationException {
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
-			Date date = (Date) dateFormat.parse(createDate);
-			this.createDate = new java.sql.Date(date.getTime());
-		} catch (Exception e) {
-			throw new InvalidEcoBikeInformationException("invalid date format");
-		}
+		// TODO: Fix bug here
+//		try {
+//			System.out.println(createDate);
+//			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");	
+//			Date date = (Date) dateFormat.parse(createDate);
+//			this.createDate = new java.sql.Date(date.getTime());
+//		} catch (Exception e) {
+//			throw new InvalidEcoBikeInformationException("invalid date format");
+//		}
+		this.createDate = createDate.toString();
 	}
 
 	public Configs.BIKE_STATUS getCurrentStatus() {

@@ -1,37 +1,83 @@
 package views.screen;
 
-import java.io.IOException;
-
-import controllers.EcoBikeBaseController;
+import controllers.PaymentController;
 import entities.Invoice;
-import exceptions.ecobike.EcoBikeUndefinedException;
-import exceptions.ecobike.RentBikeException;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import utils.Configs;
+
+import java.io.IOException;
 
 /**
  * This is the class handler for invoice screen
- * @author Duong
  *
+ * @author Duong
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-	protected InvoiceScreenHandler(Stage stage, String screenTitle, EcoBikeBaseController controller, EcoBikeBaseScreenHandler prevScreen, String screenPath) {
-		super(stage, screenTitle, controller, prevScreen, screenPath);
-		// TODO Auto-generated constructor stub
-	}
+    private static InvoiceScreenHandler invoiceScreenHandler = null;
+    private Invoice currentInvoice = null;
 
-	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	/**
-	 * Display the invoice and allow customer to accept if the invoice is correct, request update if there is any mismatch
-	 * @param invoice  The invoice entity ({@link entities.Invoice}
-	 * @throws RentBikeException If the invoice is invalid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 */
-	public void confirmInvoice(Invoice invoice) throws  RentBikeException, EcoBikeUndefinedException {
-		
-	}
+    @FXML
+    private Label invoiceID;
+    @FXML
+    private Label invoiceDate;
+    @FXML
+    private Label bikeName;
+    @FXML
+    private Label startRentTime;
+    @FXML
+    private Label endRentTime;
+    @FXML
+    private Label total;
+    @FXML
+    private Label backToMainScreenButton;
+
+    private InvoiceScreenHandler(Stage stage, String screenPath) throws IOException {
+        super(stage, screenPath);
+    }
+
+    public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Invoice invoice) {
+        if (invoiceScreenHandler == null) {
+            try {
+                invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.INVOICE_SCREEN_PATH);
+                invoiceScreenHandler.setbController(PaymentController.getPaymentController());
+                invoiceScreenHandler.setScreenTitle("Invoice screen");
+                invoiceScreenHandler.initializeInvoiceScreen();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (invoice != null) {
+            invoiceScreenHandler.currentInvoice = invoice;
+        }
+
+        if (prevScreen != null) {
+            invoiceScreenHandler.setPreviousScreen(prevScreen);
+        }
+
+        invoiceScreenHandler.renderInvoiceScreen();
+
+        return invoiceScreenHandler;
+    }
+
+    /**
+     * This is the method to do initialization and register button event.
+     */
+    private void initializeInvoiceScreen() {
+        backToMainScreenButton.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+    }
+
+    /**
+     * This is the method to do render the screen with the data.
+     */
+    private void renderInvoiceScreen() {
+        invoiceID.setText(currentInvoice.getInvoiceID());
+        invoiceDate.setText(currentInvoice.getTimeCreate().toString());
+        bikeName.setText(currentInvoice.getBikeName());
+        startRentTime.setText(currentInvoice.getStartTime().toString());
+        endRentTime.setText(currentInvoice.getEndTime().toString());
+        total.setText(currentInvoice.getTotal() + " VND");
+    }
 }

@@ -26,7 +26,7 @@ public class DBUtils {
         if (connection != null) return connection;
         try {
             Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:src/ecobikedb.db";
+            String url = "jdbc:sqlite:src/lib/ecobikedb.db";
             connection = DriverManager.getConnection(url);
             System.out.println("Connect database successfully");
         } catch (Exception e) {
@@ -125,22 +125,24 @@ public class DBUtils {
 		return transaction;
 	}
 	
-	public static Bike getBikeByBarcode(int bikeBarcode) throws EcoBikeException, SQLException {
+	public static Bike getBikeByBarcode(String bikeBarcode) throws EcoBikeException, SQLException {
 		String sql = "SELECT * FROM Bike, BikeStatus, BikeInDock WHERE bike_barcode=? "
 				+ "And Bike.bike_barcode = BikeStatus.bike_barcode And "
 				+ "BikeStatus.bike_barcode = BikeInDock.bike_barcode";
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
-		stm.setInt(1, bikeBarcode);
+		stm.setString(1, bikeBarcode);
 		ResultSet result = stm.executeQuery();
-		Bike bikeRes = new Bike(result.getString("name"), 
-				result.getString("bike_type"),
-				result.getString("license_plate_code"),
-				result.getString("bike_image"), 
-				result.getInt("bike_barcode"), 
-				result.getDouble("bike_rental_price"),
-				result.getString("currency_unit"),
-				result.getDouble("deposit_price"),  
-				result.getDate("create_date").toString());
+		// TODO: finish constructor here
+		Bike bikeRes = null;
+//		Bike bikeRes = new Bike(result.getString("name"), 
+//				result.getString("bike_type"),
+//				result.getString("license_plate_code"),
+//				result.getString("bike_image"), 
+//				result.getInt("bike_barcode"), 
+//				result.getDouble("bike_rental_price"),
+//				result.getString("currency_unit"),
+//				result.getDouble("deposit_price"),  
+//				result.getDate("create_date").toString());
 		// set bike current status
 		String bikeStatus = result.getString("current_status");
 		Configs.BIKE_STATUS bikeStat;
@@ -163,8 +165,19 @@ public class DBUtils {
 //		return strRes;
 	}
 	
-	public static  java.util.List<Bike> getAllBikeByDockId(int dockId) throws SQLException, EcoBikeException {
-		String sql = "SELECT * FROM Bike, BikeStatus, BikeInDock WHERE dock_id=? "
+	public static  ArrayList<Bike> getAllBikeByDockId(int dockId) throws SQLException, EcoBikeException {
+		String sql = "SELECT Bike.name as name,"
+				+ "Bike.bike_type as bike_type,"
+				+ "Bike.license_plate_code as license_plate_code,"
+				+ "Bike.bike_image as bike_image,"
+				+ "Bike.bike_barcode as bike_barcode,"
+				+ "Bike.bike_rental_price as bike_rental_price,"
+				+ "Bike.currency_unit as currency_unit,"
+				+ "Bike.bike_rental_price as deposit_price,"
+				+ "Bike.create_date as create_date,"
+				+ "BikeStatus.total_rent_time as total_rent_time,"
+				+ "BikeStatus.current_battery as current_battery,"
+				+ "BikeStatus.current_status as current_status FROM Bike, BikeStatus, BikeInDock WHERE dock_id=? "
 				+ "And Bike.bike_barcode = BikeStatus.bike_barcode And "
 				+ "BikeStatus.bike_barcode = BikeInDock.bike_barcode";
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
@@ -172,11 +185,12 @@ public class DBUtils {
 		ResultSet result = stm.executeQuery();
 		ArrayList<Bike> list = new ArrayList<Bike>();
 		while(result.next()) {
+			// TODO: finish constructor here
 			Bike bikeRes = new Bike(result.getString("name"), 
 					result.getString("bike_type"),
 					result.getString("license_plate_code"),
 					result.getString("bike_image"), 
-					result.getInt("bike_barcode"), 
+					result.getString("bike_barcode"), 
 					result.getDouble("bike_rental_price"),
 					result.getString("currency_unit"),
 					result.getDouble("deposit_price"),  
@@ -196,11 +210,9 @@ public class DBUtils {
 				throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 			}
 			bikeRes.setCurrentStatus(bikeStat);
-			bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-			bikeRes.setCurrentBattery(result.getFloat("current_battery"));
 			
 			// set dockId
-			bikeRes.setDockId(result.getString("dock_id"));
+//			bikeRes.setDockId(result.getString("dock_id"));
 		}
 		
 		return list;

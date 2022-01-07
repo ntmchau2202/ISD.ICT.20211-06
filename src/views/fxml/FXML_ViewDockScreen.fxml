@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
 <?import javafx.scene.layout.AnchorPane?>
-=======
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-=======
-<?import javafx.scene.text.Font?>
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
    <children>
       <GridPane layoutX="6.0" layoutY="7.0" prefHeight="600.0" prefWidth="1200.0">
         <columnConstraints>
@@ -42,7 +32,7 @@
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="imgv_logo" fitHeight="80.0" fitWidth="80.0" layoutX="43.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="mainScreenIcon" fitHeight="80.0" fitWidth="80.0" layoutX="43.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../detailed_design/interface_design/images/icon/ecobike_logo_transparent.png" />
                      </image>
@@ -51,119 +41,90 @@
             </Pane>
             <Pane prefHeight="500.0" prefWidth="750.0" GridPane.rowIndex="1">
                <children>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="55.0" layoutY="97.0" pickOnBounds="true">
+                  <ImageView fx:id="dockImageView" fitHeight="200.0" fitWidth="200.0" layoutX="19.0" layoutY="128.0" pickOnBounds="true">
                      <image>
                         <Image url="@../images/data/dai-co-viet-dock.jpg" />
                      </image>
                   </ImageView>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Label fx:id="dockNameText" layoutX="278.0" layoutY="80.0" text="Dai Co Viet dock bike">
-=======
-                  <Label fx:id="dockName" layoutX="278.0" layoutY="80.0" text="Dai Co Viet dock bike">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Label fx:id="dockNameText" layoutX="301.0" layoutY="54.0" text="Dai Co Viet dock bike">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="279.0" layoutY="119.0" text="Address:">
+                  <Label layoutX="241.0" layoutY="114.0" text="Address:">
                      <font>
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="278.0" layoutY="150.0" text="Dock area:">
+                  <Label layoutX="241.0" layoutY="147.0" text="Dock area:">
                      <font>
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="279.0" layoutY="186.0" text="Number of available bikes:">
+                  <Label layoutX="241.0" layoutY="182.0" text="Number of docks:">
                      <font>
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="278.0" layoutY="219.0" text="Number of available free space:">
+                  <Label layoutX="241.0" layoutY="221.0" text="Number of available bikes:">
                      <font>
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="276.0" layoutY="250.0" text="Distance:">
+                  <Label layoutX="241.0" layoutY="258.0" prefHeight="23.0" prefWidth="241.0" text="Number of available docks:">
                      <font>
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="275.0" layoutY="282.0" text="Estimated walking time:">
+                  <Label layoutX="240.0" layoutY="294.0" text="Distance:">
                      <font>
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Label layoutX="278.0" layoutY="305.0" text="Estimated walking time:">
+                  <Label layoutX="241.0" layoutY="331.0" text="Estimated walking time:">
                      <font>
                         <Font name="Segoe UI Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="dockAddressText" layoutX="356.0" layoutY="119.0" text="123 Dai Co Viet, Dong Da, Hanoi">
+                  <Label fx:id="dockAddressText" layoutX="479.0" layoutY="115.0" text="123 Dai Co Viet, Dong Da, Hanoi">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="dockAreaText" layoutX="377.0" layoutY="150.0" text="20m2">
-=======
-                  <Label fx:id="address" layoutX="356.0" layoutY="119.0" text="123 Dai Co Viet, Dong Da, Hanoi">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Label fx:id="dockAreaText" layoutX="479.0" layoutY="148.0" text="20m2">
+
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Label fx:id="dockCount" layoutX="484.0" layoutY="179.0" text="50">
-=======
-                  <Label fx:id="dockArea" layoutX="377.0" layoutY="150.0" text="20m2">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Label fx:id="dockCount" layoutX="482.0" layoutY="185.0" text="50">
+
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Label fx:id="distance" layoutX="367.0" layoutY="273.0" text="1.5 km">
-=======
-                  <Label fx:id="distance" layoutX="367.0" layoutY="250.0" text="1.5 km">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Label fx:id="distance" layoutX="483.0" layoutY="295.0" text="1.5 km">
+
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Label fx:id="availableDocksCount" layoutX="528.0" layoutY="242.0" text="14">
-=======
-                  <Label fx:id="numDockSpaceFree" layoutX="555.0" layoutY="219.0" text="14">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Label fx:id="availableDocksCount" layoutX="482.0" layoutY="259.0" text="14">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Label fx:id="availableBikeCount" layoutX="528.0" layoutY="210.0" text="36">
-=======
-                  <Label fx:id="numAvailableBike" layoutX="514.0" layoutY="186.0" text="36">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Label fx:id="availableBikesCount" layoutX="482.0" layoutY="222.0" text="36">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Label fx:id="estimateWalkTime" layoutX="493.0" layoutY="305.0" text="25 mins">
-=======
-                  <Label fx:id="estimatedWalkingTime" layoutX="488.0" layoutY="282.0" text="25 mins">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Label fx:id="estimateWalkTime" layoutX="482.0" layoutY="332.0" text="25 mins">
                      <font>
                         <Font name="Segoe UI Italic" size="18.0" />
                      </font>
                   </Label>
-<<<<<<< HEAD:src/views/screens/FXML_ViewDockScreen.fxml
-                  <Button fx:id="returnBike" layoutX="321.0" layoutY="411.0" mnemonicParsing="false" text="Return bike here">
-=======
-                  <Button fx:id="returnBikeHere" layoutX="321.0" layoutY="411.0" mnemonicParsing="false" text="Return bike here">
->>>>>>> feature/backend:src/views/fxml/FXML_ViewDockScreen.fxml
+                  <Button fx:id="returnBikeButton" layoutX="297.0" layoutY="406.0" mnemonicParsing="false" text="Return bike here">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
@@ -172,94 +133,18 @@
             </Pane>
             <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="444.0" snapToPixel="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <content>
-                  <VBox fx:id="bikeVBox" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <AnchorPane prefHeight="121.0" prefWidth="442.0">
-                           <children>
-                              <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="28.0" layoutY="25.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@../images/data/electric-bike.jpg" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="144.0" layoutY="41.0" text="Electric bike 1236">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="144.0" layoutY="66.0" text="Battery:">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="144.0" layoutY="91.0" text="Distance estimation:">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="20.0" top="20.0" />
-                           </padding>
-                        </AnchorPane>
-                        <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="121.0" prefWidth="442.0">
-                           <children>
-                              <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="28.0" layoutY="25.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@../images/data/electric-bike.jpg" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="144.0" layoutY="41.0" text="Electric bike 1236">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="144.0" layoutY="66.0" text="Battery:">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="144.0" layoutY="91.0" text="Distance estimation:">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="20.0" top="20.0" />
-                           </padding>
-                        </AnchorPane>
-                        <AnchorPane layoutX="10.0" layoutY="165.0" prefHeight="121.0" prefWidth="442.0">
-                           <children>
-                              <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="28.0" layoutY="25.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@../images/data/electric-bike.jpg" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="144.0" layoutY="41.0" text="Electric bike 1236">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="144.0" layoutY="66.0" text="Battery:">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="144.0" layoutY="91.0" text="Distance estimation:">
-                                 <font>
-                                    <Font name="Segoe UI Bold Italic" size="16.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="20.0" top="20.0" />
-                           </padding>
-                        </AnchorPane>
-
-                     </children>
-                  </VBox>
+                  <VBox fx:id="bikeVBox" prefHeight="200.0" prefWidth="100.0" />
                </content>
             </ScrollPane>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <ImageView fx:id="backIcon" fitHeight="80.0" fitWidth="80.0" layoutX="242.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../detailed_design/interface_design/images/icon/back_button.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
          </children>
       </GridPane>
    </children>
