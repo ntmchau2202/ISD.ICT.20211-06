@@ -2,12 +2,14 @@ package views.screen;
 
 import controllers.PaymentController;
 import entities.Invoice;
+import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import utils.Configs;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * This is the class handler for invoice screen
@@ -37,7 +39,7 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
         super(stage, screenPath);
     }
 
-    public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Invoice invoice) {
+    public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Invoice invoice) throws EcoBikeException, SQLException {
         if (invoiceScreenHandler == null) {
             try {
                 invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.INVOICE_SCREEN_PATH);
@@ -71,8 +73,10 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
 
     /**
      * This is the method to do render the screen with the data.
+     * @throws SQLException 
+     * @throws EcoBikeException 
      */
-    private void renderInvoiceScreen() {
+    private void renderInvoiceScreen() throws EcoBikeException, SQLException {
         invoiceID.setText(currentInvoice.getInvoiceID());
         invoiceDate.setText(currentInvoice.getTimeCreate().toString());
         bikeName.setText(currentInvoice.getBikeName());

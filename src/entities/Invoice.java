@@ -1,11 +1,15 @@
 package entities;
 
+import java.sql.SQLException;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
+import utils.DBUtils;
 
 /**
  * This is the class for object entity Invoice including all information of an invoice
@@ -47,6 +51,8 @@ public class Invoice {
 	private double total;
 	
 	private int rentID;
+	
+	private Time timeCreate;
 	
 	public int getRentID() {
 		return rentID;
@@ -150,5 +156,17 @@ public class Invoice {
 	public void setInvoiceID(String invoiceID) {
 		this.invoiceID = invoiceID;
 	}
+
+	public Time getTimeCreate() {
+		return timeCreate;
+	}
+
+	public void setTimeCreate(Time timeCreate) {
+		this.timeCreate = timeCreate;
+	}
 	
+	public String getBikeName() throws EcoBikeException, SQLException {
+		Bike bike = DBUtils.getBikeByBarcode(bikeBarCode);
+		return bike.getName();
+	}
 }

@@ -1,6 +1,7 @@
 package utils;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -81,7 +82,7 @@ public class JSONUtils {
 		return obj.toString();
 	}
 	
-	public static Dock toDock(String dockStr) throws InvalidEcoBikeInformationException, JSONException {
+	public static Dock toDock(String dockStr) throws JSONException, SQLException, EcoBikeException {
 		JSONObject result = new JSONObject(dockStr);
 		if (!result.has("dock_id")) {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Dock");
