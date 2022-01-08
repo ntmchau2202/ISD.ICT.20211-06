@@ -1,3 +1,29 @@
+# ECOBIKE APPLICATION REPORT
+
+## Contribution
+- Chau: 35%
+- Long: 35%
+- Duong: 35%
+
+## Notes:
+This submission includes 
+- README (this file)
+- Presentation slides
+- SRS
+- SDS
+- Diagrams, with astah files: in the corresponding folders of previous labs
+- Source code (up to this moment): in folder `/doc`
+- Program specifications (Javadocs): in folder `/doc` - Note that this is temporary only since the functions are being implemented and adjusted
+- Test case: The first version, in folder `/test_cases` We are updating the testcases according to real situations 
+
+Although this is the submission, it still has so many bugs and errors that we're trying our best to handle (but due to the fact that all 3 members are overwhelmed with deadlines, we couldn't finish that on time)
+
+We are trying to fix them and will push them to the repo in the hotfix branches
+
+All the missing parts will be added later
+
+-------
+
 # LAB 01: USECASE DIAGRAMS
 ## Tasks:
 - Design usecase diagram for EcoBike System, with the problem statment given
@@ -243,3 +269,9 @@ a. Guidelines for submission
 b. Timeline for working
 - Deadline for 1st submission: 5 PM 3 Dec. 2021
 - Deadline for submission: 10 PM 4 Nov. 2021
+
+---------------------------
+
+# LABS afterwards
+
+Each team member discuss to each other try to complete his/her as much as posibile
