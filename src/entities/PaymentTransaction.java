@@ -46,13 +46,12 @@ public class PaymentTransaction {
 		
 	}
 	
-	public PaymentTransaction(String transactionId, String creditCardNumber, double amount, String content, 
-			String transactionTime) throws InvalidEcoBikeInformationException {
+	public PaymentTransaction(String transactionId, String creditCardNumber, double amount, String content) throws InvalidEcoBikeInformationException {
 		this.setAmount(amount);
 		this.setTransactionId(transactionId);
 		this.setCreditCardNumber(creditCardNumber);
 		this.setContent(content);
-		this.setTransactionTime(transactionTime);
+//		this.setTransactionTime(transactionTime);
 	}
 	
 	public String getTransactionId() {

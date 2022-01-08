@@ -35,11 +35,6 @@ public class DBUtils {
         return connection;
 	}
 	
-	
-	public static void initializeDBInstance() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public static Invoice getInvoiceById(String invoiceID) throws EcoBikeException, SQLException {
 		PreparedStatement stmI = DBUtils.getConnection().prepareStatement(
@@ -58,7 +53,7 @@ public class DBUtils {
 		while(result.next()) {
 			PaymentTransaction transaction = new PaymentTransaction(result.getString("transaction_id"),
 					result.getString("creaditcard_number"), result.getDouble("transaction_amount"),
-					result.getString("transaction_detail"), result.getDate("transaction_time").toString());
+					result.getString("transaction_detail"));
 			// doing a little bit structured here. Will change it to OO later
 			String transactionDetails = result.getString("transaction_detail");
 			if(transactionDetails.contains(Configs.TransactionType.PAY_DEPOSIT.toString()) ||
@@ -75,7 +70,7 @@ public class DBUtils {
 	
 	public static Customer getCustomerInformation(int customerID) throws EcoBikeException, SQLException {
 		if (connection == null) {
-			initializeDBInstance();
+			getConnection();
 		}
 		PreparedStatement stm = connection.prepareStatement(
 				"SELECT * FROM Customer WHERE customer_id=?");
@@ -87,22 +82,22 @@ public class DBUtils {
 		return customerRes;
 	}
 	
-	public static CreditCard getCreditCardByNumber(String creditCardNumber) throws SQLException, EcoBikeException {
-		if (connection == null) {
-			initializeDBInstance();
-		}
-		PreparedStatement stm = connection.prepareStatement(
-				"SELECT * FROM CreditCard WHERE creditcard_number=?");
-		stm.setString(1, creditCardNumber);
-		ResultSet result = stm.executeQuery();
-		CreditCard card = new CreditCard(result.getString("cardholder_name"),
-				result.getString("creditcard_number"), 
-				result.getString("issuing_bank"), 
-				result.getString("security_code"),
-				result.getDouble("balance"),
-				result.getDate("expiration_date").toString());
-		return card;
-	}
+//	public static CreditCard getCreditCardByNumber(String creditCardNumber) throws SQLException, EcoBikeException {
+//		if (connection == null) {
+//			getConnection()();
+//		}
+//		PreparedStatement stm = connection.prepareStatement(
+//				"SELECT * FROM CreditCard WHERE creditcard_number=?");
+//		stm.setString(1, creditCardNumber);
+//		ResultSet result = stm.executeQuery();
+//		CreditCard card = new CreditCard(result.getString("cardholder_name"),
+//				result.getString("creditcard_number"), 
+//				result.getString("issuing_bank"), 
+//				result.getString("security_code"),
+//				result.getDouble("balance"),
+//				result.getDate("expiration_date").toString());
+//		return card;
+//	}
 	
 	public static PaymentTransaction getTransactionById(String transactionID) throws SQLException, EcoBikeException {
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(
@@ -126,24 +121,33 @@ public class DBUtils {
 	}
 	
 	public static Bike getBikeByBarcode(String bikeBarcode) throws EcoBikeException, SQLException {
-		String sql = "SELECT * FROM Bike, BikeStatus, BikeInDock WHERE bike_barcode=? "
+		String sql = "SELECT Bike.name as name,"
+				+ "Bike.bike_type as bike_type,"
+				+ "Bike.license_plate_code as license_plate_code,"
+				+ "Bike.bike_image as bike_image,"
+				+ "Bike.bike_barcode as bike_barcode,"
+				+ "Bike.bike_rental_price as bike_rental_price,"
+				+ "Bike.currency_unit as currency_unit,"
+				+ "Bike.bike_rental_price as deposit_price,"
+				+ "Bike.create_date as create_date,"
+				+ "BikeStatus.total_rent_time as total_rent_time,"
+				+ "BikeStatus.current_battery as current_battery,"
+				+ "BikeStatus.current_status as current_status FROM Bike, BikeStatus, BikeInDock WHERE Bike.bike_barcode=? "
 				+ "And Bike.bike_barcode = BikeStatus.bike_barcode And "
 				+ "BikeStatus.bike_barcode = BikeInDock.bike_barcode";
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
 		stm.setString(1, bikeBarcode);
 		ResultSet result = stm.executeQuery();
 		// TODO: finish constructor here
-		Bike bikeRes = null;
-//		Bike bikeRes = new Bike(result.getString("name"), 
-//				result.getString("bike_type"),
-//				result.getString("license_plate_code"),
-//				result.getString("bike_image"), 
-//				result.getInt("bike_barcode"), 
-//				result.getDouble("bike_rental_price"),
-//				result.getString("currency_unit"),
-//				result.getDouble("deposit_price"),  
-//				result.getDate("create_date").toString());
-		// set bike current status
+		Bike bikeRes = new Bike(result.getString("name"), 
+				result.getString("bike_type"),
+				result.getString("license_plate_code"),
+				result.getString("bike_image"), 
+				result.getString("bike_barcode"), 
+				result.getDouble("bike_rental_price"),
+				result.getString("currency_unit"),
+				result.getDouble("deposit_price"),  
+				result.getDate("create_date").toString());
 		String bikeStatus = result.getString("current_status");
 		Configs.BIKE_STATUS bikeStat;
 		if(bikeStatus.equalsIgnoreCase("FREE")) {
@@ -153,12 +157,12 @@ public class DBUtils {
 		} else {
 			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 		}
-		bikeRes.setCurrentStatus(bikeStat);
-		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
+//		bikeRes.setCurrentStatus(bikeStat);
+//		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
+//		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
 		
 		// set dockId
-		bikeRes.setDockId(result.getString("dock_id"));
+//		bikeRes.setDockId(result.getString("dock_id"));
 		
 		return bikeRes;
 //		String strRes = JSONUtils.serializeBikeInformation(bikeRes);
@@ -249,6 +253,54 @@ public class DBUtils {
 			docks.add(dockRes);
 		}
 		return docks;
+	}
+	
+	
+	public static void saveCardInformation(CreditCard card) throws SQLException, EcoBikeException {
+		String stm = "INSERT INTO CreditCard(cardholder_name, creditcard_number, issuing_bank, security_code)"
+				+ "VALUES (?,?,?,?)";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setString(1, card.getCardHolderName());
+		sqlStm.setString(2, card.getCardNumber());
+		sqlStm.setString(3, card.getIssueBank());
+		sqlStm.setString(4, card.getCardSecurity());
+		// TODO: fix the expriration date
+//		sqlStm.setTime(5, card.getExpirationDate());
+		sqlStm.execute();
+	}
+	
+	public static int saveCustomer(String customerName) throws SQLException, EcoBikeException {
+		String stm = "INSERT INTO Customer(customer_name) VALUES (?)";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setString(1, customerName);
+		sqlStm.execute();
+		stm = "SELECT customer_id FROM Customer WHERE customer_name=?";
+		sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setString(1, customerName);
+		ResultSet result = sqlStm.executeQuery();
+//		result.last();
+		return result.getInt("customer_id");
+	}
+	
+	public static int createNewRentRecord(int customerID) throws SQLException, EcoBikeException {
+		String stm = "INSERT INTO CustomerRent(customer_id) VALUES (?)";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setInt(1, customerID);
+		sqlStm.execute();
+		stm = "SELECT rent_id FROM CustomerRent WHERE customer_id=?";
+		sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setInt(1, customerID);
+		ResultSet result = sqlStm.executeQuery();
+//		result.last();
+		return result.getInt("rent_id");
+	}
+	
+	public static void changeBikeStatus(String bikeBarcode, String newStatus) throws SQLException, EcoBikeException {
+		String stm = "UPDATE BikeStatus SET current_status=? WHERE bike_barcode=?";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setString(1, newStatus);
+		sqlStm.setString(2, bikeBarcode);
+		sqlStm.executeUpdate();
 	}
 	
 }

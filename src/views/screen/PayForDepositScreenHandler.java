@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import boundaries.InterbankBoundary;
 import controllers.EcoBikeBaseController;
 import controllers.PaymentController;
 import controllers.RentBikeController;
@@ -23,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utils.Configs;
+import views.screen.popup.PopupScreen;
 
 /**
  * This is the class handler for payment method screen
@@ -71,32 +73,35 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     	
     }
     
-	public void validateInput() {
+    public void initialize() {
+    	confirmPaymentButton.setOnMouseClicked(e->{
+			try {
+				confirmPaymentMethod();
+			} catch (EcoBikeException | SQLException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+    }
+    
+	public boolean validateInput() throws IOException {
 		if(PaymentController.getPaymentController().validateCardHolderName(cardHolderName.getText()) == false){
-            popUpError("Invalid card holder name!");
-            return;
+			PopupScreen.error("Invalid card holder name!");
+            return false;
         }
         if(PaymentController.getPaymentController().validateCardNumber(cardNumber.getText()) == false){
-            popUpError("Invalid card number!");
-            return;
+        	PopupScreen.error("Invalid card number!");
+            return false;
         }
-        if(PaymentController.getPaymentController().validateExdpirationDate(expirationDate.getText()) == false){
-            popUpError("Invalid expiration date!");
-            return;
+        if(PaymentController.getPaymentController().validateExpirationDate(expirationDate.getText()) == false){
+        	PopupScreen.error("Invalid expiration date!");
+            return false;
         }
         if(PaymentController.getPaymentController().validateCardSecurity(securityCode.getText()) == false){
-            popUpError("Invalid security code!");
-            return;
+        	PopupScreen.error("Invalid security code!");
+            return false;
         }
-
-        // TODO: Create a creditcard here
-        CreditCard card = null;
-//        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "", expirationDate.getText(), securityCode.getText());
-        try{
-            confirmPaymentMethod(card);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        return true;
 	}
 
     /**
@@ -105,20 +110,15 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
      * @throws SQLException 
      * @throws EcoBikeException 
      */
-    public void confirmPaymentMethod(CreditCard card) throws EcoBikeException, SQLException, IOException {
-    	// this is paying for deposit
-    	RentBikeController.getRentBikeServiceController().rentBike(bikeToRent, card);
-    	
+    public void confirmPaymentMethod() throws EcoBikeException, SQLException, IOException {
+    	if(validateInput()) {
+    		System.out.println("Confirm successfully");
+    		CreditCard card = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "ACB", securityCode.getText(), expirationDate.getText());
+    		// in reality, we will based on the issuing bank to create proper boundary 
+    		InterbankBoundary interbank = new InterbankBoundary("ACB");
+    		RentBikeController.getRentBikeServiceController(interbank).rentBike(bikeToRent, card);    		
+    	} else {
+    		System.out.println("Confirm failed");
+    	}
     }
-
-    private void popUpError(String errorMessage) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Invalid input");
-
-        alert.setHeaderText(null);
-        alert.setContentText(errorMessage);
-
-        alert.showAndWait();
-    }
-
 }

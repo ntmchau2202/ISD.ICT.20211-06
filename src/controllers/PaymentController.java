@@ -10,6 +10,8 @@ import exceptions.ecobike.RentBikeException;
 import exceptions.interbank.InvalidCardException;
 import interfaces.InterbankInterface;
 import utils.DBUtils;
+import utils.FunctionalUtils;
+
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,110 +51,7 @@ public class PaymentController extends EcoBikeBaseController {
 		return paymentController;
     }
 
-    /**
-     * Pay for the deposit for the rental bike and return message result.
-     * <br>@param cardNumber  the credit card number
-     * <br>@param amount  the money to pay deposit
-     * <br>@param content  the content of transaction
-     * <br>@throws RentBikeException If the transaction is invalid
-     * <br>@throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-     * <br>@return {@link java.util.Map Map} represent the payment result with a
-     * message.
-     */
-    @SuppressWarnings("unused")
-    public Map<String, String> payDeposit(int amount, String content,
-                                          String cardHolderName,
-                                          String cardNumber,
-                                          String issueBank, float balance,
-                                          String expirationDate,
-                                          String securityCode) throws RentBikeException, EcoBikeUndefinedException {
-        Map<String, String> result = new Hashtable<String, String>();
-        result.put("RESULT", "PAYMENT FAILED!");
-        try {
-            this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
-            		balance, getExpirationDate(expirationDate));
-            this.interbank = new InterbankBoundary(issueBank);
-            PaymentTransaction transaction = interbank.payDeposit(card, amount, content);
-            result.put("RESULT", "PAYMENT SUCCESSFUL!");
-            result.put("MESSAGE", "You have succesffully paid the deposit!");
-        } catch (Exception e) {
-            result.put("MESSAGE", e.getMessage());
-        }
-        return result;
-    }
-
-    /**
-     * Return the deposit for the rental bike that was paid before
-     *
-     * @param card    the credit card used to pay
-     * @param amount  the money to pay deposit
-     * @param content the content of transaction
-     * @throws RentBikeException         If the transaction is invalid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-     *                                   <br>@return {@link java.util.Map Map} represent the payment result with a
-     *                                   message.
-     */
-    @SuppressWarnings("unused")
-    public Map<String, String> returnDeposit(int amount, String content, String cardHolderName, 
-    		String cardNumber, String issueBank, float balance, 
-    		String expirationDate, String securityCode) 
-    				throws RentBikeException, EcoBikeUndefinedException {
-        Map<String, String> result = new Hashtable<String, String>();
-        result.put("RESULT", "RETURN FAILED!");
-        try {
-        	this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
-            		balance, getExpirationDate(expirationDate));
-            this.interbank = new InterbankBoundary(issueBank);
-            PaymentTransaction transaction = interbank.returnDeposit(card, amount, content);
-            result.put("RESULT", "RETURN SUCCESSFUL!");
-            result.put("MESSAGE", "You have succesffully receive the deposit!");
-        } catch (Exception e) {
-            result.put("MESSAGE", e.getMessage());
-        }
-        return result;
-    }
-
-    /**
-     * Pay for the for the rental bike
-     *
-     * @param card    the credit card used to pay
-     * @param amount  the money to pay deposit
-     * @param content the content of transaction
-     * @throws RentBikeException         If the transaction is invalid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-     *                                   <br>@return {@link java.util.Map Map} represent the payment result with a
-     *                                   message.
-     */
-    @SuppressWarnings("unused")
-    public Map<String, String> payRental(int amount, String content, String cardHolderName, 
-    		String cardNumber, String issueBank, float balance, 
-    		String expirationDate, String securityCode) throws RentBikeException, EcoBikeUndefinedException {
-        Map<String, String> result = new Hashtable<String, String>();
-        result.put("RESULT", "PAYMENT FAILED!");
-        try {
-        	this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
-            		balance, getExpirationDate(expirationDate));
-            this.interbank = new InterbankBoundary(issueBank);
-            PaymentTransaction transaction = interbank.payRental(card, amount, content);
-            result.put("RESULT", "PAYMNET SUCCESSFUL!");
-            result.put("MESSAGE", "You have succesffully pay the rental!");
-        } catch (Exception e) {
-            result.put("MESSAGE", e.getMessage());
-        }
-        return result;
-    }
-
-    /**
-     * Request to update payment method
-     *
-     * @param card The credit card used to pay
-     * @throws RentBikeException         If the card is invalid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-     */
-    public void requestToUpdatePaymentMethod(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-    	this.card = card;
-    }
-
+    
     /**
      * Display a screen including transaction information
      *
@@ -236,14 +135,6 @@ public class PaymentController extends EcoBikeBaseController {
     	}
     }
 
-    public boolean validateCard(CreditCard card) throws RentBikeException, EcoBikeUndefinedException {
-
-        return validateCardNumber(card.getCardNumber()) && validateCardHolderName(card.getCardHolderName())
-        		&& validateCardSecurity(card.getCardSecurity()) && 
-        		validateExdpirationDate(card.getExpirationDate().toString()) && 
-        		validateIssueBank(card.getIssueBank());
-    }
-
     public boolean validateCardNumber(String cardNumber) {
         if (cardNumber.length() != 10) return false;
         try {
@@ -255,14 +146,14 @@ public class PaymentController extends EcoBikeBaseController {
     }
 
     public boolean validateCardHolderName(String cardHolderName) {
-        return cardHolderName.matches("^[\\p{L} .'-]+$");
+        return FunctionalUtils.contains(cardHolderName, "^[a-zA-Z ]");
     }
 
     public boolean validateIssueBank(String issueBank) {
-        return issueBank.equalsIgnoreCase("VCB") || issueBank.equalsIgnoreCase("AGB");
+        return true;
     }
 
-    public boolean validateExdpirationDate(String expirationDate) {
+    public boolean validateExpirationDate(String expirationDate) {
         SimpleDateFormat format = new java.text.SimpleDateFormat("mm/yy");
         try {
             format.parse(expirationDate);
@@ -273,7 +164,10 @@ public class PaymentController extends EcoBikeBaseController {
     }
 
     public boolean validateCardSecurity(String cardSecurity) {
-        return cardSecurity.matches("^[0-9]{3,4}$");
+    	if (cardSecurity.length() != 3) {
+    		return false;
+    	}
+        return FunctionalUtils.contains(cardSecurity, "^[0-9]");
     }
 
     /**
@@ -286,29 +180,28 @@ public class PaymentController extends EcoBikeBaseController {
      * <br>@throws InvalidCardException - If the string does not represent a valid date
      * in the expected format
      */
-    public String getExpirationDate(String date) throws InvalidCardException {
-        String strs[] = date.split("/");
-        if (strs.length != 2) {
-            throw new InvalidCardException("Invalid format of date");
-        }
-
-        String expirationDate = null;
-        int month = -1;
-        int year = -1;
-
-        try {
-            month = Integer.parseInt(strs[0]);
-            year = Integer.parseInt(strs[1]);
-            if (month < 1 || month > 12 || year < Calendar.getInstance()
-                    .get(Calendar.YEAR) % 100 || year > 100) {
-                throw new InvalidCardException("Invalid date");
-            }
-            expirationDate = strs[0] + strs[1];
-        } catch (Exception e) {
-            throw new InvalidCardException("Invalid date");
-        }
-        return expirationDate;
-    }
+//    public String getExpirationDate(String date) throws InvalidCardException {
+//        String strs[] = date.split("/");
+//        if (strs.length != 2) {
+//            throw new InvalidCardException("Invalid format of date");
+//        }
+//
+//        String expirationDate = null;
+//        int month = -1;
+//        int year = -1;
+//
+//        try {
+//            month = Integer.parseInt(strs[0]);
+//            year = Integer.parseInt(strs[1]);
+//            if (month < 1 || month > 12 || year < Calendar.getInstance()
+//                    .get(Calendar.YEAR) % 100 || year > 100) {
+//                throw new InvalidCardException("Invalid date");
+//            }
+//            expirationDate = strs[0] + strs[1];
+//        } catch (Exception e) {
+//            throw new InvalidCardException("Invalid date");
+//        }
+//        return expirationDate;
+//    }
 
 }
-

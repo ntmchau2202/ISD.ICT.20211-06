@@ -40,5 +40,5 @@ public interface InterbankInterface {
 	 * Get current balance of a given credit card.
 	 * <br>@param creditCard The card with the balance to be queried
 	 */
-	public void getBalance(CreditCard creditCard);
+	public double getBalance(CreditCard creditCard);
 }

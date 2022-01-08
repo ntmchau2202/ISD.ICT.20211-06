@@ -74,8 +74,9 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
      */
     private void renderInvoiceScreen() {
         invoiceID.setText(currentInvoice.getInvoiceID());
-        invoiceDate.setText(currentInvoice.getTimeCreate().toString());
-        bikeName.setText(currentInvoice.getBikeName());
+        // TODO: restores these line properly
+//        invoiceDate.setText(currentInvoice.getTimeCreate().toString());
+//        bikeName.setText(currentInvoice.getBikeName());
         startRentTime.setText(currentInvoice.getStartTime().toString());
         endRentTime.setText(currentInvoice.getEndTime().toString());
         total.setText(currentInvoice.getTotal() + " VND");

@@ -86,13 +86,15 @@ public class JSONUtils {
 		if (!result.has("dock_id")) {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Dock");
 		}
-		return new Dock(result.getString("name"), 
-				result.getInt("dock_id"), 
-				result.getString("dock_address"), 
-				result.getDouble("dock_area"),
-				result.getInt("num_available_bike"),
-				result.getInt("num_free_dock"),
-				result.getString("dock_image"));
+		return null;
+		// TODO: return properly
+//		return new Dock(result.getString("name"), 
+//				result.getInt("dock_id"), 
+//				result.getString("dock_address"), 
+//				result.getDouble("dock_area"),
+//				result.getInt("num_available_bike"),
+//				result.getInt("num_free_dock"),
+//				result.getString("dock_image"));
 	}
 	
 	public static String serializeInvoiceInformation(Invoice invoice) throws JSONException {
@@ -178,12 +180,14 @@ public class JSONUtils {
 		if (!result.has("creditcard_number")) {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to CreditCard");
 		}
-		return new CreditCard(result.getString("cardholder_name"),
-				result.getString("creditcard_number"), 
-				result.getString("issuing_bank"), 
-				result.getString("security_code"),
-				result.getDouble("balance"),
-				result.getString("expiration_date"));
+		return null;
+		// TODO: return properly
+//		return new CreditCard(result.getString("cardholder_name"),
+//				result.getString("creditcard_number"), 
+//				result.getString("issuing_bank"), 
+//				result.getString("security_code"),
+//				result.getDouble("balance"),
+//				result.getString("expiration_date"));
 	}
 	
 	public static String serializeCustomerInformation(Customer customer) throws JSONException {

@@ -41,17 +41,15 @@ public class CreditCard {
 	/**
 	 * The expired date of the card in defined time format
 	 */
-	private Date expirationDate;
+	private String expirationDate;
 	
 	
-	public CreditCard(String cardHolderName,String cardNumber, String issueBank, String cardSecurity, 
-			double balance,String expirationDate) {
+	public CreditCard(String cardHolderName,String cardNumber, String issueBank, String cardSecurity, String expirationDate) {
 		super();
 		this.setCardHolderName(cardHolderName);
 		this.setCardNumber(cardNumber);
 		this.setIssueBank(issueBank);
 		this.setCardSecurity(cardSecurity);
-		this.setBalance(balance);
 		this.setExpirationDate(expirationDate);
 	}
 	public String getCardNumber() {
@@ -63,7 +61,7 @@ public class CreditCard {
 			throw new InvalidCardException("card number must not be null");
 		}
 		
-		if (FunctionalUtils.contains(cardNumber, "^[0-9 ]")) {
+		if (!FunctionalUtils.contains(cardNumber, "^[0-9 ]")) {
 			throw new InvalidCardException("card number must not contains letters or special character");
 		}
 		
@@ -76,8 +74,8 @@ public class CreditCard {
 		if (cardHolderName == null || cardHolderName.length() == 0) {
 			throw new InvalidCardException("cardholder name must not be null");
 		}
-		
-		if (FunctionalUtils.contains(cardHolderName, "^[a-zA-z ]")) {
+		System.out.println("Cardholder name is:"+cardHolderName);
+		if (!FunctionalUtils.contains(cardHolderName, "^[a-zA-z ]")) {
 			throw new InvalidCardException("card number must not contains digits or special characters");
 		}
 		this.cardHolderName = cardHolderName;
@@ -90,22 +88,24 @@ public class CreditCard {
 			throw new InvalidCardException("issuing bank must not be null");
 		}
 		
-		if (FunctionalUtils.contains(issueBank, "^[a-zA-z ]")) {
+		if (!FunctionalUtils.contains(issueBank, "^[a-zA-z ]")) {
 			throw new InvalidCardException("issuing bank must not contains digits or special characters");
 		}
 		this.issueBank = issueBank;
 	}
-	public Date getExpirationDate() {
+	public String getExpirationDate() {
 		return expirationDate;
 	}
 	public void setExpirationDate(String expirationDate) {
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("MM/yyyy");	
-			Date date = (Date) dateFormat.parse(expirationDate);
-			this.expirationDate = new Date(date.getTime());
-		} catch (Exception e) {
-			throw new InvalidCardException("invalid expiration date");
-		}
+		// TODO: need to redo this
+//		try {
+//			DateFormat dateFormat = new SimpleDateFormat("mm/yy");	
+//			Date date = (Date) dateFormat.parse(expirationDate);
+//			this.expirationDate = new Date(date.getTime());
+//		} catch (Exception e) {
+//			throw new InvalidCardException("invalid expiration date");
+//		}
+		this.expirationDate = expirationDate;
 	}
 	public String getCardSecurity() {
 		return cardSecurity;
@@ -116,10 +116,4 @@ public class CreditCard {
 	public double getBalance() {
 		return balance;
 	}
-	private void setBalance(double balance) {
-		this.balance = balance;
-	}
-	
-	
-
 }
