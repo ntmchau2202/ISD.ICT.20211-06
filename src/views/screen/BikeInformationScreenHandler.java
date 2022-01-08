@@ -126,7 +126,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         try {
             System.out.println("rent bike");
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.currentBike);
+            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.stage, this.currentBike);
 //            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +137,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         try {
             System.out.println("return bike");
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).returnBike(this.currentBike);
+            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).returnBike(this.stage, this.currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,7 +147,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         try {
         	System.out.println("pause bike rental");
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).pauseBikeRental(this.currentBike);
+            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).pauseBikeRental(this.stage, this.currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }

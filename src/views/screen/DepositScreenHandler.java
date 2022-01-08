@@ -52,7 +52,7 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
      * @param creditCard the credit card to render this screen, provide null if update is not needed
      * @param bike       the bike to render this screen, provide null if update is not needed
      */
-    public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
+    public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard,Bike bike) {
         if (depositScreenHandler == null) {
             try {
                 depositScreenHandler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH, prevScreen);
@@ -68,9 +68,9 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
             depositScreenHandler.setPreviousScreen(prevScreen);
         }
 
-//        if (creditCard != null) {
-//            depositScreenHandler.currentCreditCard = creditCard;
-//        }
+        if (creditCard != null) {
+            depositScreenHandler.currentCreditCard = creditCard;
+        }
 
         if (bike != null) {
             depositScreenHandler.currentBike = bike;

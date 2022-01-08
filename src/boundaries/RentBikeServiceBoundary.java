@@ -32,22 +32,22 @@ public class RentBikeServiceBoundary implements RentBikeServiceInterface {
 		if (currentStage != null) {
 			rentBikeService.prevScreen = currentStage;
 		}
-		return rentBikeService;
-		
+		return rentBikeService;		
 	}
-	public void rentBike(Bike bike) throws IOException, EcoBikeException, SQLException {
+	
+	public void rentBike(Stage stage, Bike bike) throws IOException, EcoBikeException, SQLException {
 		// TODO: call pay for deposit handler here
-		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(null, Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
+		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(stage, Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
 		paymentScreenHandler.show();
 	}
 	
-	public void returnBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException {
+	public void returnBike(Stage stage, Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException {
 		// TODO: call pay for return handler here
-		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(null, Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
+		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(stage, Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
 		paymentScreenHandler.show();
 	}
 	
-	public void pauseBikeRental(Bike bike) throws EcoBikeException, SQLException {
+	public void pauseBikeRental(Stage stage, Bike bike) throws EcoBikeException, SQLException {
 		if (RentBikeController.getRentBikeServiceController().pauseBikeRental(bike.getBikeBarCode())) {
 			// TODO: show popup here
 		}

@@ -40,7 +40,7 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     private TextField securityCode;
     @FXML
     private Button confirmPaymentButton;
-    
+        
     private static PayForDepositScreenHandler paymentScreenHandler;
 
     /**
@@ -63,12 +63,17 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     	if (paymentScreenHandler == null) {
     		paymentScreenHandler = new PayForDepositScreenHandler(stage, screenPath);
     		paymentScreenHandler.setScreenTitle("Register payment method");
+    		paymentScreenHandler.initializeScreen();
     	}
     	if (bike != null) {
     		paymentScreenHandler.bikeToRent = bike;
     	}
     	return paymentScreenHandler;
     	
+    }
+    
+    private void initializeScreen() {
+    	confirmPaymentButton.setOnMouseClicked(e -> validateInput());
     }
     
 	public void validateInput() {
@@ -108,7 +113,7 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     public void confirmPaymentMethod(CreditCard card) throws EcoBikeException, SQLException, IOException {
     	// this is paying for deposit
     	RentBikeController.getRentBikeServiceController().rentBike(bikeToRent, card);
-    	
+    	System.out.println("Hello");
     }
 
     private void popUpError(String errorMessage) {

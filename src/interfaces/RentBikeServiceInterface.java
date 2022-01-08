@@ -8,6 +8,7 @@ import entities.CreditCard;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
+import javafx.stage.Stage;
 
 /**
  * This interface allow communication between the information subsystem and the rent bike service subsystem
@@ -25,7 +26,7 @@ public interface RentBikeServiceInterface {
 	 * @throws SQLException 
 	 * @throws EcoBikeException 
 	 */
-	public void rentBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException, EcoBikeException, SQLException;
+	public void rentBike(Stage stage, Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException, EcoBikeException, SQLException;
 	
 	/**
 	 * Calls the Return bike sequence of operations for customers to return bike
@@ -34,7 +35,7 @@ public interface RentBikeServiceInterface {
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 * @throws IOException 
 	 */
-	public void returnBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException;
+	public void returnBike(Stage stage, Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException;
 	
 	/**
 	 * Calls the Pause bike rental sequence of operations for customers to pause bike rental
@@ -44,5 +45,5 @@ public interface RentBikeServiceInterface {
 	 * @throws SQLException 
 	 * @throws EcoBikeException 
 	 */
-	public void pauseBikeRental(Bike bike) throws RentBikeException, EcoBikeUndefinedException, EcoBikeException, SQLException;
+	public void pauseBikeRental(Stage stage, Bike bike) throws RentBikeException, EcoBikeUndefinedException, EcoBikeException, SQLException;
 }

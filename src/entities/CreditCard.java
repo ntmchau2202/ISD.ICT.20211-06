@@ -54,6 +54,9 @@ public class CreditCard {
 		this.setBalance(balance);
 		this.setExpirationDate(expirationDate);
 	}
+	public CreditCard() {
+		// TODO Auto-generated constructor stub
+	}
 	public String getCardNumber() {
 		return cardNumber;
 	}
