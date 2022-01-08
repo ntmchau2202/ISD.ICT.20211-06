@@ -23,11 +23,11 @@ class DockTest {
 		"A BC, 123, 123 Tay Ho, 163.9, 10, 20",
 		"ABC, 12-3, 123/69 Tay Ho, 163.9, 10, 20",
 	})
-	void DockConstructorTestOK(String name, String dockID, String dock_address, double dock_area, int num_available_bike,
-			int num_dock_space_free) {
+	void DockConstructorTestOK(String name, int dockID, String dock_address, double dock_area, int num_available_bike,
+			int num_dock_space_free, String dockImage) {
 		boolean isValid = true;
 		try {
-			Dock dock = new Dock(name, dockID, dock_address, dock_area, num_available_bike, num_dock_space_free);
+			Dock dock = new Dock(name, dockID, dock_address, dock_area, num_available_bike, num_dock_space_free, dockImage);
 		} catch (Exception e){
 			isValid = false;
 		} finally {
@@ -45,11 +45,11 @@ class DockTest {
 		"1ABC, 123, 123 Tay Ho, 163.9, 10, -1",
 	})
 	
-	void DockConstructorTestException(String name, String dockID, String dock_address, double dock_area, int num_available_bike,
-			int num_dock_space_free) {
+	void DockConstructorTestException(String name, int dockID, String dock_address, double dock_area, int num_available_bike,
+			int num_dock_space_free, String dockImage) {
 		boolean isValid = true;
 		try {
-			Dock dock = new Dock(name, dockID, dock_address, dock_area, num_available_bike, num_dock_space_free);
+			Dock dock = new Dock(name, dockID, dock_address, dock_area, num_available_bike, num_dock_space_free, dockImage);
 		} catch (Exception e) {
 			assertTrue(e instanceof InvalidEcoBikeInformationException);
 		}

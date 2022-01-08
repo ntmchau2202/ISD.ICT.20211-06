@@ -48,9 +48,7 @@ public class RentBikeServiceBoundary implements RentBikeServiceInterface {
 	}
 	
 	public void pauseBikeRental(Stage stage, Bike bike) throws EcoBikeException, SQLException {
-		if (RentBikeController.getRentBikeServiceController().pauseBikeRental(bike.getBikeBarCode())) {
-			// TODO: show popup here
-		}
+		RentBikeController.getRentBikeServiceController().pauseBikeRental(bike.getBikeBarCode());
 		
 	}
 }

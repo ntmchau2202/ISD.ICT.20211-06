@@ -1,6 +1,9 @@
 package controllers;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import entities.Bike;
 import entities.Dock;
 import exceptions.ecobike.EcoBikeException;
@@ -15,6 +18,8 @@ import utils.DBUtils;
  */
 public class EcoBikeInformationController extends EcoBikeBaseController {
 	private static EcoBikeInformationController ecoBikeInformationController;
+	
+	private List<Bike> listBike;
 
 	public static EcoBikeInformationController getEcoBikeInformationController() {
 		if (ecoBikeInformationController == null)
@@ -65,6 +70,14 @@ public class EcoBikeInformationController extends EcoBikeBaseController {
 		}
 
 		return DBUtils.getBikeByBarcode(barCode);
+	}
+
+	public void setBikeList(ArrayList<Bike> listBike) {
+		this.listBike = listBike;
+	}
+	
+	public List<Bike> getListBike() {
+		return this.listBike;
 	}
 	
 }

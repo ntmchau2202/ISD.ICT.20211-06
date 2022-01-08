@@ -56,15 +56,7 @@ public class RentBikeController extends EcoBikeBaseController {
 		}
 		
 		// create new customerRent record
-		
-		// create new rentBike record
 		startCountingRentTime(bike);
-		String sql = "Insert into RentBike(rent_id, bike_barcode, start_time) values(?, ?, ?)";
-		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
-		stm.setString(1, null); // unknown
-		stm.setString(2, bikeToRent.getBikeBarCode());
-		stm.setTime(3, Time.valueOf(LocalTime.now()));
-		stm.executeUpdate();
 
 		//Update status
 		String sql2 = "Update BikeStatus set current_status = ? where bike_barcode = ?";
@@ -79,19 +71,30 @@ public class RentBikeController extends EcoBikeBaseController {
 	 * Start pausing bike rental process
 	 * @param bikeBarcode barCode of the bike to be rented
 	 */
-	public boolean pauseBikeRental(String bikeBarcode) throws EcoBikeException, SQLException {
+	public void pauseBikeRental(String bikeBarcode) throws EcoBikeException, SQLException {
 
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
-		// do st
-		// return
-		return false;
+		String sql = "Update RentBike set end_time = ? where bike_barcode = ?";
+		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+		stm.setTime(1, Time.valueOf(LocalTime.now()));
+		stm.setString(2, bike.getBikeBarCode());
+		stm.executeUpdate();
 	}
 	
 	/**
 	 * Invoke counter for tracking rental time
+	 * @throws EcoBikeException 
+	 * @throws SQLException 
 	 */
-	private void startCountingRentTime(Bike bike) {
-		//todo: start counting rental time
+	private void startCountingRentTime(Bike bike) throws SQLException, EcoBikeException {
+		// create new rentBike record
+		
+		String sql = "Insert into RentBike(rent_id, bike_barcode, start_time) values(?, ?, ?)";
+		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+		stm.setString(1, null); // unknown
+		stm.setString(2, bike.getBikeBarCode());
+		stm.setTime(3, Time.valueOf(LocalTime.now()));
+		stm.executeUpdate();
 	}
 
 

@@ -29,12 +29,13 @@ public class BikeTest {
 		"ABC, norm_al, laksjfhbg/alkjfhg, 135afg21, 10, 300, VND, 12/03/2021",
 		"ABC, normal, , 135afg21, 10, 300, VND, 12/03/2021",
 	})
-	public void BikeConstructorTestOK(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
-			double deposit, String currency, String create_date) {
+	public void BikeConstructorTestOK(String name, String bikeType, String licensePlateCode, String bikeImage, 
+			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String createDate) {
 		boolean isValid = true;
 		try {
-			Bike bike = new Bike(name, bike_type, bike_image, bar_code, bike_rental_price,
-					deposit, currency, create_date);					
+			Bike bike = new Bike(name, bikeType, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice
+					, currencyUnit, deposit, createDate);					
 		} catch (Exception e) {
 			isValid = false;
 		} finally {
@@ -56,11 +57,12 @@ public class BikeTest {
 		"ABC, , laksjfhbg/alkjfhg, 135afg21, 10, 300, VND, 12/03/2021",
 		"ABC, normal, laksjfhbg/alkjfhg, , 0, 300, VND, 12/03/2021",
 	})
-	public void BikeConstructorTestException(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
-			double deposit, String currency, String create_date) {
+	public void BikeConstructorTestException(String name, String bikeType, String licensePlateCode, String bikeImage, 
+			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String createDate) {
 		try { 
-			Bike bike = new Bike(name, bike_type, bike_image, bar_code, bike_rental_price,
-					deposit, currency, create_date);
+			Bike bike = new Bike(name, bikeType, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice
+					, currencyUnit, deposit, createDate);
 		} catch (Exception e) {
 			assertTrue(e instanceof InvalidEcoBikeInformationException);
 		}
@@ -73,11 +75,12 @@ public class BikeTest {
 		"ABC, normal, , 135afg21, 10, 300, VND, 12/03/2021",
 		"ABC, normal, laksjfhbg/alkjfhg, , 0, 300, VND, 12/03/2021",
 	})
-	public void BikeConstructorTestNullException(String name, String bike_type, String bike_image, String bar_code, double bike_rental_price,
-			double deposit, String currency, String create_date) {
+	public void BikeConstructorTestNullException(String name, String bikeType, String licensePlateCode, String bikeImage, 
+			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String createDate) {
 		try { 
-			Bike bike = new Bike(name, bike_type, bike_image, bar_code, bike_rental_price,
-					deposit, currency, create_date);
+			Bike bike = new Bike(name, bikeType, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice
+					, currencyUnit, deposit, createDate);
 		} catch (Exception e) {
 			assertTrue(e instanceof InvalidEcoBikeInformationException);
 		}

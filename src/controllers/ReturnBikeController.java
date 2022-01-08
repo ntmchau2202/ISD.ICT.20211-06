@@ -14,7 +14,6 @@ import utils.DBUtils;
 
 public class ReturnBikeController extends EcoBikeBaseController {
 	
-	private static ReturnBikeController returnController;	
 	private InterbankInterface interbankSystem;
 
 	private static ReturnBikeController returnBikeController;
@@ -62,12 +61,12 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	 * @return a float value expresses the money have to pay in currency VND
 	 */
 	@SuppressWarnings("unlikely-arg-type")
-	public float calculateFee(String bikeType, float rentTime) {
+	public double calculateFee(String bikeType, double rentTime) {
 		//renting cost
-		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute
+		double rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute
 				? 0
 				: rentTime - Configs.firstChargeTimeIntervalInMinute > 0
-					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
+					? (Configs.firstChargeTimeIntervalCost + (double)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
 					: Configs.firstChargeTimeIntervalCost;
 
 		rentingCost *= Configs.chargeMultiplierDictionary.get(bikeType);

@@ -15,7 +15,7 @@ class validateCardHolderNameTest {
 	private PaymentController controllers;
 	@BeforeEach
 	void setUp() throws Exception {
-		controllers = new PaymentController(null);
+		controllers = PaymentController.getPaymentController();
 	}
 
 	@ParameterizedTest

@@ -122,7 +122,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     }
 
 
-    public void rentBike() {
+    private void rentBike() {
         try {
             System.out.println("rent bike");
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
@@ -133,7 +133,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         }
     }
 
-    public void returnBike() {
+    private void returnBike() {
         try {
             System.out.println("return bike");
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem

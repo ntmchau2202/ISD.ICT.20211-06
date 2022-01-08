@@ -80,7 +80,7 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
             popUpError("Invalid card number!");
             return;
         }
-        if(PaymentController.getPaymentController().validateExdpirationDate(expirationDate.getText()) == false){
+        if(PaymentController.getPaymentController().validateExprirationDate(expirationDate.getText()) == false){
             popUpError("Invalid expiration date!");
             return;
         }

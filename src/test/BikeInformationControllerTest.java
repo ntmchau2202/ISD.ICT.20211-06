@@ -22,8 +22,9 @@ class BikeInformationControllerTest {
 		boolean isOK = true;
 		try {
 			controller = new EcoBikeInformationController();
-			Bike bike1 = new Bike("ABC", "normal", "ABC/123", "ABC-123", 10, 300, "VND", "12/03/2021");
-			Bike bike2 = new Bike("ABC", "normal", "ABC/124", "ABC-124", 10, 300, "VND", "12/03/2021");
+			Bike bike1 = new Bike("ABC", "normal", "ABC/123", "assets/images/loading.gif", "A1", 10000, "VND", 30000,"12/03/2021");
+			Bike bike2 = new Bike("ABC", "normal", "ABC/124", "assets/images/loading.gif", "A2", 10000, "VND", 30000,"12/03/2021");
+			Bike bike3 = new Bike("ABD", "normal", "ABC/123", "assets/images/loading.gif", "A3", 10000, "VND", 30000, "12/03/2021");
 			listBike = new ArrayList<Bike>();
 			listBike.add(bike2);
 			listBike.add(bike1);
@@ -41,7 +42,7 @@ class BikeInformationControllerTest {
 		"ABC-125, false",
 	})
 	void test(String id, boolean expected) throws Exception {
-		assertTrue((controller.getBikeInformation(id).compareTo("ABC") == 0) == expected);			
+		assertTrue((controller.getBikeInformation(id).getName().compareTo("ABC") == 0) == expected);			
 	}
 
 }

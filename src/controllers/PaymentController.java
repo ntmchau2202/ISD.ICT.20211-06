@@ -154,17 +154,6 @@ public class PaymentController extends EcoBikeBaseController {
     }
 
     /**
-     * Display a screen including transaction information
-     *
-     * @param transaction The transaction entity ({@link entities.PaymentTransaction}
-     * @throws RentBikeException         If the transaction is not valid
-     * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-     */
-    public void displayTransactionInfo(PaymentTransaction transaction) throws RentBikeException, EcoBikeUndefinedException {
-    	
-    }
-
-    /**
      * save the transaction to the database
      *
      * @param transaction The transaction entity ({@link entities.PaymentTransaction}
@@ -207,18 +196,6 @@ public class PaymentController extends EcoBikeBaseController {
     }
 
     /**
-     * Display a screen including the invoice information
-     *
-     * @param invoice The Invoice entity ({@link entities.Invoice}
-     * @return The invoice entity ({@link entities.Invoice}
-     * @throws EcoBikeException 
-     * @throws SQLException 
-     */
-    public void displayInvoiceScreen(Invoice invoice) throws SQLException, EcoBikeException {
-    	
-    }
-
-    /**
      * save the invoice to the database
      *
      * @param transaction The invoice entity ({@link entities.Invoice}
@@ -240,7 +217,7 @@ public class PaymentController extends EcoBikeBaseController {
 
         return validateCardNumber(card.getCardNumber()) && validateCardHolderName(card.getCardHolderName())
         		&& validateCardSecurity(card.getCardSecurity()) && 
-        		validateExdpirationDate(card.getExpirationDate().toString()) && 
+        		validateExprirationDate(card.getExpirationDate().toString()) && 
         		validateIssueBank(card.getIssueBank());
     }
 
@@ -262,7 +239,7 @@ public class PaymentController extends EcoBikeBaseController {
         return issueBank.equalsIgnoreCase("VCB") || issueBank.equalsIgnoreCase("AGB");
     }
 
-    public boolean validateExdpirationDate(String expirationDate) {
+    public boolean validateExprirationDate(String expirationDate) {
         SimpleDateFormat format = new java.text.SimpleDateFormat("mm/yy");
         try {
             format.parse(expirationDate);
