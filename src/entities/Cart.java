@@ -34,9 +34,7 @@ public class Cart {
 	  public void addBike(Bike cm) {
 	    lstCartMedia.add(cm);
 	  }
-
-	  @SuppressWarnings("rawtypes")
-	  public List getListMedia() {
+	  public List<Bike> getListMedia() {
 	    return lstCartMedia;
 	  }
 

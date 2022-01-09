@@ -60,9 +60,8 @@ public class FunctionalUtils {
     public static String convertTime(int time) {
         int hours = (int) time / 3600;
         int minutes = (int) (time - hours * 3600) / 60;
-        if (minutes == 0) return hours + " hours";
-        if (hours == 0) return minutes + " minutes";
-        return hours + " hours " + minutes + " minutes";
+        int seconds = (int) (time - hours * 3600 - minutes * 60);
+        return hours + " hours " + minutes + " minutes " + seconds + " seconds";
     }
 
     /**
@@ -70,7 +69,7 @@ public class FunctionalUtils {
      * @return money in vietnam currency
      */
     public static String getCurrencyFormat(int num) {
-        Locale vietnam = new Locale("vi", "VN");
+    	Locale vietnam = new Locale("vi", "VN");
         NumberFormat defaultFormat = NumberFormat.getCurrencyInstance(vietnam);
         return defaultFormat.format(num);
     }

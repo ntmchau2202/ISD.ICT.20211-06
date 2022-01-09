@@ -18,7 +18,7 @@
          <top>
             <Pane prefHeight="100.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="imgv_logo" fitHeight="80.0" fitWidth="80.0" layoutX="58.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imgv_logo" fitHeight="80.0" fitWidth="80.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../detailed_design/interface_design/images/icon/ecobike_logo_transparent.png" />
                      </image>
@@ -26,17 +26,18 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ImageView>
-                  <TextField fx:id="searchBarField" layoutX="291.0" layoutY="28.0" prefHeight="45.0" prefWidth="826.0" />
-                  <Button fx:id="searchButton" layoutX="1025.0" layoutY="38.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Search">
+                  <TextField fx:id="searchBarField" layoutX="199.0" layoutY="30.0" prefHeight="45.0" prefWidth="826.0" />
+                  <Button fx:id="searchButton" layoutX="938.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Search">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
-                  <Label layoutX="145.0" layoutY="37.0" text="EcoBike">
+                  <Label layoutX="102.0" layoutY="36.0" text="EcoBike">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <ChoiceBox fx:id="choiceBox" layoutX="914.0" layoutY="38.0" prefHeight="25.0" prefWidth="98.0" />
+                  <ChoiceBox fx:id="choiceBox" layoutX="827.0" layoutY="40.0" prefHeight="25.0" prefWidth="98.0" />
+                  <Button fx:id="viewBike" layoutX="1046.0" layoutY="29.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="118.0" text="View Bike Rented" textFill="#1b1a1a" />
                </children>
             </Pane>
          </top>

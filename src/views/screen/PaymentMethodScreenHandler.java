@@ -1,16 +1,21 @@
 package views.screen;
 
 import controllers.PaymentController;
+import controllers.ReturnBikeController;
 import entities.Bike;
 import entities.CreditCard;
+import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import utils.Configs;
+import views.screen.popup.PopupScreen;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * This is the class handler for payment method screen
@@ -19,7 +24,6 @@ import java.io.IOException;
  */
 public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static PaymentMethodScreenHandler paymentMethodScreenHandler = null;
     private CreditCard currentCreditCard = null;
     private Configs.TransactionType currentTransactionType = null;
     private Bike currentBike = null;
@@ -35,49 +39,27 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button confirmPaymentButton;
     
-    private static PaymentMethodScreenHandler paymentScreenHandler;
-
-    private PaymentMethodScreenHandler(Stage stage, String screenPath) throws IOException {
+    public PaymentMethodScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prev, 
+    		CreditCard card,Configs.TransactionType transactionType,Bike bike) throws IOException {
         super(stage, screenPath);
-    }
-
-    /**
-     * This class return an instance of payment method screen handler, initialize it with the stage, prevScreen, creditCard and transactionType
-     *
-     * @param stage             the stage to show this screen
-     * @param prevScreen        the screen that call to this screen
-     * @param creditCard        the credit card to render this screen, provide null if update is not needed
-     * @param transactionType   the transaction type of the process
-     *
-     */
-    public static PaymentMethodScreenHandler getPaymentMethodScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, 
-    		CreditCard card,Configs.TransactionType transactionType,Bike bike) {
-        if (paymentMethodScreenHandler == null) {
-            try {
-                paymentMethodScreenHandler = new PaymentMethodScreenHandler(stage, Configs.PAYMENT_METHOD_SCREEN_PATH);
-                paymentMethodScreenHandler.setbController(PaymentController.getPaymentController());
-                paymentMethodScreenHandler.setScreenTitle("Payment method screen");
-                paymentMethodScreenHandler.initializePaymentScreen();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        setbController(PaymentController.getPaymentController());
+        setScreenTitle("Payment method screen");
+        initializePaymentScreen();
         
         if(bike != null) {
-        	paymentMethodScreenHandler.currentBike = bike;
+        	currentBike = bike;
         }
-        if (prevScreen != null) {
-            paymentMethodScreenHandler.setPreviousScreen(prevScreen);
+        if (prev != null) {
+            setPreviousScreen(prev);
         }
 
         if(transactionType != null){
-            paymentMethodScreenHandler.currentTransactionType = transactionType;
+            currentTransactionType = transactionType;
         }
         
-        paymentMethodScreenHandler.currentCreditCard = card;
-
-        return paymentMethodScreenHandler;
+        setCreditCard(card);
     }
+
     
     public void setCreditCard(CreditCard card) {
     	currentCreditCard = card;
@@ -90,7 +72,7 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     	if(currentCreditCard == null) currentCreditCard = new CreditCard();
         confirmPaymentButton.setOnMouseClicked(e -> {
         	validateInput();
-        	paymentMethodScreenHandler.renderPaymentMethod();
+        	renderPaymentMethod();
         });
     }
 
@@ -147,15 +129,20 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     /**
      * This method is called when user click confirm payment button
      * It shows the previous screen that require this screen to be shown (deposit or pay rental)
+     * @throws IOException 
+     * @throws SQLException 
+     * @throws EcoBikeException 
      */
-    private void confirmPaymentMethod() {
+    private void confirmPaymentMethod() throws IOException, EcoBikeException, SQLException {
     	currentCreditCard = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "VCB", securityCode.getText(), 10000000, expirationDate.getText());
         switch (currentTransactionType){
             case PAY_DEPOSIT:
-                DepositScreenHandler.getDepositScreenHandler(this.stage, null, currentCreditCard, currentBike).show();
+            	DepositScreenHandler handler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH, this, currentCreditCard, currentBike);
+            	handler.show();
                 break;
             case PAY_RENTAL:
-                PaymentScreenHandler.getPaymentScreenHandler(this.stage, null, currentCreditCard, currentBike).show();
+            	PaymentScreenHandler handler1 = new PaymentScreenHandler(stage, Configs.PAYMENT_SCREEN_PATH, this, currentCreditCard, currentBike);
+            	handler1.show();
                 break;
             default:
                 System.out.println("Unknown payment source");

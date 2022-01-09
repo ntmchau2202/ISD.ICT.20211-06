@@ -53,15 +53,23 @@ public class BikeInDockHandler extends EcoBikeBaseScreenHandler {
         bikeName.setText(currentBike.getName());
         bikeBattery.setText(currentBike.getCurrentBattery() + "%");
         distanceEstimation.setText(.2 * currentBike.getCurrentBattery() + "km");
-        viewBikeButton.setOnMouseClicked(e -> viewBikeInformation());
+        viewBikeButton.setOnMouseClicked(e -> {
+			try {
+				viewBikeInformation();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
     }
 
     /**
      * This method is called when user click view bike button
+     * @throws IOException 
      *
      */
-    public void viewBikeInformation() {
-    	BikeInformationScreenHandler bikeInfHandler = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this.getPreviousScreen(), currentBike);
+    public void viewBikeInformation() throws IOException {
+    	BikeInformationScreenHandler bikeInfHandler = new BikeInformationScreenHandler(this.stage, Configs.VIEW_BIKE_SCREEN_PATH, this.getPreviousScreen(), currentBike);
     	bikeInfHandler.show();
     }
 

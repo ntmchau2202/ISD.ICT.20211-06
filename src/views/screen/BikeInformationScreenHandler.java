@@ -6,6 +6,7 @@ import controllers.ReturnBikeController;
 import entities.Bike;
 import entities.Cart;
 import entities.Dock;
+import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +18,11 @@ import utils.DBUtils;
 import views.screen.popup.PopupScreen;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalTime;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
@@ -25,7 +31,6 @@ import java.io.IOException;
  */
 public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static BikeInformationScreenHandler bikeInformationScreenHandler = null;
     private Bike currentBike = null;
 
     @FXML
@@ -57,42 +62,21 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private ImageView backIcon;
 
-    private BikeInformationScreenHandler(Stage stage, String screenPath) throws IOException {
+    public BikeInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
         super(stage, screenPath);
-    }
-
-    /**
-     * This class return an instance of bike information screen handler, initialize it with the stage, prevScreen and bike
-     *
-     * @param stage         the stage to show this screen
-     * @param prevScreen    the screen that call to this screen
-     * @param bike          the bike to render this screen, provide null if update is not needed
-     *
-     */
-    public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
-    	
-        if (bikeInformationScreenHandler == null) {
-            try {
-                bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.VIEW_BIKE_SCREEN_PATH);
-                bikeInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
-                bikeInformationScreenHandler.setScreenTitle("Bike information screen");
-                bikeInformationScreenHandler.currentBike = bike;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        bikeInformationScreenHandler.initializeBikeScreen();
+        setbController(EcoBikeInformationController.getEcoBikeInformationController());
+        setScreenTitle("Bike information screen");
+        currentBike = bike;
+        initializeBikeScreen();
         if (prevScreen != null) {
-            bikeInformationScreenHandler.setPreviousScreen(prevScreen);
+            setPreviousScreen(prevScreen);
         }
 
         if (bike != null) {
-            bikeInformationScreenHandler.currentBike = bike;
+            currentBike = bike;
         }
         
-        bikeInformationScreenHandler.renderBikeScreen();
-
-        return bikeInformationScreenHandler;
+        renderBikeScreen();
     }
 
     /**
@@ -114,7 +98,15 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     	pauseRentalButton.setOnMouseClicked(e -> pauseBikeRental());
         rentBikeButton.setOnMouseClicked(e -> rentBike());
         returnBikeButton.setOnMouseClicked(e -> returnBike());
-        mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        mainScreenIcon.setOnMouseClicked(e -> {
+        	try {
+				EcoBikeMainScreenHandler handler = new EcoBikeMainScreenHandler(this.stage, Configs.MAIN_SCREEN_PATH);
+				handler.show();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        });
         backIcon.setOnMouseClicked(e -> {
             if (this.getPreviousScreen() != null)
                 this.getPreviousScreen().show();
@@ -149,7 +141,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
             	return;
             }
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null,Configs.TransactionType.PAY_DEPOSIT,currentBike).show();
+            PaymentMethodScreenHandler handler = new PaymentMethodScreenHandler(this.stage, Configs.PAYING_METHOD_SCREEN_PATH, this, null,Configs.TransactionType.PAY_DEPOSIT,currentBike);
+            handler.show();
 //            RentBikeController.getRentBikeServiceController().rentBike(currentBike);
 //            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
         } catch (Exception e) {
@@ -160,18 +153,48 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     private void returnBike() {
         try {
             System.out.println("return bike");
-            System.out.println(currentBike.toString());
+            
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
             Dock dock = DBUtils.getDockInformation(currentBike.getDockId());
             if(!ReturnBikeController.getReturnBikeController().checkDockFreeSpace(dock)) {
             	PopupScreen.error("Dock is full!");
             	return;
             }
-            
-            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null, Configs.TransactionType.PAY_RENTAL, currentBike).show();
+            updateBikeRent();
+            updateRentPeriod();
+            currentBike.setTotalRentTime(getTotalRentTime());
+            PaymentMethodScreenHandler handler = new PaymentMethodScreenHandler(this.stage, Configs.PAYING_METHOD_SCREEN_PATH, this, null,Configs.TransactionType.PAY_RENTAL,currentBike);
+            handler.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    private void updateBikeRent() throws SQLException, EcoBikeException {
+    	String sql = "Update RentBike set end_time = ?, rent_period = end_time - start_time where bike_barcode = ?";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setTime(1, Time.valueOf(LocalTime.now()));
+    	stm.setString(2, currentBike.getBikeBarCode());
+    	stm.executeUpdate();
+    }
+    
+    private void updateRentPeriod() throws SQLException, EcoBikeException {
+    	String sql = "Update RentBike set rent_period = end_time - start_time where bike_barcode = ?";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setString(1, currentBike.getBikeBarCode());
+    	stm.executeUpdate();
+    }
+    
+    private int getTotalRentTime() throws SQLException, EcoBikeException {
+    	String sql = "Select * from RentBike where bike_barcode = ?";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setString(1, currentBike.getBikeBarCode());
+    	ResultSet result = stm.executeQuery();
+    	while(result.next()) {
+    		long total = (int)result.getTime("rent_period").getTime() / 1000l;
+    		return (int) total;
+    	}
+    	return 0;
     }
 
     public void pauseBikeRental() {

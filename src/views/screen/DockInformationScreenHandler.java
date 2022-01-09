@@ -1,8 +1,11 @@
 package views.screen;
 
 import controllers.EcoBikeInformationController;
+import controllers.ReturnBikeController;
 import entities.Bike;
+import entities.Cart;
 import entities.Dock;
+import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,9 +13,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.Configs;
+import utils.DBUtils;
 import views.screen.popup.BikeInDockHandler;
+import views.screen.popup.PopupScreen;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +32,6 @@ import java.util.ArrayList;
  */
 public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static DockInformationScreenHandler dockInformationScreenHandler = null;
     private Dock currentDock = null;
     private ArrayList<Bike> currentBikeList = null;
 
@@ -53,57 +62,46 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private ImageView backIcon;
 
-    private DockInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
+    public DockInformationScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Dock dock) throws IOException {
         super(stage, screenPath);
         this.setPreviousScreen(prevScreen);
-    }
-
-    /**
-     * This class return an instance of dock screen handler, initialize it with the stage, prevScreen, dock and bikeList
-     *
-     * @param stage         the stage to show this screen
-     * @param prevScreen    the screen that call to this screen
-     * @param dock          the dock to render this screen, provide null if update is not needed
-     * @param bikeList      the bikeList to render this screen, provide null if update is not needed
-     *
-     */
-    public static DockInformationScreenHandler getDockInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Dock dock) {
-    	// TODO: BikeList should be returned from dock, no need to pass it here
-    	if (dockInformationScreenHandler == null) {
-            try {
-                dockInformationScreenHandler = new DockInformationScreenHandler(stage, Configs.VIEW_DOCK_SCREEN_PATH, prevScreen);
-                dockInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
-                dockInformationScreenHandler.setScreenTitle("Dock information screen");
-                dockInformationScreenHandler.initializeDockInformationScreen();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+        setbController(EcoBikeInformationController.getEcoBikeInformationController());
+        setScreenTitle("Dock information screen");
+        initializeDockInformationScreen();
+        
         if (prevScreen != null) {
-            dockInformationScreenHandler.setPreviousScreen(prevScreen);
+            setPreviousScreen(prevScreen);
         }
 
         if (dock != null) {
-            dockInformationScreenHandler.currentDock = dock;
+            currentDock = dock;
         }
 
         ArrayList<Bike> bikeList = dock.getAllBikeInDock();
         if (bikeList != null && bikeList.size() != 0) {
-            dockInformationScreenHandler.currentBikeList = bikeList;
+            currentBikeList = bikeList;
         }
 
-        dockInformationScreenHandler.renderDockInformation();
-
-        return dockInformationScreenHandler;
+        renderDockInformation();
     }
 
     /**
      * This is the method to do initialization and register button event.
      */
     private void initializeDockInformationScreen() {
+    	if(!Cart.getCart().getListMedia().isEmpty()) {
+    		returnBikeButton.setVisible(true);
+    	} else returnBikeButton.setVisible(false);
         returnBikeButton.setOnMouseClicked(e -> returnBike());
-        mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        mainScreenIcon.setOnMouseClicked(e -> {
+        	try {
+				EcoBikeMainScreenHandler handler = new EcoBikeMainScreenHandler(this.stage, Configs.MAIN_SCREEN_PATH);
+				handler.show();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        });
         backIcon.setOnMouseClicked(e -> {
             if (this.getPreviousScreen() != null)
                 this.getPreviousScreen().show();
@@ -115,7 +113,7 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
      */
     private void renderDockInformation() {
         // provide dock image
-        //super.setImage(dockImageView, currentDock.getDockImage);
+//        super.setImage(dockImageView,Configs.IMAGE_PATH + currentDock.getDockImage());
         dockNameText.setText(currentDock.getName());
         dockAddressText.setText(currentDock.getDockAddress());
         dockAreaText.setText(currentDock.getDockArea() + " km2");
@@ -132,9 +130,52 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
      * This is the method called when the user press button return bike.
      */
     private void returnBike() {
-    	// TODO: Call return bike here
+    	try {
+            System.out.println("return bike");
+            Bike currentBike = Cart.getCart().getListMedia().get(0);
+            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
+            Dock dock = DBUtils.getDockInformation(currentDock.getDockID());
+            if(!ReturnBikeController.getReturnBikeController().checkDockFreeSpace(dock)) {
+            	PopupScreen.error("Dock is full!");
+            	return;
+            }
+            updateBikeRent(currentBike);
+            updateRentPeriod(currentBike);
+            currentBike.setTotalRentTime(getTotalRentTime(currentBike));
+            PaymentMethodScreenHandler handler = new PaymentMethodScreenHandler(this.stage, Configs.PAYING_METHOD_SCREEN_PATH, this, null,Configs.TransactionType.PAY_RENTAL,currentBike);
+            handler.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    private void updateBikeRent(Bike currentBike) throws SQLException, EcoBikeException {
+    	String sql = "Update RentBike set end_time = ?, rent_period = end_time - start_time where bike_barcode = ?";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setTime(1, Time.valueOf(LocalTime.now()));
+    	stm.setString(2, currentBike.getBikeBarCode());
+    	stm.executeUpdate();
+    }
+    
+    private void updateRentPeriod(Bike currentBike) throws SQLException, EcoBikeException {
+    	String sql = "Update RentBike set rent_period = end_time - start_time where bike_barcode = ?";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setString(1, currentBike.getBikeBarCode());
+    	stm.executeUpdate();
+    }
+    
+    private int getTotalRentTime(Bike currentBike) throws SQLException, EcoBikeException {
+    	String sql = "Select * from RentBike where bike_barcode = ?";
+    	PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+    	stm.setString(1, currentBike.getBikeBarCode());
+    	ResultSet result = stm.executeQuery();
+    	while(result.next()) {
+    		long total = (int)result.getTime("rent_period").getTime() / 1000l;
+    		return (int) total;
+    	}
+    	return 0;
+    }
+    
     /**
      * This is the method to render bike list in the dock screen.
      */

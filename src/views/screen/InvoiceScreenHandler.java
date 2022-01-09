@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * @author Duong
  */
 public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
-    private static InvoiceScreenHandler invoiceScreenHandler = null;
+	
     private Invoice currentInvoice = null;
 
     @FXML
@@ -35,40 +35,37 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Label backToMainScreenButton;
 
-    private InvoiceScreenHandler(Stage stage, String screenPath) throws IOException {
+    public InvoiceScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Invoice invoice) throws IOException, EcoBikeException, SQLException {
         super(stage, screenPath);
-    }
-
-    public static InvoiceScreenHandler getInvoiceScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Invoice invoice) throws EcoBikeException, SQLException {
-        if (invoiceScreenHandler == null) {
-            try {
-                invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.INVOICE_SCREEN_PATH);
-                invoiceScreenHandler.setbController(PaymentController.getPaymentController());
-                invoiceScreenHandler.setScreenTitle("Invoice screen");
-                invoiceScreenHandler.initializeInvoiceScreen();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+        setbController(PaymentController.getPaymentController());
+        setScreenTitle("Invoice screen");
+        initializeInvoiceScreen();
+        
         if (invoice != null) {
-            invoiceScreenHandler.currentInvoice = invoice;
+            currentInvoice = invoice;
         }
 
         if (prevScreen != null) {
-            invoiceScreenHandler.setPreviousScreen(prevScreen);
+            setPreviousScreen(prevScreen);
         }
 
-        invoiceScreenHandler.renderInvoiceScreen();
-
-        return invoiceScreenHandler;
+        renderInvoiceScreen();
     }
+
 
     /**
      * This is the method to do initialization and register button event.
      */
     private void initializeInvoiceScreen() {
-        backToMainScreenButton.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        backToMainScreenButton.setOnMouseClicked(e -> {
+        	try {
+				EcoBikeMainScreenHandler handler = new EcoBikeMainScreenHandler(this.stage, Configs.MAIN_SCREEN_PATH);
+				handler.show();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        });
     }
 
     /**

@@ -8,16 +8,14 @@ package utils;
 public class Configs {
     //renting service related constant
     public enum BikeType{
-        STANDARDBIKE,
-        STANDARDEBIKE,
-        TWINBIKE
+        normal,
+        standard
     }
 
     @SuppressWarnings("serial")
 	public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
-        put(BikeType.STANDARDBIKE, 1f);
-        put(BikeType.STANDARDEBIKE, 1.5f);
-        put(BikeType.TWINBIKE, 1.5f);
+        put(BikeType.normal, 1f);
+        put(BikeType.standard, 1.5f);
     }};
     
     // api
@@ -55,7 +53,6 @@ public class Configs {
     public static final String VIEW_DOCK_SCREEN_PATH = "/views/fxml/FXML_ViewDockScreen.fxml";
     public static final String INVOICE_SCREEN_PATH = "/views/fxml/FXML_InvoiceScreen.fxml";
 	public static final String BIKE_IN_DOCK_PATH = "/views/fxml/FXML_BikeInDock.fxml";
-	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
 
 
 	public enum BIKE_STATUS {

@@ -38,7 +38,13 @@ public class App extends Application {
 			});
 
 			fadeOut.setOnFinished((e) -> {
-				EcoBikeMainScreenHandler homeHandler = EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(primaryStage, null);
+				EcoBikeMainScreenHandler homeHandler = null;
+				try {
+					homeHandler = new EcoBikeMainScreenHandler(primaryStage, Configs.MAIN_SCREEN_PATH);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				homeHandler.show();
 			});
 		} catch (Exception e) {

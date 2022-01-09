@@ -36,22 +36,22 @@
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="603.0" layoutY="113.0" text="Long">
+                  <Label fx:id="customerName" layoutX="603.0" layoutY="113.0" text="Long">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="603.0" layoutY="142.0" text="Thong Nhat bike 1359">
+                  <Label fx:id="bikeRented" layoutX="603.0" layoutY="142.0" text="Thong Nhat bike 1359">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="603.0" layoutY="173.0" text="E-bike">
+                  <Label fx:id="bikeType" layoutX="603.0" layoutY="173.0" text="E-bike">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="603.0" layoutY="201.0" text="1 hour">
+                  <Label fx:id="timeRented" layoutX="603.0" layoutY="201.0" text="1 hour">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
@@ -72,7 +72,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Label layoutX="603.0" layoutY="233.0" text="30,300 VND">
+                  <Label fx:id="total" layoutX="603.0" layoutY="233.0" text="30,300 VND">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>

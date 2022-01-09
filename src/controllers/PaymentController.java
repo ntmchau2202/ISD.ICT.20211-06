@@ -60,7 +60,6 @@ public class PaymentController extends EcoBikeBaseController {
      * <br>@return {@link java.util.Map Map} represent the payment result with a
      * message.
      */
-    @SuppressWarnings("unused")
     public Map<String, String> payDeposit(int amount, String content,
                                           String cardHolderName,
                                           String cardNumber,
@@ -74,6 +73,7 @@ public class PaymentController extends EcoBikeBaseController {
             		balance, getExpirationDate(expirationDate));
             this.interbank = new InterbankSubsystem();
             PaymentTransaction transaction = interbank.payDeposit(card, amount, content);
+            saveTransaction(transaction);
             result.put("RESULT", "PAYMENT SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully paid the deposit!");
         } catch (Exception e) {
@@ -93,7 +93,6 @@ public class PaymentController extends EcoBikeBaseController {
      *                                   <br>@return {@link java.util.Map Map} represent the payment result with a
      *                                   message.
      */
-    @SuppressWarnings("unused")
     public Map<String, String> returnDeposit(int amount, String content, String cardHolderName, 
     		String cardNumber, String issueBank, float balance, 
     		String expirationDate, String securityCode) 
@@ -105,6 +104,7 @@ public class PaymentController extends EcoBikeBaseController {
             		balance, getExpirationDate(expirationDate));
             this.interbank = new InterbankSubsystem();
             PaymentTransaction transaction = interbank.returnDeposit(card, amount, content);
+            saveTransaction(transaction);
             result.put("RESULT", "RETURN SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully receive the deposit!");
         } catch (Exception e) {
@@ -124,7 +124,6 @@ public class PaymentController extends EcoBikeBaseController {
      *                                   <br>@return {@link java.util.Map Map} represent the payment result with a
      *                                   message.
      */
-    @SuppressWarnings("unused")
     public Map<String, String> payRental(int amount, String content, String cardHolderName, 
     		String cardNumber, String issueBank, float balance, 
     		String expirationDate, String securityCode) throws RentBikeException, EcoBikeUndefinedException {
@@ -135,6 +134,7 @@ public class PaymentController extends EcoBikeBaseController {
             		balance, getExpirationDate(expirationDate));
             this.interbank = new InterbankSubsystem();
             PaymentTransaction transaction = interbank.payRental(card, amount, content);
+            saveTransaction(transaction);
             result.put("RESULT", "PAYMNET SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully pay the rental!");
         } catch (Exception e) {

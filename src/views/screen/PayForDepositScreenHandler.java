@@ -41,7 +41,6 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button confirmPaymentButton;
         
-    private static PayForDepositScreenHandler paymentScreenHandler;
 
     /**
      * Initialize handler for paying method screen of EcoBike application
@@ -54,23 +53,15 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     
     private Bike bikeToRent;
     
-    private PayForDepositScreenHandler(Stage stage, String screenPath) throws IOException {
+    public PayForDepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
         super(stage, screenPath);
-//        initialize();
+        setScreenTitle("Register payment method");
+		initializeScreen();
+		if (bike != null) {
+    		bikeToRent = bike;
+    	}
     }
     
-    public static PayForDepositScreenHandler getPayForDepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
-    	if (paymentScreenHandler == null) {
-    		paymentScreenHandler = new PayForDepositScreenHandler(stage, screenPath);
-    		paymentScreenHandler.setScreenTitle("Register payment method");
-    		paymentScreenHandler.initializeScreen();
-    	}
-    	if (bike != null) {
-    		paymentScreenHandler.bikeToRent = bike;
-    	}
-    	return paymentScreenHandler;
-    	
-    }
     
     private void initializeScreen() {
     	confirmPaymentButton.setOnMouseClicked(e -> validateInput());

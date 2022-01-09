@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import entities.Bike;
@@ -47,8 +48,26 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	public void returnBike(String bikeBarcode) throws EcoBikeException, SQLException {
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
 		
+		updateDock(bike.getDockId());
+		updateBikeStatus(bike);
 		Cart.getCart().emptyCart();
 	}
+	
+	public void updateDock(int dockID) throws SQLException, EcoBikeException {
+		String sql = "Update Dock set num_available_bike = num_available_bike + 1, num_free_dock = num_free_dock - 1 WHERE dock_Id = ?";
+		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
+		stm.setInt(1, dockID);
+		stm.executeUpdate();
+	}
+	
+	public void updateBikeStatus(Bike bike) throws SQLException, EcoBikeException {
+		String sql2 = "Update BikeStatus set current_status = ? where bike_barcode = ?";
+		PreparedStatement stm2 = DBUtils.getConnection().prepareStatement(sql2);
+		stm2.setString(1, String.valueOf(Configs.BIKE_STATUS.FREE).toLowerCase());
+		stm2.setString(2, bike.getBikeBarCode());
+		stm2.executeUpdate();
+	}
+	
 	
 	/**
 	 * Request to pay for rental bike
@@ -72,10 +91,14 @@ public class ReturnBikeController extends EcoBikeBaseController {
 		double rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute
 				? 0
 				: rentTime - Configs.firstChargeTimeIntervalInMinute > 0
-					? (Configs.firstChargeTimeIntervalCost + (double)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
+					? (Configs.firstChargeTimeIntervalCost + (double)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)
+							/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
 					: Configs.firstChargeTimeIntervalCost;
 
-		rentingCost *= Configs.chargeMultiplierDictionary.get(bikeType);
+		double price = 0;
+		if(bikeType.equalsIgnoreCase("normal")) price = 1.0f;
+		else price = 1.5f;
+		rentingCost *= price;
 
 		return rentingCost;
 	}

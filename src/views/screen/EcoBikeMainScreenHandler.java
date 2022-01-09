@@ -24,7 +24,6 @@ import java.util.ArrayList;
  */
 public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static EcoBikeMainScreenHandler ecoBikeMainScreenHandler = null;
     @FXML
     private ImageView dock1;
     @FXML
@@ -37,34 +36,13 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
     private TextField searchBarField;
     @FXML
     private Button searchButton;
+    @FXML
+    private Button viewBike;
 
-    private EcoBikeMainScreenHandler(Stage stage, String screenPath) throws IOException {
+    public EcoBikeMainScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
-    }
-
-    /**
-     * This class return an instance of main screen handler, initialize it with the stage and prevScreen
-     *
-     * @param stage         the stage to show this screen
-     * @param prevScreen    the screen that call to this screen
-     *
-     */
-    public static EcoBikeMainScreenHandler getEcoBikeMainScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen) {
-        if (ecoBikeMainScreenHandler == null) {
-            try {
-                ecoBikeMainScreenHandler = new EcoBikeMainScreenHandler(stage, Configs.MAIN_SCREEN_PATH);
-                ecoBikeMainScreenHandler.setScreenTitle("Main screen");
-                ecoBikeMainScreenHandler.initializeMainScreen();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        if (prevScreen != null) {
-            ecoBikeMainScreenHandler.setPreviousScreen(prevScreen);
-        }
-
-        return ecoBikeMainScreenHandler;
+        setScreenTitle("Main screen");
+        initializeMainScreen();
     }
 
     /**
@@ -87,7 +65,7 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
         dock1.setOnMouseClicked(e -> {
 			try {
 				showDock("1");
-			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
+			} catch (NumberFormatException | SQLException | EcoBikeException | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -95,7 +73,7 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
         dock2.setOnMouseClicked(e -> {
 			try {
 				showDock("2");
-			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
+			} catch (NumberFormatException | SQLException | EcoBikeException | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -103,7 +81,7 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
         dock3.setOnMouseClicked(e -> {
 			try {
 				showDock("3");
-			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
+			} catch (NumberFormatException | SQLException | EcoBikeException | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -124,7 +102,8 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
             //TODO : search bike from somewhere
             if (bike != null) {
                 //render bike screen
-                BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this, bike).show();
+                BikeInformationScreenHandler handler = new BikeInformationScreenHandler(this.stage, Configs.VIEW_BIKE_SCREEN_PATH,this, bike);
+                handler.show();
             } else {
                 PopupScreen popup = new PopupScreen(this.stage);
                 PopupScreen.error("Cannot find bike matching keyword!");
@@ -139,7 +118,8 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
                 ArrayList<Bike> bikeList = new ArrayList<Bike>();
 
                 //render dock screen
-                DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock).show();
+                DockInformationScreenHandler handler = new DockInformationScreenHandler(this.stage, Configs.VIEW_DOCK_SCREEN_PATH,this, dock);
+                handler.show();
             } else {
                 PopupScreen popup = new PopupScreen(this.stage);
                 PopupScreen.error("Cannot find dock matching keyword!");
@@ -152,12 +132,14 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
      * @throws EcoBikeException 
      * @throws SQLException 
      * @throws NumberFormatException 
+     * @throws IOException 
      */
-    private void showDock(String dockID) throws NumberFormatException, SQLException, EcoBikeException {
+    private void showDock(String dockID) throws NumberFormatException, SQLException, EcoBikeException, IOException {
         //TODO: get dock with dock id from somewhere
         Dock dock = DBUtils.getDockInformation(Integer.parseInt(dockID));
 
         //render dock screen (always find the dock because it is shown on the map!!!)
-        DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock).show();
+        DockInformationScreenHandler handler = new DockInformationScreenHandler(this.stage, Configs.VIEW_DOCK_SCREEN_PATH,this, dock);
+        handler.show();
     }
 }

@@ -15,12 +15,12 @@ import entities.Bike;
 import exceptions.ecobike.EcoBikeException;
 import utils.Configs;
 import utils.DBUtils;
+import utils.FunctionalUtils;
 
 public class EcoBikeMain {
 
 	public static void main(String[] args) throws EcoBikeException, SQLException, ParseException {
-		DateFormat dateFormat = new SimpleDateFormat("MM/yyyy");	
-		Date date = (Date) dateFormat.parse("09/2023");
+		System.out.println(FunctionalUtils.getCurrencyFormat(10000));
 	}
 
 }

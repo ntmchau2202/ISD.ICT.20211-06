@@ -41,7 +41,6 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button confirmPaymentButton;
     
-    private static PayForRentScreenHandler paymentScreenHandler;
 
     /**
      * Initialize handler for paying method screen of EcoBike application
@@ -54,22 +53,14 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     
     private Bike bikeToRent;
     
-    private PayForRentScreenHandler(Stage stage, String screenPath) throws IOException {
+    public PayForRentScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
         super(stage, screenPath);
-//        initialize();
+        setScreenTitle("Register payment method");
+        if (bike != null) {
+    		bikeToRent = bike;
+    	}
     }
     
-    public static PayForRentScreenHandler getPayForRentScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
-    	if (paymentScreenHandler == null) {
-    		paymentScreenHandler = new PayForRentScreenHandler(stage, screenPath);
-    		paymentScreenHandler.setScreenTitle("Register payment method");
-    	}
-    	if (bike != null) {
-    		paymentScreenHandler.bikeToRent = bike;
-    	}
-    	return paymentScreenHandler;
-    	
-    }
     
 	public void validateInput() {
 		if(PaymentController.getPaymentController().validateCardHolderName(cardHolderName.getText()) == false){

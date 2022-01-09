@@ -35,11 +35,7 @@
             </Pane>
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" GridPane.rowIndex="1">
                <children>
-                  <ImageView fx:id="bikeImage" fitHeight="200.0" fitWidth="200.0" layoutX="42.0" layoutY="126.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/data/electric-bike.jpg" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="bikeImage" fitHeight="200.0" fitWidth="200.0" layoutX="42.0" layoutY="126.0" pickOnBounds="true" />
                   <Label fx:id="bikeNameText" layoutX="265.0" layoutY="104.0" text="Electric bike 1236">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />

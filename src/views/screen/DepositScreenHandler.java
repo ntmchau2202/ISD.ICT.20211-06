@@ -24,7 +24,6 @@ import java.util.Map;
  */
 public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static DepositScreenHandler depositScreenHandler;
     private Bike currentBike = null;
     private CreditCard currentCreditCard = null;
 
@@ -45,45 +44,25 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private ImageView backIcon;
 
-    private DepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen) throws IOException {
+    public DepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard,Bike bike) throws IOException {
         super(stage, screenPath);
-    }
-
-    /**
-     * This class return an instance of deposit screen handler, initialize it with the stage, prevScreen, creditCard and bike
-     *
-     * @param stage      the stage to show this screen
-     * @param prevScreen the screen that call to this screen
-     * @param creditCard the credit card to render this screen, provide null if update is not needed
-     * @param bike       the bike to render this screen, provide null if update is not needed
-     */
-    public static DepositScreenHandler getDepositScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard,Bike bike) {
-        if (depositScreenHandler == null) {
-            try {
-                depositScreenHandler = new DepositScreenHandler(stage, Configs.DEPOSIT_SCREEN_PATH, prevScreen);
-                depositScreenHandler.setbController(PaymentController.getPaymentController());
-                depositScreenHandler.setScreenTitle("Deposit screen");
-                depositScreenHandler.initializeDepositScreen();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
+        setbController(PaymentController.getPaymentController());
+        setScreenTitle("Deposit screen");
+        initializeDepositScreen();
+        
         if (prevScreen != null) {
-            depositScreenHandler.setPreviousScreen(prevScreen);
+            setPreviousScreen(prevScreen);
         }
 
         if (creditCard != null) {
-            depositScreenHandler.currentCreditCard = creditCard;
+            currentCreditCard = creditCard;
         }
 
         if (bike != null) {
-            depositScreenHandler.currentBike = bike;
+            currentBike = bike;
         }
 
-        depositScreenHandler.renderDepositScreen();
-
-        return depositScreenHandler;
+        renderDepositScreen();
     }
 
 //    @Override
@@ -120,8 +99,23 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
 				e1.printStackTrace();
 			}
 		});
-        changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
-        mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
+        changeCardInformationButton.setOnMouseClicked(e -> {
+			try {
+				changeCardInformation();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+		});
+        mainScreenIcon.setOnMouseClicked(e -> {
+        	try {
+				EcoBikeMainScreenHandler handler = new EcoBikeMainScreenHandler(this.stage, Configs.MAIN_SCREEN_PATH);
+				handler.show();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        });
         backIcon.setOnMouseClicked(e -> {
             if (this.getPreviousScreen() != null)
                 this.getPreviousScreen().show();
@@ -153,15 +147,22 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
     			, currentCreditCard.getCardNumber(), currentCreditCard.getIssueBank(), (float) currentCreditCard.getBalance(), 
     			currentCreditCard.getExpirationDate().toString(), currentCreditCard.getCardSecurity());
     	RentBikeController.getRentBikeServiceController().rentBike(currentBike);
-    	EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show();
+    	try {
+			EcoBikeMainScreenHandler handler = new EcoBikeMainScreenHandler(this.stage, Configs.MAIN_SCREEN_PATH);
+			handler.show();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
 
     /**
      * This is the method to be called when user press change card information.
+     * @throws IOException 
      */
-    private void changeCardInformation() {
-    	PaymentMethodScreenHandler paymentMethodScreenHandler = PaymentMethodScreenHandler.getPaymentMethodScreenHandler
-    			(this.stage, this, null, Configs.TransactionType.PAY_DEPOSIT, currentBike); 
+    private void changeCardInformation() throws IOException {
+    	PaymentMethodScreenHandler paymentMethodScreenHandler = new PaymentMethodScreenHandler
+    			(this.stage, Configs.PAYING_METHOD_SCREEN_PATH, this, currentCreditCard, Configs.TransactionType.PAY_DEPOSIT, currentBike); 
         paymentMethodScreenHandler.setCreditCard(currentCreditCard);
         paymentMethodScreenHandler.show();
     }
