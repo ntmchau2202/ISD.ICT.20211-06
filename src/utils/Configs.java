@@ -45,7 +45,9 @@ public class Configs {
     public static float PERCENT_VAT = 10;
     
     // static resource
-    public static final String IMAGE_PATH = "assets/images";
+    public static final String IMAGE_PATH = "/lib/assets/icons";
+    public static final String BIKE_IMAGE_LIB = "/lib/assets/bikes";
+    public static final String DOCK_IMAGE_LIB = "/lib/assets/docks";
     public static final String LIST_DOCK_SCREEN_PATH = "/views/fxml/FXML_ListDockScreen.fxml";
     public static final String MAIN_SCREEN_PATH = "/views/fxml/FXML_MainScreen.fxml";
     public static final String PAYING_FOR_DEPOSIT_SCREEN_PATH = "/views/fxml/FXML_PayForDepositScreen.fxml";

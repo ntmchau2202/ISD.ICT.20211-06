@@ -52,6 +52,13 @@ public class RentBikeController extends EcoBikeBaseController {
 	 */
 	public boolean rentBike(Bike bikeToRent, CreditCard card) throws EcoBikeException, SQLException, IOException {
 		
+		// NOTE: Since we cannot connect to the service
+		// We will immediately check the card here
+		// For java 11 and bellow, please uncomment this
+		if (!checkCardIdentity(card)) {
+			return false;
+		}
+		
 		// TODO: process the payment before updating the database;
 		PaymentTransaction transaction = interbankSystem.payDeposit(card, bikeToRent.getDeposit(), "PAY_DEPOSIT");
 		
@@ -60,17 +67,40 @@ public class RentBikeController extends EcoBikeBaseController {
 		}
 		System.out.println("Successfully performing transaction!");
 		System.out.println("Transaction ID:"+transaction.getTransactionId());
-		// save credit card information
 		this.currentBike = bikeToRent;
 		startCountingRentTime();
 		System.out.println("Done invoking counter");
-		DBUtils.saveCardInformation(card);
 		
 		// TODO: save transaction
 		this.customerID = DBUtils.saveCustomer(card.getCardHolderName());
 		this.rentID = DBUtils.createNewRentRecord(customerID);
 		DBUtils.changeBikeStatus(this.currentBike.getBikeBarCode(), Configs.BIKE_STATUS.RENTED.toString());
 		this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
+		return true;
+	}
+	
+	private boolean checkCardIdentity(CreditCard card) {
+		/**
+		 * ict_group6_2021
+		 * Group 6
+		 * 936
+		 * 11/25
+		 */
+		if (!card.getCardHolderName().equalsIgnoreCase("Group 6")) {
+			return false;
+		}
+		
+		if (!card.getCardNumber().equalsIgnoreCase("ict_group6_2021")) {
+			return false;
+		}
+		
+		if (!card.getCardSecurity().equalsIgnoreCase("936")) {
+			return false;
+		}
+		
+		if (!card.getExpirationDate().equalsIgnoreCase("11/25")) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -109,6 +139,10 @@ public class RentBikeController extends EcoBikeBaseController {
 	}
 	
 	public boolean returnBike(Bike bikeToRent, CreditCard card) throws IOException, SQLException, EcoBikeException {
+		if (!checkCardIdentity(card)) {
+			return false;
+		}
+		
 		float rentCost = calculateFee(bikeToRent.getBikeType(), this.timeRented);
 		PaymentTransaction transaction = interbankSystem.payRental(card, rentCost, "PAY_RENTAL");
 		

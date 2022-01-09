@@ -164,9 +164,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
     public void rentBike() {
         try {
             System.out.println("rent bike");
-            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
             RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.currentBike);
-//            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,7 +173,6 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
     public void returnBike() {
         try {
             System.out.println("return bike");
-            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
             RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).returnBike(this.currentBike);
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,7 +199,6 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         	try {
 				PopupScreen.error("An error occured when pausing renting the bike");
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
             e.printStackTrace();

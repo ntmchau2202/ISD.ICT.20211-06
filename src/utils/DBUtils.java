@@ -214,9 +214,6 @@ public class DBUtils {
 				throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 			}
 			bikeRes.setCurrentStatus(bikeStat);
-			
-			// set dockId
-//			bikeRes.setDockId(result.getString("dock_id"));
 		}
 		
 		return list;
