@@ -56,7 +56,7 @@
                         <Font name="Segoe UI" size="18.0" />
                      </font>
                   </Label>
-                  <Button layoutX="369.0" layoutY="399.0" mnemonicParsing="false" text="Confirm deposit">
+                  <Button fx:id="confirmDepositButton" layoutX="369.0" layoutY="399.0" mnemonicParsing="false" text="Confirm deposit">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>
@@ -64,7 +64,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button layoutX="571.0" layoutY="399.0" mnemonicParsing="false" text="Change card information">
+                  <Button fx:id="changeCardInformationButton" layoutX="571.0" layoutY="399.0" mnemonicParsing="false" text="Change card information">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
                      </font>

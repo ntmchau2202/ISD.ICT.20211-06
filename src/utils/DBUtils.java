@@ -126,30 +126,29 @@ public class DBUtils {
 	}
 	
 	public static Bike getBikeByBarcode(String bikeBarcode) throws EcoBikeException, SQLException {
-		String sql = "SELECT * FROM Bike, BikeStatus, BikeInDock WHERE bike_barcode=? "
+		String sql = "SELECT *, Bike.bike_barcode as BikeBarcode FROM Bike, BikeStatus, BikeInDock WHERE Bike.bike_barcode=? "
 				+ "And Bike.bike_barcode = BikeStatus.bike_barcode And "
 				+ "BikeStatus.bike_barcode = BikeInDock.bike_barcode";
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(sql);
 		stm.setString(1, bikeBarcode);
 		ResultSet result = stm.executeQuery();
 		// TODO: finish constructor here
-		Bike bikeRes = null;
-//		Bike bikeRes = new Bike(result.getString("name"), 
-//				result.getString("bike_type"),
-//				result.getString("license_plate_code"),
-//				result.getString("bike_image"), 
-//				result.getInt("bike_barcode"), 
-//				result.getDouble("bike_rental_price"),
-//				result.getString("currency_unit"),
-//				result.getDouble("deposit_price"),  
-//				result.getDate("create_date").toString());
-		// set bike current status
+		Bike bikeRes = new Bike(result.getString("name"), 
+				result.getString("bike_type"),
+				result.getString("license_plate_code"),
+				result.getString("bike_image"), 
+				result.getString("BikeBarcode"), 
+				result.getDouble("bike_rental_price"),
+				result.getString("currency_unit"),
+				result.getDouble("deposit_price"),  
+				result.getDate("create_date").toString());
+//		 set bike current status
 		String bikeStatus = result.getString("current_status");
 		Configs.BIKE_STATUS bikeStat;
 		if(bikeStatus.equalsIgnoreCase("FREE")) {
 			bikeStat = Configs.BIKE_STATUS.FREE;
-		} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
-			bikeStat = Configs.BIKE_STATUS.RENTED;
+		} else if (bikeStatus.equalsIgnoreCase("RENT")) {
+			bikeStat = Configs.BIKE_STATUS.RENT;
 		} else {
 			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 		}
@@ -158,7 +157,7 @@ public class DBUtils {
 		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
 		
 		// set dockId
-		bikeRes.setDockId(result.getString("dock_id"));
+		bikeRes.setDockId(result.getInt("dock_id"));
 		
 		return bikeRes;
 //		String strRes = JSONUtils.serializeBikeInformation(bikeRes);
@@ -195,17 +194,19 @@ public class DBUtils {
 					result.getString("currency_unit"),
 					result.getDouble("deposit_price"),  
 					result.getDate("create_date").toString());
+			bikeRes.setDockId(dockId);
 			bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
 			bikeRes.setCurrentBattery(result.getFloat("current_battery"));
 			list.add(bikeRes);
 			
 			// set bike status
 			String bikeStatus = result.getString("current_status");
+			System.out.println(bikeStatus);
 			Configs.BIKE_STATUS bikeStat;
 			if(bikeStatus.equalsIgnoreCase("FREE")) {
 				bikeStat = Configs.BIKE_STATUS.FREE;
-			} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
-				bikeStat = Configs.BIKE_STATUS.RENTED;
+			} else if (bikeStatus.equalsIgnoreCase("RENT")) {
+				bikeStat = Configs.BIKE_STATUS.RENT;
 			} else {
 				throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 			}

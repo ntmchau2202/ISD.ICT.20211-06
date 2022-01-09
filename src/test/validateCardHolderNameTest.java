@@ -8,7 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import controllers.PaymentController;
-import interfaces.InterbankInterface;
+import subsystem.InterbankInterface;
 
 class validateCardHolderNameTest {
 

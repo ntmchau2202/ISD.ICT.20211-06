@@ -1,6 +1,5 @@
 package controllers;
 
-import boundaries.InterbankBoundary; 
 import entities.CreditCard;
 import entities.Invoice;
 import entities.PaymentTransaction;
@@ -8,7 +7,9 @@ import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import exceptions.interbank.InvalidCardException;
-import interfaces.InterbankInterface;
+import subsystem.InterbankInterface;
+import subsystem.InterbankSubsystem;
+import subsystem.boundaries.InterbankBoundary;
 import utils.DBUtils;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -71,7 +72,7 @@ public class PaymentController extends EcoBikeBaseController {
         try {
             this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
             		balance, getExpirationDate(expirationDate));
-            this.interbank = new InterbankBoundary(issueBank);
+            this.interbank = new InterbankSubsystem();
             PaymentTransaction transaction = interbank.payDeposit(card, amount, content);
             result.put("RESULT", "PAYMENT SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully paid the deposit!");
@@ -102,7 +103,7 @@ public class PaymentController extends EcoBikeBaseController {
         try {
         	this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
             		balance, getExpirationDate(expirationDate));
-            this.interbank = new InterbankBoundary(issueBank);
+            this.interbank = new InterbankSubsystem();
             PaymentTransaction transaction = interbank.returnDeposit(card, amount, content);
             result.put("RESULT", "RETURN SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully receive the deposit!");
@@ -132,7 +133,7 @@ public class PaymentController extends EcoBikeBaseController {
         try {
         	this.card = new CreditCard(cardHolderName, cardNumber,issueBank, securityCode, 
             		balance, getExpirationDate(expirationDate));
-            this.interbank = new InterbankBoundary(issueBank);
+            this.interbank = new InterbankSubsystem();
             PaymentTransaction transaction = interbank.payRental(card, amount, content);
             result.put("RESULT", "PAYMNET SUCCESSFUL!");
             result.put("MESSAGE", "You have succesffully pay the rental!");

@@ -19,6 +19,16 @@ public class Configs {
         put(BikeType.STANDARDEBIKE, 1.5f);
         put(BikeType.TWINBIKE, 1.5f);
     }};
+    
+    // api
+    public static final String PROCESS_TRANSACTION_URL = "https://ecopark-system-api.herokuapp.com/api/card/processTransaction";
+    public static final String appCode = "CWmpa7Oypss=";
+    
+    // card code
+    public static final String CARDCODE = "118609_group1_2020";
+    public static final String OWNER = "Group 1";
+    public static final String CVVCODE = "101";
+    public static final String DATEEXPIRED = "1125";
 
     public static float freeOfChargeTimeInMinute = 10f;
 
@@ -50,7 +60,7 @@ public class Configs {
 
 	public enum BIKE_STATUS {
 		FREE,
-		RENTED,		
+		RENT,		
 	}
 	
 	public enum TransactionType {

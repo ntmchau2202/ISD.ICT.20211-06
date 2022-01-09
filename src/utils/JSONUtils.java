@@ -1,7 +1,14 @@
 package utils;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.Locale;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -59,8 +66,8 @@ public class JSONUtils {
 		Configs.BIKE_STATUS bikeStat;
 		if(bikeStatus.equalsIgnoreCase("FREE")) {
 			bikeStat = Configs.BIKE_STATUS.FREE;
-		} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
-			bikeStat = Configs.BIKE_STATUS.RENTED;
+		} else if (bikeStatus.equalsIgnoreCase("RENT")) {
+			bikeStat = Configs.BIKE_STATUS.RENT;
 		} else {
 			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 		}

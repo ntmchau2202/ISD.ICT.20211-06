@@ -1,6 +1,6 @@
 package entities;
 
-import java.sql.Date;
+import java.util.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import exceptions.interbank.InvalidCardException;
 import utils.FunctionalUtils;
@@ -53,6 +53,19 @@ public class PaymentTransaction {
 		this.setCreditCardNumber(creditCardNumber);
 		this.setContent(content);
 		this.setTransactionTime(transactionTime);
+	}
+	
+	public PaymentTransaction(String creditCardNumber, double amount, String content, 
+			String transactionTime, String errorMessage) throws InvalidEcoBikeInformationException {
+		this.setAmount(amount);
+		this.setCreditCardNumber(creditCardNumber);
+		this.setContent(content);
+		this.setTransactionTime(transactionTime);
+		this.errorMessage = errorMessage;
+	}
+	
+	public PaymentTransaction(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 	
 	public String getTransactionId() {

@@ -1,16 +1,21 @@
 package views.screen;
 
 import controllers.PaymentController;
+import controllers.RentBikeController;
 import entities.Bike;
 import entities.CreditCard;
+import exceptions.ecobike.EcoBikeException;
+import exceptions.ecobike.EcoBikeUndefinedException;
+import exceptions.ecobike.RentBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
-
-import java.awt.*;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * This class creates a handler for deposit screen
@@ -19,7 +24,7 @@ import java.io.IOException;
  */
 public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
 
-    private static DepositScreenHandler depositScreenHandler = null;
+    private static DepositScreenHandler depositScreenHandler;
     private Bike currentBike = null;
     private CreditCard currentCreditCard = null;
 
@@ -81,22 +86,40 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
         return depositScreenHandler;
     }
 
-    @Override
-    public void show() {
-        if (currentCreditCard != null) {
-            //if already provided a credit card, just show the screen
-            super.show();
-        } else {
-            //show payment method
-            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null, Configs.TransactionType.PAY_DEPOSIT).show();
-        }
-    }
+//    @Override
+//    public void show() {
+//        if (currentCreditCard != null) {
+//            //if already provided a credit card, just show the screen
+//            super.show();
+//        } else {
+//            //show payment method
+//            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null, Configs.TransactionType.PAY_DEPOSIT).show();
+//        }
+//    }
 
     /**
      * This is the method to do initialization and register button event.
      */
     private void initializeDepositScreen() {
-        confirmDepositButton.setOnMouseClicked(e -> confirmDeposit());
+        confirmDepositButton.setOnMouseClicked(e -> {
+			try {
+				try {
+					confirmDeposit();
+				} catch (EcoBikeException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
         changeCardInformationButton.setOnMouseClicked(e -> changeCardInformation());
         mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
         backIcon.setOnMouseClicked(e -> {
@@ -119,15 +142,27 @@ public class DepositScreenHandler extends EcoBikeBaseScreenHandler {
 
     /**
      * This is the method to be called when user press confirm deposit.
+     * @throws NumberFormatException 
+     * @throws IOException 
+     * @throws SQLException 
+     * @throws EcoBikeException 
      */
-    private void confirmDeposit() {
+    private void confirmDeposit() throws NumberFormatException, EcoBikeException, SQLException, IOException {
         //todo: call payment controller to proceed deposit transaction with current bike and credit card
+    	Map<String, String> result = PaymentController.getPaymentController().payDeposit((int) currentBike.getDeposit(), "pay deposit", currentCreditCard.getCardHolderName()
+    			, currentCreditCard.getCardNumber(), currentCreditCard.getIssueBank(), (float) currentCreditCard.getBalance(), 
+    			currentCreditCard.getExpirationDate().toString(), currentCreditCard.getCardSecurity());
+    	RentBikeController.getRentBikeServiceController().rentBike(currentBike);
+    	EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show();
     }
 
     /**
      * This is the method to be called when user press change card information.
      */
     private void changeCardInformation() {
-        PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, currentCreditCard, Configs.TransactionType.PAY_DEPOSIT);
+    	PaymentMethodScreenHandler paymentMethodScreenHandler = PaymentMethodScreenHandler.getPaymentMethodScreenHandler
+    			(this.stage, this, null, Configs.TransactionType.PAY_DEPOSIT, currentBike); 
+        paymentMethodScreenHandler.setCreditCard(currentCreditCard);
+        paymentMethodScreenHandler.show();
     }
 }

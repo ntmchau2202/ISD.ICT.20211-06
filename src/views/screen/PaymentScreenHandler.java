@@ -93,7 +93,7 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
         }
         else{
             //show payment method
-            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null, Configs.TransactionType.PAY_RENTAL).show();
+            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, currentCreditCard,Configs.TransactionType.PAY_RENTAL, currentBike).show();
         }
     }
 
@@ -132,7 +132,7 @@ public class PaymentScreenHandler extends EcoBikeBaseScreenHandler {
      * This is the method to be called when user press change card information button.
      */
     private void changeCardInformation() {
-        PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, currentCreditCard, Configs.TransactionType.PAY_RENTAL).show();
+        PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, currentCreditCard, Configs.TransactionType.PAY_RENTAL, currentBike).show();
     }
 
 }

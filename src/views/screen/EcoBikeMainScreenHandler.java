@@ -59,7 +59,7 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
                 e.printStackTrace();
             }
         }
-
+        
         if (prevScreen != null) {
             ecoBikeMainScreenHandler.setPreviousScreen(prevScreen);
         }
@@ -127,7 +127,7 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
                 BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this, bike).show();
             } else {
                 PopupScreen popup = new PopupScreen(this.stage);
-                popup.error("Cannot find bike matching keyword!");
+                PopupScreen.error("Cannot find bike matching keyword!");
             }
         } else if (choiceBox.getValue() == "Dock") {
             Dock dock = null;
@@ -142,7 +142,7 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
                 DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock).show();
             } else {
                 PopupScreen popup = new PopupScreen(this.stage);
-                popup.error("Cannot find dock matching keyword!");
+                PopupScreen.error("Cannot find dock matching keyword!");
             }
         }
     }

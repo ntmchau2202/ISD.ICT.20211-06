@@ -3,7 +3,6 @@ package views.screen;
 import controllers.PaymentController;
 import entities.Bike;
 import entities.CreditCard;
-import exceptions.ecobike.EcoBikeUndefinedException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -23,6 +22,7 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
     private static PaymentMethodScreenHandler paymentMethodScreenHandler = null;
     private CreditCard currentCreditCard = null;
     private Configs.TransactionType currentTransactionType = null;
+    private Bike currentBike = null;
 
     @FXML
     private TextField cardHolderName;
@@ -50,7 +50,8 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
      * @param transactionType   the transaction type of the process
      *
      */
-    public static PaymentMethodScreenHandler getPaymentMethodScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, CreditCard creditCard, Configs.TransactionType transactionType) {
+    public static PaymentMethodScreenHandler getPaymentMethodScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, 
+    		CreditCard card,Configs.TransactionType transactionType,Bike bike) {
         if (paymentMethodScreenHandler == null) {
             try {
                 paymentMethodScreenHandler = new PaymentMethodScreenHandler(stage, Configs.PAYMENT_METHOD_SCREEN_PATH);
@@ -61,41 +62,48 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
                 e.printStackTrace();
             }
         }
-
+        
+        if(bike != null) {
+        	paymentMethodScreenHandler.currentBike = bike;
+        }
         if (prevScreen != null) {
             paymentMethodScreenHandler.setPreviousScreen(prevScreen);
-        }
-
-        if (creditCard != null) {
-            paymentMethodScreenHandler.currentCreditCard = creditCard;
         }
 
         if(transactionType != null){
             paymentMethodScreenHandler.currentTransactionType = transactionType;
         }
-
-        paymentMethodScreenHandler.renderPaymentMethod();
+        
+        paymentMethodScreenHandler.currentCreditCard = card;
 
         return paymentMethodScreenHandler;
+    }
+    
+    public void setCreditCard(CreditCard card) {
+    	currentCreditCard = card;
     }
 
     /**
      * This is the method to do initialization and register button event.
      */
     private void initializePaymentScreen() {
-        confirmPaymentButton.setOnMouseClicked(e -> validateInput());
+    	if(currentCreditCard == null) currentCreditCard = new CreditCard();
+        confirmPaymentButton.setOnMouseClicked(e -> {
+        	validateInput();
+        	paymentMethodScreenHandler.renderPaymentMethod();
+        });
     }
 
     /**
      * This is the method to render payment method if a card is provided.
      */
     private void renderPaymentMethod() {
-        if (currentCreditCard != null) {
-            cardHolderName.setText(currentCreditCard.getCardHolderName());
-            cardNumber.setText(currentCreditCard.getCardNumber());
-            securityCode.setText(currentCreditCard.getCardSecurity());
-            expirationDate.setText(currentCreditCard.getExpirationDate().toString());
-        }
+//        if (currentCreditCard != null) {
+//            cardHolderName.setText(currentCreditCard.getCardHolderName());
+//            cardNumber.setText(currentCreditCard.getCardNumber());
+//            securityCode.setText(currentCreditCard.getCardSecurity());
+//            expirationDate.setText(currentCreditCard.getExpirationDate().toString());
+//        }
     }
     
 //    @Override
@@ -130,7 +138,7 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
         CreditCard card = null;
 //        CreditCard card = new CreditCard(cardNumber.getText(), cardHolderName.getText(), "acb", expirationDate.getText(), securityCode.getText());
         try {
-            confirmPaymentMethod(card);
+            confirmPaymentMethod();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -140,13 +148,14 @@ public class PaymentMethodScreenHandler extends EcoBikeBaseScreenHandler {
      * This method is called when user click confirm payment button
      * It shows the previous screen that require this screen to be shown (deposit or pay rental)
      */
-    private void confirmPaymentMethod(CreditCard creditCard) {
+    private void confirmPaymentMethod() {
+    	currentCreditCard = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "VCB", securityCode.getText(), 10000000, expirationDate.getText());
         switch (currentTransactionType){
             case PAY_DEPOSIT:
-                DepositScreenHandler.getDepositScreenHandler(this.stage, null, creditCard, null).show();
+                DepositScreenHandler.getDepositScreenHandler(this.stage, null, currentCreditCard, currentBike).show();
                 break;
             case PAY_RENTAL:
-                PaymentScreenHandler.getPaymentScreenHandler(this.stage, null, creditCard, null).show();
+                PaymentScreenHandler.getPaymentScreenHandler(this.stage, null, currentCreditCard, currentBike).show();
                 break;
             default:
                 System.out.println("Unknown payment source");

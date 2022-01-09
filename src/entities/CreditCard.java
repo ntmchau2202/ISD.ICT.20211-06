@@ -1,8 +1,8 @@
 package entities;
 
-import java.text.DateFormat;
+import java.text.DateFormat; 
 import java.text.SimpleDateFormat;
-import java.sql.Date;
+import java.util.Date;
 import utils.FunctionalUtils;
 import exceptions.interbank.InvalidCardException;
 
@@ -66,7 +66,7 @@ public class CreditCard {
 			throw new InvalidCardException("card number must not be null");
 		}
 		
-		if (FunctionalUtils.contains(cardNumber, "^[0-9 ]")) {
+		if (FunctionalUtils.contains(cardNumber, "^[a-zA-Z]")) {
 			throw new InvalidCardException("card number must not contains letters or special character");
 		}
 		
@@ -80,8 +80,8 @@ public class CreditCard {
 			throw new InvalidCardException("cardholder name must not be null");
 		}
 		
-		if (FunctionalUtils.contains(cardHolderName, "^[a-zA-z ]")) {
-			throw new InvalidCardException("card number must not contains digits or special characters");
+		if (FunctionalUtils.contains(cardHolderName, "^[0-9]")) {
+			throw new InvalidCardException("card holder name must not contains digits or special characters");
 		}
 		this.cardHolderName = cardHolderName;
 	}
@@ -93,7 +93,7 @@ public class CreditCard {
 			throw new InvalidCardException("issuing bank must not be null");
 		}
 		
-		if (FunctionalUtils.contains(issueBank, "^[a-zA-z ]")) {
+		if (!issueBank.equalsIgnoreCase("VCB") && !issueBank.equalsIgnoreCase("AGB")) {
 			throw new InvalidCardException("issuing bank must not contains digits or special characters");
 		}
 		this.issueBank = issueBank;

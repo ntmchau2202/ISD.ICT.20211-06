@@ -112,7 +112,7 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
      */
     public void confirmPaymentMethod(CreditCard card) throws EcoBikeException, SQLException, IOException {
     	// this is paying for deposit
-    	RentBikeController.getRentBikeServiceController().rentBike(bikeToRent, card);
+    	RentBikeController.getRentBikeServiceController().rentBike(bikeToRent);
     	System.out.println("Hello");
     }
 

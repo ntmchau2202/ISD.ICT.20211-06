@@ -2,17 +2,21 @@ package views.screen;
 
 import controllers.EcoBikeInformationController;
 import controllers.RentBikeController;
+import controllers.ReturnBikeController;
 import entities.Bike;
+import entities.Cart;
+import entities.Dock;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import subsystem.boundaries.InterbankSubsystemController;
 import utils.Configs;
+import utils.DBUtils;
+import views.screen.popup.PopupScreen;
 
 import java.io.IOException;
-
-import boundaries.RentBikeServiceBoundary;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
@@ -45,6 +49,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Button returnBikeButton;
     @FXML
+    private Button pauseRentalButton;
+    @FXML
     private ImageView bikeImage;
     @FXML
     private ImageView mainScreenIcon;
@@ -64,17 +70,18 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
      *
      */
     public static BikeInformationScreenHandler getBikeInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Bike bike) {
+    	
         if (bikeInformationScreenHandler == null) {
             try {
                 bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.VIEW_BIKE_SCREEN_PATH);
                 bikeInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
                 bikeInformationScreenHandler.setScreenTitle("Bike information screen");
-                bikeInformationScreenHandler.initializeBikeScreen();
+                bikeInformationScreenHandler.currentBike = bike;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
+        bikeInformationScreenHandler.initializeBikeScreen();
         if (prevScreen != null) {
             bikeInformationScreenHandler.setPreviousScreen(prevScreen);
         }
@@ -82,7 +89,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         if (bike != null) {
             bikeInformationScreenHandler.currentBike = bike;
         }
-
+        
         bikeInformationScreenHandler.renderBikeScreen();
 
         return bikeInformationScreenHandler;
@@ -92,6 +99,19 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
      * This is the method to do initialization and register button event.
      */
     private void initializeBikeScreen(){
+    	System.out.println("Hello!");
+    	if(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE) {
+			System.out.println("FREEE");
+			rentBikeButton.setDisable(false);
+    		returnBikeButton.setDisable(true);
+    		pauseRentalButton.setDisable(true);
+		} else {
+			System.out.println("RENTED");
+			rentBikeButton.setDisable(true);
+    		returnBikeButton.setDisable(false);
+    		pauseRentalButton.setDisable(false);
+		}
+    	pauseRentalButton.setOnMouseClicked(e -> pauseBikeRental());
         rentBikeButton.setOnMouseClicked(e -> rentBike());
         returnBikeButton.setOnMouseClicked(e -> returnBike());
         mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
@@ -125,8 +145,12 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     private void rentBike() {
         try {
             System.out.println("rent bike");
+            if(!RentBikeController.getRentBikeServiceController().checkAvailableBike(currentBike)) {
+            	return;
+            }
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.stage, this.currentBike);
+            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null,Configs.TransactionType.PAY_DEPOSIT,currentBike).show();
+//            RentBikeController.getRentBikeServiceController().rentBike(currentBike);
 //            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,8 +160,15 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     private void returnBike() {
         try {
             System.out.println("return bike");
+            System.out.println(currentBike.toString());
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).returnBike(this.stage, this.currentBike);
+            Dock dock = DBUtils.getDockInformation(currentBike.getDockId());
+            if(!ReturnBikeController.getReturnBikeController().checkDockFreeSpace(dock)) {
+            	PopupScreen.error("Dock is full!");
+            	return;
+            }
+            
+            PaymentMethodScreenHandler.getPaymentMethodScreenHandler(this.stage, this, null, Configs.TransactionType.PAY_RENTAL, currentBike).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,10 +178,10 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         try {
         	System.out.println("pause bike rental");
             // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).pauseBikeRental(this.stage, this.currentBike);
+//            InterbankSubsystemController.getRentBikeService(this.getPreviousScreen()).pauseBikeRental(this.stage, this.currentBike);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+   
 }

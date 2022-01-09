@@ -84,7 +84,7 @@ public class Bike {
 	 */
 	private int totalRentTime;
 	
-	private String dockId;
+	private int dockId;
 	
 	public Bike() {
 		
@@ -270,10 +270,6 @@ public class Bike {
 		}
 		return null;
 	}
-
-	public String getdockId() {
-		return dockId;
-	}
 	
 	public float getDistanceEstimated() {
 		return this.currentBattery * 5;
@@ -287,11 +283,11 @@ public class Bike {
 		this.creator = creator;
 	}
 
-	public String getDockId() {
+	public int getDockId() {
 		return dockId;
 	}
 
-	public void setDockId(String dockId) {
+	public void setDockId(int dockId) {
 		this.dockId = dockId;
 	}
 	

@@ -17,8 +17,8 @@
          <center>
             <Pane prefHeight="500.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="cardHolderName" layoutX="472.0" layoutY="117.0" prefHeight="35.0" prefWidth="420.0" />
-                  <TextField fx:id="cardNumber" layoutX="472.0" layoutY="168.0" prefHeight="35.0" prefWidth="420.0" />
+                  <TextField fx:id="cardHolderName" layoutX="472.0" layoutY="117.0" prefHeight="35.0" prefWidth="420.0" text="118609_group1_2020" />
+                  <TextField fx:id="cardNumber" layoutX="472.0" layoutY="168.0" prefHeight="35.0" prefWidth="420.0" text="Group 1" />
                   <Label layoutX="308.0" layoutY="121.0" text="Card holder name">
                      <font>
                         <Font name="Segoe UI" size="18.0" />
@@ -47,8 +47,8 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <TextField fx:id="expirationDate" layoutX="472.0" layoutY="215.0" prefHeight="35.0" prefWidth="420.0" />
-                  <TextField fx:id="securityCode" layoutX="472.0" layoutY="263.0" prefHeight="35.0" prefWidth="420.0" />
+                  <TextField fx:id="expirationDate" layoutX="472.0" layoutY="215.0" prefHeight="35.0" prefWidth="420.0" text="11/2025" />
+                  <TextField fx:id="securityCode" layoutX="472.0" layoutY="263.0" prefHeight="35.0" prefWidth="420.0" text="185" />
                </children>
             </Pane>
          </center>

@@ -3,12 +3,14 @@ package controllers;
 import java.sql.SQLException;
 
 import entities.Bike;
+import entities.Cart;
 import entities.CreditCard;
 import entities.Dock;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
+import exceptions.ecobike.InvalidEcoBikeInformationException;
 import exceptions.ecobike.RentBikeException;
-import interfaces.InterbankInterface;
+import subsystem.InterbankInterface;
 import utils.Configs;
 import utils.DBUtils;
 
@@ -42,15 +44,19 @@ public class ReturnBikeController extends EcoBikeBaseController {
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void returnBike(String bikeBarcode, CreditCard card) throws EcoBikeException, SQLException {
+	public void returnBike(String bikeBarcode) throws EcoBikeException, SQLException {
 		Bike bike = DBUtils.getBikeByBarcode(bikeBarcode);
+		
+		Cart.getCart().emptyCart();
 	}
 	
 	/**
 	 * Request to pay for rental bike
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 * @throws InvalidEcoBikeInformationException 
+	 * @throws NumberFormatException 
 	 */
-	public void requestToPay(CreditCard card, double amount, String content) throws EcoBikeUndefinedException {
+	public void requestToPay(CreditCard card, double amount, String content) throws EcoBikeUndefinedException, NumberFormatException, InvalidEcoBikeInformationException {
 		//todo: request to pay
 		this.interbankSystem.payRental(card, amount, content);
 	}
