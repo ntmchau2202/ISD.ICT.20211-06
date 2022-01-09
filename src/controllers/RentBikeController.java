@@ -50,14 +50,13 @@ public class RentBikeController extends EcoBikeBaseController {
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
-	public void rentBike(Bike bikeToRent, CreditCard card) throws EcoBikeException, SQLException, IOException {
+	public boolean rentBike(Bike bikeToRent, CreditCard card) throws EcoBikeException, SQLException, IOException {
 		
 		// TODO: process the payment before updating the database;
 		PaymentTransaction transaction = interbankSystem.payDeposit(card, bikeToRent.getDeposit(), "PAY_DEPOSIT");
 		
 		if (transaction == null) {
-			PopupScreen.error("Error performing transaction");
-			return;
+			return false;
 		}
 		System.out.println("Successfully performing transaction!");
 		System.out.println("Transaction ID:"+transaction.getTransactionId());
@@ -71,6 +70,8 @@ public class RentBikeController extends EcoBikeBaseController {
 		this.customerID = DBUtils.saveCustomer(card.getCardHolderName());
 		this.rentID = DBUtils.createNewRentRecord(customerID);
 		DBUtils.changeBikeStatus(this.currentBike.getBikeBarCode(), Configs.BIKE_STATUS.RENTED.toString());
+		this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
+		return true;
 	}
 	
 	/**
@@ -79,10 +80,12 @@ public class RentBikeController extends EcoBikeBaseController {
 	 */
 	public void pauseBikeRental() {
 		this.timeCounter.stopCounter();
+		this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.PAUSED);
 	}
 	
 	public void resumeBikeRental() {
 		this.timeCounter.startCounter();
+		this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
 	}
 	
 	/**
@@ -95,23 +98,29 @@ public class RentBikeController extends EcoBikeBaseController {
 		counterThread.start();
 	}
 	
-	private int stopCountingRentTime() {
+	public int stopCountingRentTime() {
 		this.stopTime = timeCounter.stopCounter();
+		calculateFee(this.currentBike.getBikeType(), this.timeRented);
 		return timeCounter.getCountedTime();
 	}
+
+	public float getRentalFee() {
+		return calculateFee(this.currentBike.getBikeType(), this.timeRented);
+	}
 	
-	public void returnBike(Bike bikeToRent, CreditCard card) throws IOException, SQLException, EcoBikeException {
-		this.timeRented = stopCountingRentTime();
+	public boolean returnBike(Bike bikeToRent, CreditCard card) throws IOException, SQLException, EcoBikeException {
 		float rentCost = calculateFee(bikeToRent.getBikeType(), this.timeRented);
 		PaymentTransaction transaction = interbankSystem.payRental(card, rentCost, "PAY_RENTAL");
 		
 		if (transaction == null) {
-			PopupScreen.error("Cannot perform transaction for paying rental");
+			return false;
 		}
 		
 		// TODO: save transaction
 		// TODO: reset everything
-		DBUtils.changeBikeStatus(bikeToRent.getBikeBarCode(), Configs.BIKE_STATUS.RENTED.toString());
+		DBUtils.changeBikeStatus(bikeToRent.getBikeBarCode(), Configs.BIKE_STATUS.FREE.toString());
+		this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.FREE);
+		return true;
 	}
 	
 	private float calculateFee(String bikeType, int rentTime) {
@@ -122,7 +131,7 @@ public class RentBikeController extends EcoBikeBaseController {
 					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
 					: Configs.firstChargeTimeIntervalCost;
 
-		rentingCost *= Configs.chargeMultiplierDictionary.get(bikeType);
+		rentingCost *= Configs.chargeMultiplierDictionary.get(Configs.getBikeType(bikeType));
 		return rentingCost;
 	}
 }

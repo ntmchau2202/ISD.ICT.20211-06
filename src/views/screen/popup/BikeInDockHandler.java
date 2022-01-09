@@ -1,6 +1,7 @@
 package views.screen.popup;
 
 import entities.Bike;
+import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,11 +10,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
+import utils.DBUtils;
 import views.screen.BikeInformationScreenHandler;
 import views.screen.EcoBikeBaseScreenHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * This is the class handler for bike in dock screen

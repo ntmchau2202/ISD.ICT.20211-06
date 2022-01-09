@@ -157,7 +157,7 @@ public class DBUtils {
 		} else {
 			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 		}
-//		bikeRes.setCurrentStatus(bikeStat);
+		bikeRes.setCurrentStatus(bikeStat);
 //		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
 //		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
 		

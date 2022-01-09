@@ -21,6 +21,7 @@ import exceptions.ecobike.RentBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utils.Configs;
@@ -32,6 +33,12 @@ import views.screen.popup.PopupScreen;
  * @author Duong
  */
 public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
+	@FXML
+    private Label bikeName;
+	@FXML
+    private Label bikeType;
+	@FXML
+	private Label depositPrice;
     @FXML
     private TextField cardHolderName;
     @FXML
@@ -68,12 +75,13 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     	}
     	if (bike != null) {
     		paymentScreenHandler.bikeToRent = bike;
+    		paymentScreenHandler.renderBikeDepositInformation();
     	}
     	return paymentScreenHandler;
     	
     }
     
-    public void initialize() {
+    public void initialize() {    	
     	confirmPaymentButton.setOnMouseClicked(e->{
 			try {
 				confirmPaymentMethod();
@@ -82,6 +90,12 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
 				e1.printStackTrace();
 			}
 		});
+    }
+    
+    private void renderBikeDepositInformation() {
+    	bikeName.setText(this.bikeToRent.getName());
+    	bikeType.setText(this.bikeToRent.getBikeType());
+    	depositPrice.setText(Double.toString(this.bikeToRent.getDeposit()) + this.bikeToRent.getCurrency());
     }
     
 	public boolean validateInput() throws IOException {
@@ -116,9 +130,14 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     		CreditCard card = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "ACB", securityCode.getText(), expirationDate.getText());
     		// in reality, we will based on the issuing bank to create proper boundary 
     		InterbankBoundary interbank = new InterbankBoundary("ACB");
-    		RentBikeController.getRentBikeServiceController(interbank).rentBike(bikeToRent, card);    		
+    		if (RentBikeController.getRentBikeServiceController(interbank).rentBike(bikeToRent, card)) {
+    			PopupScreen.success("You have successfully rented bike "+ bikeToRent.getName());
+    			this.stage.hide();
+    		} else {
+    			PopupScreen.error("Error performing transaction");
+    		}
     	} else {
-    		System.out.println("Confirm failed");
+    		PopupScreen.error("Confirm payment method failed!");
     	}
     }
 }

@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 
 import org.json.JSONException;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.sql.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.Configs;
@@ -84,7 +86,7 @@ public class Bike {
 	 */
 	private int totalRentTime;
 	
-	private String dockId;
+	private PropertyChangeSupport propertyChangeNotifier;
 	
 	public Bike() {
 		
@@ -103,8 +105,16 @@ public class Bike {
 		this.setCurrency(currencyUnit);
 		this.setDeposit(deposit);
 		this.setCreateDate(createDate);
+		this.propertyChangeNotifier = new PropertyChangeSupport(this);
 	}
 
+	public void addObserver(PropertyChangeListener pcl) {
+		this.propertyChangeNotifier.addPropertyChangeListener(pcl);
+	}
+	
+	public void removeObserver(PropertyChangeListener pcl) {
+		this.propertyChangeNotifier.removePropertyChangeListener(pcl);
+	}
 
 	public String getName() {
 		return name;
@@ -237,6 +247,7 @@ public class Bike {
 	}
 
 	public void setCurrentStatus(Configs.BIKE_STATUS currentStatus) {
+		this.propertyChangeNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
 		this.currentStatus = currentStatus;
 	}
 
@@ -271,10 +282,6 @@ public class Bike {
 		return null;
 	}
 
-	public String getdockId() {
-		return dockId;
-	}
-	
 	public float getDistanceEstimated() {
 		return this.currentBattery * 5;
 	}
@@ -285,17 +292,7 @@ public class Bike {
 
 	public void setCreator(String creator) {
 		this.creator = creator;
-	}
-
-	public String getDockId() {
-		return dockId;
-	}
-
-	public void setDockId(String dockId) {
-		this.dockId = dockId;
-	}
-	
-	
+	}	
 }
 
 	

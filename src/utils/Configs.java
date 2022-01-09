@@ -8,17 +8,30 @@ package utils;
 public class Configs {
     //renting service related constant
     public enum BikeType{
-        STANDARDBIKE,
-        STANDARDEBIKE,
-        TWINBIKE
+        Bike,
+        EBike,
+        TwinBike,
+        Others;
     }
 
     @SuppressWarnings("serial")
 	public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
-        put(BikeType.STANDARDBIKE, 1f);
-        put(BikeType.STANDARDEBIKE, 1.5f);
-        put(BikeType.TWINBIKE, 1.5f);
+        put(BikeType.Bike, 1f);
+        put(BikeType.EBike, 1.5f);
+        put(BikeType.TwinBike, 1.5f);
     }};
+    
+    public static BikeType getBikeType(String bikeType) {
+    	if (bikeType.equalsIgnoreCase(BikeType.Bike.toString())) {
+    		return BikeType.Bike;
+    	} else if (bikeType.equalsIgnoreCase(BikeType.EBike.toString())) {
+    		return BikeType.EBike;
+    	} else if (bikeType.equalsIgnoreCase(BikeType.TwinBike.toString())) {
+    		return BikeType.TwinBike;
+    	} else {
+    		return BikeType.Others;
+    	}
+    }
 
     public static float freeOfChargeTimeInMinute = 10f;
 
@@ -33,10 +46,10 @@ public class Configs {
     
     // static resource
     public static final String IMAGE_PATH = "assets/images";
-    public static final String DEPOSIT_SCREEN_PATH = "/views/fxml/FXML_DepositScreen.fxml";
     public static final String LIST_DOCK_SCREEN_PATH = "/views/fxml/FXML_ListDockScreen.fxml";
     public static final String MAIN_SCREEN_PATH = "/views/fxml/FXML_MainScreen.fxml";
-    public static final String PAYING_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
+    public static final String PAYING_FOR_DEPOSIT_SCREEN_PATH = "/views/fxml/FXML_PayForDepositScreen.fxml";
+    public static final String PAYING_FOR_RENTAL_SCREEN_PATH = "/views/fxml/FXML_PayForRentalScreen.fxml";
     public static final String PAYMENT_SCREEN_PATH = "/views/fxml/FXML_PaymentScreen.fxml";
     public static final String POPUP_SCREEN_PATH = "/views/fxml/FXML_PopupScreen.fxml";
     public static final String RETURN_BIKE_SCREEN_PATH = "/views/fxml/FXML_ReturnBikeScreen.fxml";
@@ -51,6 +64,7 @@ public class Configs {
 	public enum BIKE_STATUS {
 		FREE,
 		RENTED,		
+		PAUSED
 	}
 	
 	public enum TransactionType {

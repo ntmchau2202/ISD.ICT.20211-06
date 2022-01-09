@@ -20,6 +20,7 @@ import exceptions.ecobike.RentBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utils.Configs;
@@ -31,6 +32,14 @@ import views.screen.popup.PopupScreen;
  * @author Duong
  */
 public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
+	@FXML
+    private Label bikeName;
+	@FXML
+    private Label bikeType;
+	@FXML
+    private Label rentalTime;
+	@FXML
+    private Label rentalPrice;	
     @FXML
     private TextField cardHolderName;
     @FXML
@@ -67,12 +76,22 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     	}
     	if (bike != null) {
     		paymentScreenHandler.bikeToRent = bike;
+    		paymentScreenHandler.renderBikeRentInformation();
+    		
     	}
     	return paymentScreenHandler;
     	
     }
     
+    private void renderBikeRentInformation() {
+    	bikeName.setText(this.bikeToRent.getName());
+    	bikeType.setText(this.bikeToRent.getBikeType());
+    	rentalTime.setText(Integer.toString(RentBikeController.getRentBikeServiceController(null).stopCountingRentTime())+" mins");
+    	rentalPrice.setText(Float.toString(RentBikeController.getRentBikeServiceController(null).getRentalFee()) + this.bikeToRent.getCurrency());
+    }
+    
     public void initialize() {
+
     	confirmPaymentButton.setOnMouseClicked(e->{
 			try {
 				confirmPaymentMethod();
@@ -112,8 +131,13 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     public void confirmPaymentMethod() throws EcoBikeException, SQLException, IOException {
     	if(validateInput()) {
     		System.out.println("Confirm successfully");
-    		CreditCard card = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "", securityCode.getText(), expirationDate.getText());
-    		RentBikeController.getRentBikeServiceController(null).returnBike(bikeToRent, card);
+    		CreditCard card = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "ACB", securityCode.getText(), expirationDate.getText());
+    		if (RentBikeController.getRentBikeServiceController(null).returnBike(bikeToRent, card)) {
+    			PopupScreen.success("Return bike successfully");    			
+    			this.stage.hide();
+    		} else {
+    			PopupScreen.error("Cannot perform transaction for paying rental");
+    		}
     	} else {
     		System.out.println("Confirm failed");
     	}

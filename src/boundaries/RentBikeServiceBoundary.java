@@ -37,21 +37,20 @@ public class RentBikeServiceBoundary implements RentBikeServiceInterface {
 		
 	}
 	public void rentBike(Bike bike) throws IOException, EcoBikeException, SQLException {
-		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(new Stage(), Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
+		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(new Stage(), Configs.PAYING_FOR_DEPOSIT_SCREEN_PATH, this.prevScreen, bike);
 		paymentScreenHandler.show();
 	}
 	
 	public void returnBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException {
-		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
+		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYING_FOR_RENTAL_SCREEN_PATH, this.prevScreen, bike);
 		paymentScreenHandler.show();
 	}
 	
 	public void pauseBikeRental(Bike bike) throws EcoBikeException, SQLException {
-		RentBikeController.getRentBikeServiceController(null).pauseBikeRental();
-		try {
-			PopupScreen.success("Pause bike rental successfully!");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+		RentBikeController.getRentBikeServiceController(null).pauseBikeRental();	
+	}
+	
+	public void resumeBikeRental(Bike bike) throws EcoBikeException, SQLException {
+		RentBikeController.getRentBikeServiceController(null).resumeBikeRental();	
 	}
 }
