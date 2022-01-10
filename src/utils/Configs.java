@@ -8,7 +8,7 @@ package utils;
 public class Configs {
     //renting service related constant
     public enum BikeType{
-        Bike,
+        NormalBike,
         EBike,
         TwinBike,
         Others;
@@ -16,14 +16,14 @@ public class Configs {
 
     @SuppressWarnings("serial")
 	public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
-        put(BikeType.Bike, 1f);
+        put(BikeType.NormalBike, 1f);
         put(BikeType.EBike, 1.5f);
         put(BikeType.TwinBike, 1.5f);
     }};
     
     public static BikeType getBikeType(String bikeType) {
-    	if (bikeType.equalsIgnoreCase(BikeType.Bike.toString())) {
-    		return BikeType.Bike;
+    	if (bikeType.equalsIgnoreCase(BikeType.NormalBike.toString())) {
+    		return BikeType.NormalBike;
     	} else if (bikeType.equalsIgnoreCase(BikeType.EBike.toString())) {
     		return BikeType.EBike;
     	} else if (bikeType.equalsIgnoreCase(BikeType.TwinBike.toString())) {
@@ -45,9 +45,9 @@ public class Configs {
     public static float PERCENT_VAT = 10;
     
     // static resource
-    public static final String IMAGE_PATH = "/lib/assets/icons";
-    public static final String BIKE_IMAGE_LIB = "/lib/assets/bikes";
-    public static final String DOCK_IMAGE_LIB = "/lib/assets/docks";
+    public static final String IMAGE_PATH = "assets/icons";
+    public static final String BIKE_IMAGE_LIB = "assets/bikes";
+    public static final String DOCK_IMAGE_LIB = "assets/docks";
     public static final String LIST_DOCK_SCREEN_PATH = "/views/fxml/FXML_ListDockScreen.fxml";
     public static final String MAIN_SCREEN_PATH = "/views/fxml/FXML_MainScreen.fxml";
     public static final String PAYING_FOR_DEPOSIT_SCREEN_PATH = "/views/fxml/FXML_PayForDepositScreen.fxml";
@@ -84,7 +84,7 @@ public class Configs {
 			return this.transactionType;
 		}
 	}
-	
+	public static final String ENTITIES_PKG = "entities.";
 	public static final String API_BASE_URL = "https://ecopark-system-api.herokuapp.com";
 	public static final String API_TRANSACTION = "/api/card/processTransaction";
 	public static final String API_RESET_BALANCE = "/api/card/reset-balance";

@@ -2,6 +2,7 @@ package controllers;
 
 import java.sql.SQLException;
 
+import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import entities.Dock;

@@ -13,6 +13,7 @@ import boundaries.InterbankBoundary;
 import controllers.EcoBikeBaseController;
 import controllers.PaymentController;
 import controllers.RentBikeController;
+import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeException;

@@ -136,12 +136,12 @@ public class PaymentController extends EcoBikeBaseController {
     }
 
     public boolean validateCardNumber(String cardNumber) {
-        if (cardNumber.length() != 10) return false;
-        try {
-            Integer.parseInt(cardNumber);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+//        if (cardNumber.length() != 10) return false;
+//        try {
+//            Integer.parseInt(cardNumber);
+//        } catch (NumberFormatException e) {
+//            return false;
+//        }
         return true;
     }
 

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import entities.Customer;
@@ -33,7 +34,6 @@ public class JSONUtils {
 		obj.put("deposit_price", bike.getDeposit());
 		obj.put("create_date", bike.getCreateDate().toString());
 		obj.put("current_status", bike.getCurrentStatus().toString());
-		obj.put("current_battery",String.valueOf(bike.getCurrentBattery()));
 		obj.put("total_rent_time", bike.getTotalRentTime());
 		return obj.toString();
 	}
@@ -65,7 +65,6 @@ public class JSONUtils {
 		}
 		bikeRes.setCurrentStatus(bikeStat);
 		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-		bikeRes.setCurrentBattery(Float.valueOf(result.getString("current_battery")));
 		return bikeRes;
 	}
 	

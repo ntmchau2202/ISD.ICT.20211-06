@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import controllers.RentBikeController;
 import entities.Bike;
+import entities.NormalBike;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;

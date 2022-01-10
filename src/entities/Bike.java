@@ -1,33 +1,23 @@
 package entities;
 
-import java.text.DateFormat; 
-import java.text.SimpleDateFormat;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import org.json.JSONException;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.sql.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.Configs;
 import utils.FunctionalUtils;
 import utils.JSONUtils;
 
-/**
- * This is the class for object entity Bike including information of a bike
- * @author Duong
- *
- */
-public class Bike {
-	/**
-	 * name of the bike
-	 */
+public abstract class Bike {
+	
 	private String name;
 	
 	/**
 	 * type of the bike.
 	 */
-	private String bikeType;
+	private Configs.BikeType bikeType;
 	
 	/**
 	 * Plate code of the bike.
@@ -75,29 +65,15 @@ public class Bike {
 	 * The current status of the bike
 	 */
 	private Configs.BIKE_STATUS currentStatus;
-	
-	/**
-	 * The current battery of the bike
-	 */
-	private float currentBattery;
-	
-	/**
-	 * The total time the customer has rent calculated in minute
-	 */
+
 	private int totalRentTime;
 	
 	private PropertyChangeSupport propertyChangeNotifier;
 	
-	public Bike() {
-		
-	}
-
-	public Bike(String name, String bikeType, String licensePlateCode, String bikeImage, 
+	public Bike(String name, String licensePlateCode, String bikeImage, 
 			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
-		super();
 		this.setName(name);
-		this.setBikeType(bikeType);
 		this.setLicensePlateCode(licensePlateCode);
 		this.setBikeImage(bikeImage);
 		this.setBikeBarCode(bikeBarcode);
@@ -107,7 +83,7 @@ public class Bike {
 		this.setCreateDate(createDate);
 		this.propertyChangeNotifier = new PropertyChangeSupport(this);
 	}
-
+	
 	public void addObserver(PropertyChangeListener pcl) {
 		this.propertyChangeNotifier.addPropertyChangeListener(pcl);
 	}
@@ -140,26 +116,10 @@ public class Bike {
 	}
 
 	public String getBikeType() {
-		return bikeType;
+		return bikeType.toString();
 	}
 
-	private void setBikeType(String bikeType) throws InvalidEcoBikeInformationException {
-		if(bikeType == null) {
-			throw new InvalidEcoBikeInformationException("bike type parameter must not be null");
-		}
-		
-		if(bikeType.length() == 0) {
-			throw new InvalidEcoBikeInformationException("a bike must have type information");
-		}
-		
-		if (!Character.isLetter(bikeType.charAt(0))) {
-			throw new InvalidEcoBikeInformationException("bike type must start with a letter");
-		}
-		
-		if (FunctionalUtils.contains(bikeType, "[^a-z0-9 -_]")) {
-			throw new InvalidEcoBikeInformationException("bike type can only contain letters, digits, space, hypen and underscore");
-		}
-		
+	protected void setBikeType(Configs.BikeType bikeType) throws InvalidEcoBikeInformationException {		
 		this.bikeType = bikeType;
 	}
 	
@@ -230,15 +190,6 @@ public class Bike {
 	}
 
 	private void setCreateDate(String createDate) throws InvalidEcoBikeInformationException {
-		// TODO: Fix bug here
-//		try {
-//			System.out.println(createDate);
-//			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");	
-//			Date date = (Date) dateFormat.parse(createDate);
-//			this.createDate = new java.sql.Date(date.getTime());
-//		} catch (Exception e) {
-//			throw new InvalidEcoBikeInformationException("invalid date format");
-//		}
 		this.createDate = createDate.toString();
 	}
 
@@ -249,17 +200,6 @@ public class Bike {
 	public void setCurrentStatus(Configs.BIKE_STATUS currentStatus) {
 		this.propertyChangeNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
 		this.currentStatus = currentStatus;
-	}
-
-	public float getCurrentBattery() {
-		return currentBattery;
-	}
-
-	public void setCurrentBattery(float currentBattery) throws InvalidEcoBikeInformationException {
-		if(currentBattery < 0 || currentBattery > 100) {
-			throw new InvalidEcoBikeInformationException("bike batery percentage must be between 0 and 100");
-		}
-		this.currentBattery = currentBattery;
 	}
 
 	public int getTotalRentTime() {
@@ -282,17 +222,11 @@ public class Bike {
 		return null;
 	}
 
-	public float getDistanceEstimated() {
-		return this.currentBattery * 5;
-	}
-
 	public String getCreator() {
 		return creator;
 	}
 
 	public void setCreator(String creator) {
 		this.creator = creator;
-	}	
+	}
 }
-
-	

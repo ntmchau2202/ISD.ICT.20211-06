@@ -3,6 +3,7 @@ package interfaces;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeException;

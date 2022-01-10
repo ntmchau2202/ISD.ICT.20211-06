@@ -1,6 +1,7 @@
 package views.screen;
 
 import controllers.EcoBikeInformationController;
+import entities.NormalBike;
 import entities.Bike;
 import entities.Dock;
 import javafx.fxml.FXML;
@@ -117,12 +118,15 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler {
      */
     private void renderDockInformation() {
         // provide dock image
-        super.setImage(dockImageView, currentDock.getDockImage());
+    	if (currentDock.getDockImage() != null && currentDock.getDockImage().length() != 0) {
+    		dockImageView.setImage(new Image(new File(Configs.DOCK_IMAGE_LIB + "/" + currentDock.getDockImage()).toURI().toString()));
+    	}
         dockNameText.setText(currentDock.getName());
         dockAddressText.setText(currentDock.getDockAddress());
         dockAreaText.setText(currentDock.getDockArea() + " km2");
         dockCount.setText(currentDock.getNumDockSpaceFree() + currentDock.getNumAvailableBike() + "");
         availableDocksCount.setText(currentDock.getNumDockSpaceFree() + "");
+        availableBikeCount.setText(currentDock.getNumAvailableBike() + "");
         distance.setText("100 km");
         estimateWalkTime.setText("100 minutes");
         addBike(currentBikeList);

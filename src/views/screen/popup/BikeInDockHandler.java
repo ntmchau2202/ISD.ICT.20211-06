@@ -1,6 +1,7 @@
 package views.screen.popup;
 
 import entities.Bike;
+import entities.NormalBike;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import javafx.fxml.FXML;
@@ -48,14 +49,14 @@ public class BikeInDockHandler extends EcoBikeBaseScreenHandler {
 
     protected void initialize() {
     	if(currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
-    		bikeImage.setImage(new Image((new File(currentBike.getBikeImage())).toURI().toString()));    		
+    		bikeImage.setImage(new Image((new File(Configs.BIKE_IMAGE_LIB + "/" +currentBike.getBikeImage())).toURI().toString()));    		
     	}
     	// testing information
     	System.out.println("Bike name:"+currentBike.getName());
     	System.out.println("Bike barcode:"+currentBike.getBikeBarCode());
         bikeName.setText(currentBike.getName());
-        bikeBattery.setText(currentBike.getCurrentBattery() + "%");
-        distanceEstimation.setText(.2 * currentBike.getCurrentBattery() + "km");
+//        bikeBattery.setText(currentBike.getCurrentBattery() + "%");
+//        distanceEstimation.setText(.2 * currentBike.getCurrentBattery() + "km");
         viewBikeButton.setOnMouseClicked(e -> viewBikeInformation());
     }
 

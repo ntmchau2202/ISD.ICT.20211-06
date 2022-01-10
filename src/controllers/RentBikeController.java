@@ -4,6 +4,7 @@ import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.InterbankInterface;
+import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import entities.PaymentTransaction;

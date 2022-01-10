@@ -1,5 +1,7 @@
 package utils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection; 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,10 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import entities.Customer;
 import entities.Dock;
+import entities.EBike;
 import entities.Invoice;
 import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeException;
@@ -82,23 +86,7 @@ public class DBUtils {
 		return customerRes;
 	}
 	
-//	public static CreditCard getCreditCardByNumber(String creditCardNumber) throws SQLException, EcoBikeException {
-//		if (connection == null) {
-//			getConnection()();
-//		}
-//		PreparedStatement stm = connection.prepareStatement(
-//				"SELECT * FROM CreditCard WHERE creditcard_number=?");
-//		stm.setString(1, creditCardNumber);
-//		ResultSet result = stm.executeQuery();
-//		CreditCard card = new CreditCard(result.getString("cardholder_name"),
-//				result.getString("creditcard_number"), 
-//				result.getString("issuing_bank"), 
-//				result.getString("security_code"),
-//				result.getDouble("balance"),
-//				result.getDate("expiration_date").toString());
-//		return card;
-//	}
-	
+
 	public static PaymentTransaction getTransactionById(String transactionID) throws SQLException, EcoBikeException {
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(
 				"SELECT * FROM EcoBikeTransaction WHERE transaction_id=?");
@@ -139,15 +127,24 @@ public class DBUtils {
 		stm.setString(1, bikeBarcode);
 		ResultSet result = stm.executeQuery();
 		// TODO: finish constructor here
-		Bike bikeRes = new Bike(result.getString("name"), 
-				result.getString("bike_type"),
-				result.getString("license_plate_code"),
-				result.getString("bike_image"), 
-				result.getString("bike_barcode"), 
-				result.getDouble("bike_rental_price"),
-				result.getString("currency_unit"),
-				result.getDouble("deposit_price"),  
-				result.getDate("create_date").toString());
+		Bike bikeRes = null;
+		try {
+			bikeRes = FunctionalUtils.getBikeWithInformation(
+					result.getString("name"), 
+					result.getString("bike_type"),
+					result.getString("license_plate_code"),
+					result.getString("bike_image"), 
+					result.getString("bike_barcode"), 
+					result.getDouble("bike_rental_price"),
+					result.getString("currency_unit"),
+					result.getDouble("deposit_price"),  
+					result.getDate("create_date").toString()
+			);
+		} catch (IllegalArgumentException | SecurityException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		String bikeStatus = result.getString("current_status");
 		Configs.BIKE_STATUS bikeStat;
 		if(bikeStatus.equalsIgnoreCase("FREE")) {
@@ -158,18 +155,13 @@ public class DBUtils {
 			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 		}
 		bikeRes.setCurrentStatus(bikeStat);
-//		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-//		bikeRes.setCurrentBattery(result.getFloat("current_battery"));
-		
-		// set dockId
-//		bikeRes.setDockId(result.getString("dock_id"));
 		
 		return bikeRes;
-//		String strRes = JSONUtils.serializeBikeInformation(bikeRes);
-//		return strRes;
+
 	}
 	
 	public static  ArrayList<Bike> getAllBikeByDockId(int dockId) throws SQLException, EcoBikeException {
+		System.out.println("Get all bike by dock id:"+dockId);
 		String sql = "SELECT Bike.name as name,"
 				+ "Bike.bike_type as bike_type,"
 				+ "Bike.license_plate_code as license_plate_code,"
@@ -189,21 +181,75 @@ public class DBUtils {
 		ResultSet result = stm.executeQuery();
 		ArrayList<Bike> list = new ArrayList<Bike>();
 		while(result.next()) {
-			// TODO: finish constructor here
-			Bike bikeRes = new Bike(result.getString("name"), 
-					result.getString("bike_type"),
-					result.getString("license_plate_code"),
-					result.getString("bike_image"), 
-					result.getString("bike_barcode"), 
-					result.getDouble("bike_rental_price"),
-					result.getString("currency_unit"),
-					result.getDouble("deposit_price"),  
-					result.getDate("create_date").toString());
-			bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
-			bikeRes.setCurrentBattery(result.getFloat("current_battery"));
-			list.add(bikeRes);
+			Bike bikeRes = null;
+			try {
+				bikeRes = FunctionalUtils.getBikeWithInformation(
+						result.getString("name"), 
+						result.getString("bike_type"),
+						result.getString("license_plate_code"),
+						result.getString("bike_image"), 
+						result.getString("bike_barcode"), 
+						result.getDouble("bike_rental_price"),
+						result.getString("currency_unit"),
+						result.getDouble("deposit_price"),  
+						result.getDate("create_date").toString()
+				);
+			} catch (IllegalArgumentException | SecurityException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			// set bike status
+			String bikeStatus = result.getString("current_status");
+			Configs.BIKE_STATUS bikeStat;
+			if(bikeStatus.equalsIgnoreCase("FREE")) {
+				bikeStat = Configs.BIKE_STATUS.FREE;
+			} else if (bikeStatus.equalsIgnoreCase("RENTED")) {
+				bikeStat = Configs.BIKE_STATUS.RENTED;
+			} else {
+				throw new InvalidEcoBikeInformationException("invalid status of bike in database");
+			}
+			bikeRes.setCurrentStatus(bikeStat);
+			list.add(bikeRes);
+		}
+		
+		return list;
+	}
+	
+	public static ArrayList<NormalBike> getAllBike() throws SQLException, EcoBikeException {
+		String sql = "SELECT Bike.name as name,"
+				+ "Bike.bike_type as bike_type,"
+				+ "Bike.license_plate_code as license_plate_code,"
+				+ "Bike.bike_image as bike_image,"
+				+ "Bike.bike_barcode as bike_barcode,"
+				+ "Bike.bike_rental_price as bike_rental_price,"
+				+ "Bike.currency_unit as currency_unit,"
+				+ "Bike.bike_rental_price as deposit_price,"
+				+ "Bike.create_date as create_date,"
+				+ "BikeStatus.total_rent_time as total_rent_time,"
+				+ "BikeStatus.current_battery as current_battery,"
+				+ "BikeStatus.current_status as current_status FROM Bike, BikeStatus WHERE Bike.bike_barcode = BikeStatus.bike_barcode";
+		Statement stm = DBUtils.getConnection().createStatement();
+		ResultSet result = stm.executeQuery(sql);
+		ArrayList<NormalBike> bikes = new ArrayList<NormalBike>();
+		while(result.next()) {
+			Bike bikeRes = null;
+			try {
+				bikeRes = FunctionalUtils.getBikeWithInformation(
+						result.getString("name"), 
+						result.getString("bike_type"),
+						result.getString("license_plate_code"),
+						result.getString("bike_image"), 
+						result.getString("bike_barcode"), 
+						result.getDouble("bike_rental_price"),
+						result.getString("currency_unit"),
+						result.getDouble("deposit_price"),  
+						result.getDate("create_date").toString()
+				);
+			} catch (IllegalArgumentException | SecurityException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			String bikeStatus = result.getString("current_status");
 			Configs.BIKE_STATUS bikeStat;
 			if(bikeStatus.equalsIgnoreCase("FREE")) {
@@ -215,8 +261,7 @@ public class DBUtils {
 			}
 			bikeRes.setCurrentStatus(bikeStat);
 		}
-		
-		return list;
+		return bikes;
 	}
 
 	public static Dock getDockInformation(int dockID) throws SQLException, EcoBikeException {
@@ -234,11 +279,11 @@ public class DBUtils {
 		return dockRes;
 	}
 	
-	public static List<Dock> getAllDock() throws SQLException, EcoBikeException {
+	public static ArrayList<Dock> getAllDock() throws SQLException, EcoBikeException {
 		String sql = "Select * from Dock";
 		Statement stm = DBUtils.getConnection().createStatement();
 		ResultSet result = stm.executeQuery(sql);
-		List<Dock> docks = new ArrayList<Dock>();
+		ArrayList<Dock> docks = new ArrayList<Dock>();
 		while(result.next()) {
 			Dock dockRes = new Dock(result.getString("name"), 
 					result.getInt("dock_id"), 

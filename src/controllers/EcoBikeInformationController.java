@@ -1,6 +1,7 @@
 package controllers;
 
 import java.sql.SQLException;
+import entities.NormalBike;
 import entities.Bike;
 import entities.Dock;
 import exceptions.ecobike.EcoBikeException;

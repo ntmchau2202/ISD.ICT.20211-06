@@ -1,14 +1,20 @@
 package utils;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date; 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import entities.Bike;
+import entities.EBike;
+import entities.NormalBike;
 import exceptions.ecobike.EcoBikeException;
 
 /**
@@ -66,4 +72,26 @@ public class FunctionalUtils {
 		}
 		return digest;
 	}
+	
+	public static Bike getBikeWithInformation(String name, String bikeType, String licensePlateCode, String bikeImage, 
+			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String createDate) {
+		Bike b = null;
+		System.out.println(bikeType);
+		try {			
+			if (bikeType.equalsIgnoreCase("NormalBike")) {
+				b = new NormalBike(name, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice, currencyUnit, deposit, createDate);
+				return b;
+			} 
+			
+			if (bikeType.equalsIgnoreCase("EBike")) {
+				b = new EBike(name, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice, currencyUnit, deposit, createDate);
+				return b;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return b;
+	}
+	
 }

@@ -3,10 +3,12 @@ package views.screen;
 import controllers.EcoBikeInformationController;
 import controllers.RentBikeController;
 import entities.Bike;
+import entities.NormalBike;
 import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
@@ -15,6 +17,7 @@ import views.screen.popup.PopupScreen;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -144,12 +147,12 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
      */
     private void renderBikeScreen() {
     	if (currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
-    		super.setImage(bikeImage, currentBike.getBikeImage());    		
+    		bikeImage.setImage(new Image(new File(Configs.BIKE_IMAGE_LIB + "/" + currentBike.getBikeImage()).toURI().toString()));
     	}
         bikeNameText.setText(currentBike.getName());
         bikeTypeText.setText(currentBike.getBikeType());
         bikeStatusText.setText(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? "Free" : "Rented");
-        bikeBatteryText.setText(currentBike.getCurrentBattery() + "%");
+//        bikeBatteryText.setText(currentBike.getCurrentBattery() + "%");
         bikeDistanceText.setText("30 km");
         bikeRentingText.setText(currentBike.getBikeRentalPrice() + " " + currentBike.getCurrency());
         bikeDepositText.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());

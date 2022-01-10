@@ -61,9 +61,9 @@ public class CreditCard {
 			throw new InvalidCardException("card number must not be null");
 		}
 		
-		if (!FunctionalUtils.contains(cardNumber, "^[0-9 ]")) {
-			throw new InvalidCardException("card number must not contains letters or special character");
-		}
+//		if (!FunctionalUtils.contains(cardNumber, "^[a-zA-Z0-9 ]")) {
+//			throw new InvalidCardException("card number must not contains letters or special character");
+//		}
 		
 		this.cardNumber = cardNumber;
 	}
