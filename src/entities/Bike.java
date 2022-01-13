@@ -1,5 +1,6 @@
 package entities;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -65,33 +66,42 @@ public abstract class Bike {
 	 * The current status of the bike
 	 */
 	private Configs.BIKE_STATUS currentStatus;
-
-	private int totalRentTime;
 	
-	private PropertyChangeSupport propertyChangeNotifier;
+	private Dock currentDock;
+
+	
+	private PropertyChangeSupport statusNotifier;
+	private PropertyChangeSupport dockNotifier;
 	
 	public Bike(String name, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
 		this.setName(name);
 		this.setLicensePlateCode(licensePlateCode);
 		this.setBikeImage(bikeImage);
 		this.setBikeBarCode(bikeBarcode);
-		this.setBikeRentalPrice(bikeRentalPrice);
 		this.setCurrency(currencyUnit);
 		this.setDeposit(deposit);
 		this.setCreateDate(createDate);
-		this.propertyChangeNotifier = new PropertyChangeSupport(this);
+		this.statusNotifier = new PropertyChangeSupport(this);
+		this.dockNotifier = new PropertyChangeSupport(this);
 	}
 	
-	public void addObserver(PropertyChangeListener pcl) {
-		this.propertyChangeNotifier.addPropertyChangeListener(pcl);
+	public void addStatusObserver(PropertyChangeListener pcl) {
+		this.statusNotifier.addPropertyChangeListener(pcl);
 	}
 	
-	public void removeObserver(PropertyChangeListener pcl) {
-		this.propertyChangeNotifier.removePropertyChangeListener(pcl);
+	public void removeStatusObserver(PropertyChangeListener pcl) {
+		this.statusNotifier.removePropertyChangeListener(pcl);
+	}
+	
+	public void addDockObserver(PropertyChangeListener pcl) {
+		this.dockNotifier.addPropertyChangeListener(pcl);
 	}
 
+	public void removeDockObserver(PropertyChangeListener pcl) {
+		this.dockNotifier.removePropertyChangeListener(pcl);
+	}
 	public String getName() {
 		return name;
 	}
@@ -119,8 +129,10 @@ public abstract class Bike {
 		return bikeType.toString();
 	}
 
-	protected void setBikeType(Configs.BikeType bikeType) throws InvalidEcoBikeInformationException {		
+	protected void setBikeType(Configs.BikeType bikeType) throws InvalidEcoBikeInformationException {				
+		this.statusNotifier.firePropertyChange("bikeType", this.bikeType, bikeType);
 		this.bikeType = bikeType;
+		this.bikeRentalPrice = Configs.chargeTimeIntervalCost * Configs.chargeMultiplierDictionary.get(bikeType);
 	}
 	
 
@@ -159,12 +171,6 @@ public abstract class Bike {
 		return bikeRentalPrice;
 	}
 
-	private void setBikeRentalPrice(double bikeRentalPrice) throws InvalidEcoBikeInformationException {
-		if(bikeRentalPrice <= 0) {
-			throw new InvalidEcoBikeInformationException("bike rental price must be greater than 0");
-		}
-		this.bikeRentalPrice = bikeRentalPrice;
-	}
 
 	public double getDeposit() {
 		return deposit;
@@ -198,18 +204,25 @@ public abstract class Bike {
 	}
 
 	public void setCurrentStatus(Configs.BIKE_STATUS currentStatus) {
-		this.propertyChangeNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
+		this.statusNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
 		this.currentStatus = currentStatus;
 	}
-
-	public int getTotalRentTime() {
-		return totalRentTime;
-	}
-
-	public void setTotalRentTime(int totalRentTime) {
-		this.totalRentTime = totalRentTime;
+	
+	public void goToDock(Dock dock) {
+		this.currentDock = dock;
+		System.out.println("Im added to dock " + this.currentDock.getName());
+		this.addDockObserver(dock);
+		dock.addBikeToDock(this);
+		this.setCurrentStatus(Configs.BIKE_STATUS.FREE);
+		this.dockNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
 	}
 	
+	public void getOutOfDock() {
+		this.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
+		this.currentDock.removeBikeFromDock(this);
+		this.removeDockObserver(this.currentDock);
+		this.currentDock = null;
+	}
 	
 	// return a JSON string containing information about the string
 	public String toString(){
@@ -228,5 +241,9 @@ public abstract class Bike {
 
 	public void setCreator(String creator) {
 		this.creator = creator;
+	}
+	
+	public Dock getCurrentDock() {
+		return this.currentDock;
 	}
 }

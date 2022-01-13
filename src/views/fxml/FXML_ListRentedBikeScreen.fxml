@@ -13,14 +13,14 @@
             <Image url="@../../../detailed_design/interface_design/images/icon/ecobike_logo_transparent.png" />
          </image>
       </ImageView>
-      <Label layoutX="128.0" layoutY="69.0" text="Select dock to return bike">
+      <Label layoutX="128.0" layoutY="69.0" text="Select bike to return">
          <font>
             <Font name="Segoe UI Bold" size="24.0" />
          </font>
       </Label>
       <ScrollPane layoutX="28.0" layoutY="138.0" prefHeight="358.0" prefWidth="444.0">
          <content>
-            <VBox fx:id="dockVBox" prefHeight="343.0" prefWidth="430.0" />
+            <VBox fx:id="bikeVBox" prefHeight="343.0" prefWidth="430.0" />
          </content>
       </ScrollPane>
    </children>

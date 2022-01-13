@@ -15,6 +15,7 @@ import controllers.RentBikeController;
 import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
+import entities.Dock;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
@@ -64,19 +65,21 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
      */
     
     private Bike bikeToRent;
+    private Dock dockToReturn;
     
     private PayForRentScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
 //        initialize();
     }
     
-    public static PayForRentScreenHandler getPayForRentScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
+    public static PayForRentScreenHandler getPayForRentScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike, Dock dock) throws IOException {
     	if (paymentScreenHandler == null) {
     		paymentScreenHandler = new PayForRentScreenHandler(stage, screenPath);
     		paymentScreenHandler.setScreenTitle("Register payment method");
     	}
     	if (bike != null) {
     		paymentScreenHandler.bikeToRent = bike;
+    		paymentScreenHandler.dockToReturn = dock;
     		paymentScreenHandler.renderBikeRentInformation();
     		
     	}
@@ -96,7 +99,7 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     	confirmPaymentButton.setOnMouseClicked(e->{
 			try {
 				confirmPaymentMethod();
-			} catch (EcoBikeException | SQLException | IOException e1) {
+			} catch (EcoBikeException | SQLException | IOException | ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -128,14 +131,16 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
      * @throws IOException 
      * @throws SQLException 
      * @throws EcoBikeException 
+     * @throws ParseException 
      */
-    public void confirmPaymentMethod() throws EcoBikeException, SQLException, IOException {
+    public void confirmPaymentMethod() throws EcoBikeException, SQLException, IOException, ParseException {
     	if(validateInput()) {
     		System.out.println("Confirm successfully");
     		CreditCard card = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "ACB", securityCode.getText(), expirationDate.getText());
-    		if (RentBikeController.getRentBikeServiceController(null).returnBike(bikeToRent, card)) {
+    		if (RentBikeController.getRentBikeServiceController(null).returnBike(bikeToRent, dockToReturn, card)) {
     			PopupScreen.success("Return bike successfully");    			
-    			this.stage.hide();
+    			InvoiceScreenHandler invoiceScreen = InvoiceScreenHandler.getInvoiceScreenHandler(this.stage, this, RentBikeController.getRentBikeServiceController(null).getInvoice()); 
+    			invoiceScreen.show();
     		} else {
     			PopupScreen.error("Cannot perform transaction for paying rental");
     		}

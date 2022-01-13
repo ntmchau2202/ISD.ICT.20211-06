@@ -53,7 +53,7 @@ public class InterbankController {
 //		PaymentTransaction transaction = new PaymentTransaction(tranResp.getTransactionID(), tranResp.getCardCode(), tranResp.getAmount(), tranResp.getTransactionContent());
 		
 		// this is for testing, since the api is daed
-		PaymentTransaction transaction = new PaymentTransaction("123", "ict_group6_2021", amount, content);
+		PaymentTransaction transaction = new PaymentTransaction(123, "ict_group6_2021", amount, content);
 		return transaction;
 	}
 	
@@ -72,7 +72,7 @@ public class InterbankController {
 //			throw excpt;
 //		}
 //		PaymentTransaction transaction = new PaymentTransaction(tranResp.getTransactionID(), tranResp.getCardCode(), tranResp.getAmount(), tranResp.getTransactionContent());
-		PaymentTransaction transaction = new PaymentTransaction("123", "ict_group6_2021", amount, content);
+		PaymentTransaction transaction = new PaymentTransaction(123, "ict_group6_2021", amount, content);
 		return transaction;
 	}
 	
@@ -90,7 +90,7 @@ public class InterbankController {
 //			throw excpt;
 //		}
 //		PaymentTransaction transaction = new PaymentTransaction(tranResp.getTransactionID(), tranResp.getCardCode(), tranResp.getAmount(), tranResp.getTransactionContent());
-		PaymentTransaction transaction = new PaymentTransaction("123", "ict_group6_2021", amount, content);
+		PaymentTransaction transaction = new PaymentTransaction(123, "ict_group6_2021", amount, content);
 		return transaction;
 	}
 	

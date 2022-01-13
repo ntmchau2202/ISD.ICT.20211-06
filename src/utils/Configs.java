@@ -61,6 +61,10 @@ public class Configs {
     public static final String INVOICE_SCREEN_PATH = "/views/fxml/FXML_InvoiceScreen.fxml";
 	public static final String BIKE_IN_DOCK_PATH = "/views/fxml/FXML_BikeInDock.fxml";
 	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
+	public static final String SELECT_DOCK_SCREEN_PATH = "/views/fxml/FXML_ListDockScreen.fmxl";
+	public static final String DOCK_FOR_RETURN_SCREEN_PATH = "/views/fxml/FXML_DockForReturn.fxml";
+	public static final String LIST_RENTED_BIKE_SCREEN_PATH = "/views/fxml/FXML_ListRentedBikeScreen.fxml";
+	public static final String BIKE_TO_RETURN_SCREEN_PATH = "/views/fxml/FXML_BikeToReturn.fxml";
 
 
 	public enum BIKE_STATUS {

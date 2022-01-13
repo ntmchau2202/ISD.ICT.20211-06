@@ -3,6 +3,7 @@ package entities;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.Date;
 
 public class TimeCounter implements Runnable {
 	private boolean activate;
@@ -26,18 +27,22 @@ public class TimeCounter implements Runnable {
 		
 	}
 	
-	public LocalTime startCounter() {
+	public Date startCounter() {
 		this.activate = true;
-		return LocalTime.now();
+		return Calendar.getInstance().getTime();
 	}
 	
-	public LocalTime stopCounter() {
+	public Date stopCounter() {
 		this.activate = false;
-		return LocalTime.now();
+		return Calendar.getInstance().getTime();
 	}
 	
 	public int getCountedTime() {
 		return this.time;
+	}
+	
+	public void resetCounter() {
+		this.time = 0;
 	}
 
 }

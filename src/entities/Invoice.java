@@ -3,7 +3,9 @@ package entities;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 
@@ -17,12 +19,14 @@ public class Invoice {
 	/**
 	 * The id of the invoice
 	 */
-	private String invoiceID;
+	private int invoiceID;
+	
+	private Date dateIssued;
 	
 	/**
 	 * The barcode of the bike customers rent
 	 */
-	private String bikeBarCode;
+	private Bike bike;
 	
 	private ArrayList<PaymentTransaction> listTransaction;
 	
@@ -34,12 +38,14 @@ public class Invoice {
 	/**
 	 * The time customers begin to rent bike 
 	 */
-	private Time startTime;
+	private Date startTime;
 	
 	/**
 	 * The time customers return bike
 	 */
-	private Time endTime;
+	private Date endTime;
+	
+	private int totalRentTime;
 	
 	/**
 	 * The total money customers have to pay including sub-total and VAT
@@ -60,24 +66,46 @@ public class Invoice {
 		listTransaction = new ArrayList<PaymentTransaction>();
 	}
 
-	public Invoice(String invoiceID, String bikeBarCode, String startTime,
-			String endTime) throws InvalidEcoBikeInformationException {
+	public Invoice(int invoiceID, Bike bike, Date startTime, Date endTime, int totalRentTime) throws InvalidEcoBikeInformationException {
 		listTransaction = new ArrayList<PaymentTransaction>();
-		this.bikeBarCode = bikeBarCode;
-		this.setStartTime(startTime);
-		this.setEndTime(endTime);
+		this.setInvoiceID(invoiceID);
+		this.setBike(bike);
+		this.setTotalRentTime(totalRentTime);
+		this.dateIssued = Calendar.getInstance().getTime();
+		this.rentID = -1;
+	}
+	
+	public String getIssuedDate() {
+		return this.dateIssued.toString();
+	}
+	
+	private void setTotalRentTime(int time) {
+		this.totalRentTime = time;
+	}
+	
+	public int getTotalRentTime() {
+		return this.totalRentTime;
+	}
+	
+	private void setBike(Bike bike) {
+		this.bike = bike;
 	}
 	
 	public void addTransaction(PaymentTransaction transaction) {
 		if (this.listTransaction.contains(transaction)) {
+			System.out.println("Hey the transaction is duplicated!:" + transaction.getTransactionId());
 			return;
 		}
 		this.listTransaction.add(transaction);
+		if (this.rentID == -1) {
+			this.rentID = transaction.getRentID();
+		}
+		this.setTotal();
 	}
 	
 	public void removeTransaction(PaymentTransaction transaction) {
 		if (this.listTransaction.contains(transaction)) {
-			this.listTransaction.remove(transaction);			
+			this.listTransaction.remove(transaction);				
 		}
 	}
 	
@@ -85,12 +113,12 @@ public class Invoice {
 		return this.listTransaction;
 	}
 
-	public String getInvoiceID() {
+	public int getInvoiceID() {
 		return invoiceID;
 	}
 
-	public String getBikeBarcode() {
-		return bikeBarCode;
+	public Bike getBike() {
+		return this.bike;
 	}
 
 	public double getDeposit() {
@@ -101,53 +129,34 @@ public class Invoice {
 		this.deposit = deposit;
 	}
 
-	public Time getStartTime() {
+	public Date getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) throws InvalidEcoBikeInformationException {
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
-			Date date = dateFormat.parse(startTime);
-			this.startTime = new Time(date.getTime());
-		} catch (Exception e) {
-			throw new InvalidEcoBikeInformationException("invalid date format");
-		}
+	public void setStartTime(Date startTime) throws InvalidEcoBikeInformationException {
+		this.startTime = startTime;
 	}
 
-	public Time getEndTime() {
-		return endTime;
+	public Date getEndTime() {
+		return this.endTime;
 	}
 
-	public void setEndTime(String endTime) throws InvalidEcoBikeInformationException {
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");	
-			Date date = dateFormat.parse(endTime);
-			Time tmpEnd = new Time(date.getTime());
-			if (tmpEnd.getTime() < this.startTime.getTime()) {
-				throw new InvalidEcoBikeInformationException("end time must be later than start time");
-			}
-			this.endTime = tmpEnd;
-		} catch (Exception e) {
-			throw new InvalidEcoBikeInformationException("invalid date format");
-		}
+	public void setEndTime(Date endTime) throws InvalidEcoBikeInformationException {
+		this.endTime = endTime;
 	}
-
-	public int getTotalRentTime() {
-		
-		return (int)endTime.getTime()- (int)startTime.getTime();
-	}
-
 
 	public double getTotal() {
 		return total;
 	}
 
-	public void setTotal(double total) {
-		this.total = total;
+	private void setTotal() {
+		this.total = 0;
+		for (PaymentTransaction trans : this.listTransaction) {
+			this.total += trans.getAmount();
+		}
 	}
 
-	public void setInvoiceID(String invoiceID) {
+	public void setInvoiceID(int invoiceID) {
 		this.invoiceID = invoiceID;
 	}
 	

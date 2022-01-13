@@ -21,10 +21,11 @@ import utils.JSONUtils;
 public class NormalBike extends Bike{
 	
 	public NormalBike(String name, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
-		super(name, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice, currencyUnit, deposit, createDate);
+		super(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
 		this.setBikeType(Configs.BikeType.NormalBike);
+//		this.setBikeRentalPrice(Configs.chargeTimeIntervalCost * Configs.chargeMultiplierDictionary.get(Configs.getBikeType(this.getBikeType())));
 	}		
 }
 

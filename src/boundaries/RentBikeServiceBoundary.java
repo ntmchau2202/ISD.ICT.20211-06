@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import controllers.RentBikeController;
 import entities.Bike;
+import entities.Dock;
 import entities.NormalBike;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
@@ -42,8 +43,8 @@ public class RentBikeServiceBoundary implements RentBikeServiceInterface {
 		paymentScreenHandler.show();
 	}
 	
-	public void returnBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException {
-		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYING_FOR_RENTAL_SCREEN_PATH, this.prevScreen, bike);
+	public void returnBike(Bike bike, Dock dock) throws RentBikeException, EcoBikeUndefinedException, IOException {
+		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYING_FOR_RENTAL_SCREEN_PATH, this.prevScreen, bike, dock);
 		paymentScreenHandler.show();
 	}
 	

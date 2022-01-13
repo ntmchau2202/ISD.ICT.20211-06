@@ -8,9 +8,9 @@ public class EBike extends Bike {
 	private double battery;
 	
 	public EBike(String name, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
-		super(name, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice, currencyUnit, deposit, createDate);
+		super(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
 		this.setBikeType(Configs.BikeType.EBike);
 	}	
 

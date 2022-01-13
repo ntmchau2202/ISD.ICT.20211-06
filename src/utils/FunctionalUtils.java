@@ -4,9 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date; 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -48,10 +49,10 @@ public class FunctionalUtils {
 	
 	public static Date stringToDate(String dateString) throws EcoBikeException {
 		try {
-		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy", Locale.ENGLISH);
 		    Date parsedDate = (Date) dateFormat.parse(dateString);
-		    return parsedDate;
-		} catch(Exception e) { 
+		    return parsedDate;	
+		} catch (Exception e) { 
 			throw new EcoBikeException(e.getMessage());
 		}
 	}
@@ -74,18 +75,18 @@ public class FunctionalUtils {
 	}
 	
 	public static Bike getBikeWithInformation(String name, String bikeType, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) {
 		Bike b = null;
 		System.out.println(bikeType);
 		try {			
 			if (bikeType.equalsIgnoreCase("NormalBike")) {
-				b = new NormalBike(name, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice, currencyUnit, deposit, createDate);
+				b = new NormalBike(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
 				return b;
 			} 
 			
 			if (bikeType.equalsIgnoreCase("EBike")) {
-				b = new EBike(name, licensePlateCode, bikeImage, bikeBarcode, bikeRentalPrice, currencyUnit, deposit, createDate);
+				b = new EBike(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
 				return b;
 			}
 		} catch (Exception e) {

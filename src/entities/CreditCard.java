@@ -41,7 +41,7 @@ public class CreditCard {
 	/**
 	 * The expired date of the card in defined time format
 	 */
-	private String expirationDate;
+	private java.util.Date expirationDate;
 	
 	
 	public CreditCard(String cardHolderName,String cardNumber, String issueBank, String cardSecurity, String expirationDate) {
@@ -94,18 +94,16 @@ public class CreditCard {
 		this.issueBank = issueBank;
 	}
 	public String getExpirationDate() {
-		return expirationDate;
+		DateFormat dateFormatter = new SimpleDateFormat("mm/yy");
+		return dateFormatter.format(expirationDate);
 	}
 	public void setExpirationDate(String expirationDate) {
 		// TODO: need to redo this
-//		try {
-//			DateFormat dateFormat = new SimpleDateFormat("mm/yy");	
-//			Date date = (Date) dateFormat.parse(expirationDate);
-//			this.expirationDate = new Date(date.getTime());
-//		} catch (Exception e) {
-//			throw new InvalidCardException("invalid expiration date");
-//		}
-		this.expirationDate = expirationDate;
+		try {
+			this.expirationDate = new SimpleDateFormat("mm/yy").parse(expirationDate);
+		} catch (Exception e) {
+			throw new InvalidCardException("invalid expiration date");
+		}
 	}
 	public String getCardSecurity() {
 		return cardSecurity;

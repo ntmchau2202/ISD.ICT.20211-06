@@ -1,6 +1,7 @@
 package utils;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -34,26 +35,16 @@ public class JSONUtils {
 		obj.put("deposit_price", bike.getDeposit());
 		obj.put("create_date", bike.getCreateDate().toString());
 		obj.put("current_status", bike.getCurrentStatus().toString());
-		obj.put("total_rent_time", bike.getTotalRentTime());
 		return obj.toString();
 	}
 	
-	public static Bike toBike(String bikeStr) throws InvalidEcoBikeInformationException, JSONException {
+	public static Bike toBike(String bikeStr) throws JSONException, EcoBikeException, SQLException {
 		JSONObject result = new JSONObject(bikeStr);
 		if (!result.has("bike_barcode")) {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Bike");
 		}
 		// TODO: finish constructor here
-		Bike bikeRes = null;
-//		Bike bikeRes = new Bike(result.getString("name"), 
-//				result.getString("bike_type"),
-//				result.getString("license_plate_code"),
-//				result.getString("bike_image"), 
-//				result.getInt("bike_barcode"), 
-//				result.getDouble("bike_rental_price"),
-//				result.getString("currency_unit"),
-//				result.getDouble("deposit_price"),  
-//				result.getString("create_date"));
+		Bike bikeRes = DBUtils.getBikeByBarcode(result.getString("bike_barcode"));
 		String bikeStatus = result.getString("current_status");
 		Configs.BIKE_STATUS bikeStat;
 		if(bikeStatus.equalsIgnoreCase("FREE")) {
@@ -64,7 +55,6 @@ public class JSONUtils {
 			throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 		}
 		bikeRes.setCurrentStatus(bikeStat);
-		bikeRes.setTotalRentTime(result.getInt("total_rent_time"));
 		return bikeRes;
 	}
 	
@@ -80,20 +70,12 @@ public class JSONUtils {
 		return obj.toString();
 	}
 	
-	public static Dock toDock(String dockStr) throws InvalidEcoBikeInformationException, JSONException {
+	public static Dock toDock(String dockStr) throws JSONException, SQLException, EcoBikeException {
 		JSONObject result = new JSONObject(dockStr);
 		if (!result.has("dock_id")) {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Dock");
 		}
-		return null;
-		// TODO: return properly
-//		return new Dock(result.getString("name"), 
-//				result.getInt("dock_id"), 
-//				result.getString("dock_address"), 
-//				result.getDouble("dock_area"),
-//				result.getInt("num_available_bike"),
-//				result.getInt("num_free_dock"),
-//				result.getString("dock_image"));
+		return DBUtils.getDockInformationByID(result.getInt("dock_id"));
 	}
 	
 	public static String serializeInvoiceInformation(Invoice invoice) throws JSONException {
@@ -121,21 +103,21 @@ public class JSONUtils {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Invoice");
 		}
 		Invoice invoice = new Invoice();
-		invoice.setInvoiceID(result.getString("invoice_id"));
+		invoice.setInvoiceID(result.getInt("invoice_id"));
 		invoice.setRentID(result.getInt("rent_id"));
 		JSONArray transArr = result.getJSONArray("transactions");
 		for(int i=0;i<transArr.length();i++) {
 			PaymentTransaction transaction = new PaymentTransaction();
 			JSONObject jsonTrans = (JSONObject) transArr.get(i);
-			transaction.setTransactionId(jsonTrans.getString("transaction_id"));
+			transaction.setTransactionId(jsonTrans.getInt("transaction_id"));
 			transaction.setAmount(jsonTrans.getInt("transaction_amount"));
 			transaction.setContent(jsonTrans.getString("transaction_detail"));
 			transaction.setCreditCardNumber(jsonTrans.getString("creditcard_number"));
 			transaction.setTransactionTime(jsonTrans.getString("transaction_time"));
 			invoice.addTransaction(transaction);
 		}
-		invoice.setStartTime(result.getString("start_time"));
-		invoice.setEndTime(result.getString("end_time"));
+		invoice.setStartTime(FunctionalUtils.stringToDate(result.getString("start_time")));
+		invoice.setEndTime(FunctionalUtils.stringToDate(result.getString("end_time")));
 		return invoice;
 	}
 	
@@ -158,7 +140,7 @@ public class JSONUtils {
 		transaction.setAmount(result.getDouble("transaction_amount"));
 		transaction.setContent(result.getString("transaction_detail"));
 		transaction.setCreditCardNumber(result.getString("creditcard_number"));
-		transaction.setTransactionId(result.getString("transaction_id"));
+		transaction.setTransactionId(result.getInt("transaction_id"));
 		transaction.setTransactionTime(result.getString("transaction_time"));
 		return transaction;
 	}

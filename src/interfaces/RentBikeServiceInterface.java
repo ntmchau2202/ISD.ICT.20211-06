@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
+import entities.Dock;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
@@ -35,7 +36,7 @@ public interface RentBikeServiceInterface {
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 * @throws IOException 
 	 */
-	public void returnBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException;
+	public void returnBike(Bike bike, Dock dock) throws RentBikeException, EcoBikeUndefinedException, IOException;
 	
 	/**
 	 * Calls the Pause bike rental sequence of operations for customers to pause bike rental
