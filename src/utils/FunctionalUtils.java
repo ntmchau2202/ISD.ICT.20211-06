@@ -78,7 +78,6 @@ public class FunctionalUtils {
 			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) {
 		Bike b = null;
-		System.out.println(bikeType);
 		try {			
 			if (bikeType.equalsIgnoreCase("NormalBike")) {
 				b = new NormalBike(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);

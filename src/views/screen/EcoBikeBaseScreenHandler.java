@@ -30,7 +30,6 @@ public abstract class EcoBikeBaseScreenHandler {
 
 
     public EcoBikeBaseScreenHandler(Stage newStage, String screenPath) throws IOException {
-    	System.out.println("Going to use the path:"+screenPath);
         this.loader = new FXMLLoader(getClass().getResource(screenPath));
         this.loader.setController(this);
 

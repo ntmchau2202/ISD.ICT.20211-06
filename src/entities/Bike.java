@@ -210,7 +210,6 @@ public abstract class Bike {
 	
 	public void goToDock(Dock dock) {
 		this.currentDock = dock;
-		System.out.println("Im added to dock " + this.currentDock.getName());
 		this.addDockObserver(dock);
 		dock.addBikeToDock(this);
 		this.setCurrentStatus(Configs.BIKE_STATUS.FREE);

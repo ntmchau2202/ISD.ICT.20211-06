@@ -72,7 +72,6 @@ public class Dock implements PropertyChangeListener {
 	}
 
 	public void addObserver(PropertyChangeListener pcl) {
-		System.out.println("An observer added: " + pcl.getClass());
 		this.propertyNotifier.addPropertyChangeListener(pcl);
 	}
 	
@@ -205,7 +204,6 @@ public class Dock implements PropertyChangeListener {
 			this.numDockSpaceFree -= 1;
 			this.numAvailableBike += 1;
 			this.propertyNotifier.firePropertyChange("numDockSpaceFree", this.numDockSpaceFree + 1, this.numDockSpaceFree);	
-			System.out.println("Dock "+this.getName()+ " added bike "+bike.getName());
 		}
 	}
 	
@@ -219,7 +217,6 @@ public class Dock implements PropertyChangeListener {
 			this.numDockSpaceFree += 1;
 			this.numAvailableBike -= 1;
 			this.propertyNotifier.firePropertyChange("numDockSpaceFree", this.numDockSpaceFree - 1, this.bikeInDock);
-			System.out.println("Dock "+this.getName()+" removed bike" + bike.getName());
 		}
 	}
 	

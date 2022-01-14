@@ -31,7 +31,6 @@ public class EcoBikeInformationController extends EcoBikeBaseController implemen
 
 	public static EcoBikeInformationController getEcoBikeInformationController() throws SQLException, EcoBikeException {
 		if (ecoBikeInformationController == null) {
-			System.out.println("Information controller initialization...");
 			ecoBikeInformationController = new EcoBikeInformationController();
 			ecoBikeInformationController.listAllDocks = DBUtils.getAllDock();
 			// add all free bike

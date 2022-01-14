@@ -30,18 +30,29 @@ public class RentBikeController extends EcoBikeBaseController {
 	@SuppressWarnings("unused")
 	private static int invoiceCounter = 1;
 	private InterbankInterface interbankSystem;
-	private TimeCounter timeCounter;
-	private Date startTime, stopTime;
-	private int rentID, timeRented;
-	private Bike currentBike;
-	private Invoice invoice;
-	private ArrayList<PaymentTransaction> transactionList;
 	private static RentBikeController rentBikeServiceController;
+//	private TimeCounter timeCounter; // should make an array of rent counter here? 
+//	/**
+//	 * BikeTracker
+//	 * - TimeCounter:
+//	 * - thread
+//	 * - bike
+//	 * - start time, stop time
+//	 * - rent id, time rented
+//	 * - transaction list
+//	 */
+//	private Date startTime, stopTime;
+//	private int rentID, timeRented;
+//	private Bike currentBike;
+//	private Invoice invoice;
+//	private ArrayList<PaymentTransaction> transactionList;
+//	private boolean isAllowed;
 
 	public static RentBikeController getRentBikeServiceController(InterbankInterface interbankSystem){
 		if (rentBikeServiceController == null) {
 			rentBikeServiceController = new RentBikeController();
 			rentBikeServiceController.transactionList = new ArrayList<PaymentTransaction>();
+			rentBikeServiceController.isAllowed = true;
 		}
 		if (interbankSystem != null) {
 			rentBikeServiceController.interbankSystem = interbankSystem;
@@ -51,7 +62,7 @@ public class RentBikeController extends EcoBikeBaseController {
 	/**
 	 * Initialize the controller for EcoBike rent bike service
 	 */
-	public RentBikeController() {
+	private RentBikeController() {
 		this.timeCounter = new TimeCounter();
 	}
 
@@ -63,6 +74,11 @@ public class RentBikeController extends EcoBikeBaseController {
 	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
 	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
 	 */
+	
+	public boolean isAllowedToRent() {
+		return this.isAllowed;
+	}
+	
 	public boolean rentBike(Bike bikeToRent, CreditCard card) throws EcoBikeException, SQLException, IOException {
 		
 		// NOTE: Since we cannot connect to the service
@@ -94,7 +110,9 @@ public class RentBikeController extends EcoBikeBaseController {
 		System.out.println("Added transaction for rent bike:"+ transaction.getTransactionId());
 		System.out.println("Transaction list size:"+ transactionList.size());
 		DBUtils.changeBikeStatus(this.currentBike.getBikeBarCode(), Configs.BIKE_STATUS.RENTED.toString());
+		DBUtils.removeBikeFromDock(this.currentBike.getBikeBarCode());
 		this.currentBike.getOutOfDock();
+		this.isAllowed = false;
 		return true;
 	}
 	
@@ -133,12 +151,33 @@ public class RentBikeController extends EcoBikeBaseController {
 	 * Start pausing bike rental process
 	 * @param bikeBarcode barCode of the bike to be rented
 	 */
-	public void pauseBikeRental() {
-		this.timeCounter.stopCounter();
-		this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.PAUSED);
+	public void pauseBikeRental(Bike bike) {
+		if (this.currentBike != null) {
+			// we are currently couting
+			Date pauseTime = this.timeCounter.stopCounter();
+			this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.PAUSED);
+			// do a little calculation
+			long period =  (this.startTime.getTime() - pauseTime.getTime() / (1000 * 60)) % 60;
+			
+			// save period to database;
+		} else {
+			// retrieve start time from database
+			// take current time
+			// do a minus
+			// save to database;
+			// remember to save the bike to currentBike
+		}
 	}
 	
 	public void resumeBikeRental() {
+		/**
+		 * if currentBike is not null
+		 * start counter again and set current status
+		 * else, retrieve rented period from database
+		 * set it to time rented 
+		 * and continue counting
+		 * remember to save the bike to currentBike
+		 */
 		this.timeCounter.startCounter();
 		this.currentBike.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
 	}
@@ -183,8 +222,7 @@ public class RentBikeController extends EcoBikeBaseController {
 		this.createInvoice();
 		DBUtils.addInvoice(invoice);
 		DBUtils.changeBikeStatus(bikeToRent.getBikeBarCode(), Configs.BIKE_STATUS.FREE.toString());
-		this.currentBike.goToDock(dockToReturn); // TODO: Gotta add a dock, else the bike will go to nowhere
-		// TODO: reset everything
+		this.currentBike.goToDock(dockToReturn); 
 		this.reset();
 		return true;
 	}
@@ -222,5 +260,6 @@ public class RentBikeController extends EcoBikeBaseController {
 		this.transactionList.clear();
 		this.currentBike = null;
 		this.timeCounter.resetCounter();
+		this.isAllowed = true;
 	}
 }

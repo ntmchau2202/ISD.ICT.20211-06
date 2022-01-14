@@ -102,8 +102,7 @@ public class DBUtils {
 				result.getInt("dock_id"), 
 				result.getString("dock_address"), 
 				result.getDouble("dock_area"),
-				result.getInt("num_available_bike") +
-				result.getInt("num_free_dock"),
+				result.getInt("num_dock"),
 				result.getString("dock_image"));
 		ArrayList<Bike> listBike = getAllBikeByDockId(result.getInt("dock_id"));
 		for (Bike b: listBike) {
@@ -319,6 +318,7 @@ public class DBUtils {
 			}
 			
 			String bikeStatus = result.getString("current_status");
+//			System.out.println("Status of " + bikeRes.getName() + " is:" + bikeStatus);
 			Configs.BIKE_STATUS bikeStat;
 			if(bikeStatus.equalsIgnoreCase("FREE")) {
 				bikeStat = Configs.BIKE_STATUS.FREE;
@@ -328,15 +328,18 @@ public class DBUtils {
 				throw new InvalidEcoBikeInformationException("invalid status of bike in database");
 			}
 			bikeRes.setCurrentStatus(bikeStat);
+			bikes.add(bikeRes);
 		}
 		return bikes;
 	}
 	
 	public static ArrayList<Bike> getAllRentedBike() throws SQLException, EcoBikeException {
+		System.out.println("Get into getAllRentedBike");
 		ArrayList<Bike> allBikes = getAllBike();
 		ArrayList<Bike> result = new ArrayList<Bike>();
 		for (Bike b : allBikes) {
 			if (b.getCurrentStatus() == Configs.BIKE_STATUS.RENTED) {
+				System.out.println("There is a bike in rent: " + b.getName());
 				result.add(b);
 			}
 		}
@@ -352,8 +355,7 @@ public class DBUtils {
 				result.getInt("dock_id"), 
 				result.getString("dock_address"), 
 				result.getDouble("dock_area"),
-				result.getInt("num_available_bike") + 
-				result.getInt("num_free_dock"),
+				result.getInt("num_dock"),
 				result.getString("dock_image"));
 		ArrayList<Bike> listBike = getAllBikeByDockId(result.getInt("dock_id"));
 		for (Bike b: listBike) {
@@ -372,8 +374,7 @@ public class DBUtils {
 					result.getInt("dock_id"), 
 					result.getString("dock_address"), 
 					result.getDouble("dock_area"),
-					result.getInt("num_available_bike") +
-					result.getInt("num_free_dock"),
+					result.getInt("num_dock"),
 					result.getString("dock_image"));
 			ArrayList<Bike> listBike = getAllBikeByDockId(result.getInt("dock_id"));
 			for (Bike b: listBike) {
@@ -417,6 +418,14 @@ public class DBUtils {
 		sqlStm.setString(1, newStatus);
 		sqlStm.setString(2, bikeBarcode);
 		sqlStm.executeUpdate();
+	}
+	
+	public static void removeBikeFromDock(String bikeBarcode) throws SQLException, EcoBikeException {
+		String stm = "UPDATE BikeInDock SET dock_id=? WHERE bike_barcode=?";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setInt(1, 0);
+		sqlStm.setString(2, bikeBarcode);
+		sqlStm.execute();
 	}
 	
 	public static int getCurrentRentTimeByBikeBarcode(String bikeBarcode) throws SQLException, EcoBikeException, ParseException {
@@ -522,6 +531,10 @@ public class DBUtils {
 		ResultSet result = sqlStm.executeQuery();
 		float battery = result.getFloat("current_battery");
 		return battery;
+	}
+	
+	public static void saveRentPeriod(String bikeBarcode, int rentID) {
+		
 	}
 }
 

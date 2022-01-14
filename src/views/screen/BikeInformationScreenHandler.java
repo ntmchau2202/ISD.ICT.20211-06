@@ -186,8 +186,15 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         try {
             System.out.println("rent bike");
             RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.currentBike);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (EcoBikeException e) {
+            try {
+				PopupScreen.error(e.getMessage());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        } catch (Exception e1) {
+        	e1.printStackTrace();
         }
     }
 

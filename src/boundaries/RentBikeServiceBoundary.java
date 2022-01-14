@@ -39,6 +39,9 @@ public class RentBikeServiceBoundary implements RentBikeServiceInterface {
 		
 	}
 	public void rentBike(Bike bike) throws IOException, EcoBikeException, SQLException {
+		if (!RentBikeController.getRentBikeServiceController(null).isAllowedToRent()) {
+			throw new EcoBikeException("You cannot rent more than one bike at a time");
+		}
 		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(new Stage(), Configs.PAYING_FOR_DEPOSIT_SCREEN_PATH, this.prevScreen, bike);
 		paymentScreenHandler.show();
 	}
@@ -49,7 +52,7 @@ public class RentBikeServiceBoundary implements RentBikeServiceInterface {
 	}
 	
 	public void pauseBikeRental(Bike bike) throws EcoBikeException, SQLException {
-		RentBikeController.getRentBikeServiceController(null).pauseBikeRental();	
+		RentBikeController.getRentBikeServiceController(null).pauseBikeRental(bike);	
 	}
 	
 	public void resumeBikeRental(Bike bike) throws EcoBikeException, SQLException {
