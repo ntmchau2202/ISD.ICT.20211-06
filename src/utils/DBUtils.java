@@ -17,6 +17,7 @@ import java.util.List;
 
 import entities.NormalBike;
 import entities.Bike;
+import entities.BikeTracker;
 import entities.CreditCard;
 import entities.Customer;
 import entities.Dock;
@@ -421,9 +422,16 @@ public class DBUtils {
 	}
 	
 	public static void removeBikeFromDock(String bikeBarcode) throws SQLException, EcoBikeException {
-		String stm = "UPDATE BikeInDock SET dock_id=? WHERE bike_barcode=?";
+		String stm = "DELETE FROM BikeInDock WHERE bike_barcode=?";
 		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
-		sqlStm.setInt(1, 0);
+		sqlStm.setString(1, bikeBarcode);
+		sqlStm.execute();
+	}
+	
+	public static void addBikeToDock(String bikeBarcode, int dockID) throws SQLException, EcoBikeException {
+		String stm = "INSERT INTO BikeInDock(dock_id, bike_barcode) VALUES (?,?)";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setInt(1, dockID);
 		sqlStm.setString(2, bikeBarcode);
 		sqlStm.execute();
 	}
@@ -533,8 +541,50 @@ public class DBUtils {
 		return battery;
 	}
 	
-	public static void saveRentPeriod(String bikeBarcode, int rentID) {
-		
+	public static void saveRentPeriod(int rentID, int period) throws SQLException, EcoBikeException {
+		String stm = "UPDATE RentBike SET rent_period=? WHERE rent_id=?";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setInt(1, rentID);
+		sqlStm.setInt(2, period);
+		sqlStm.execute();
+	}
+	
+	public static int getCurrentRentPeriodOfBike(String bikeBarcode) throws SQLException, EcoBikeException {
+		String stm = "SELECT rent_period FROM RentBike WHERE bike_barcode=? ORDER BY rent_id DESC LIMIT 1";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setString(1, bikeBarcode);
+		ResultSet result = sqlStm.executeQuery();
+		return result.getInt("rent_period");
+	}
+	
+	public static BikeTracker getCurrentBikeRenting(Bike bike) throws SQLException, EcoBikeException {
+		System.out.println("Going to get current bike renting");
+		String stm = "SELECT * FROM RentBike WHERE bike_barcode=? ORDER BY rent_id DESC LIMIT 1";
+		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setString(1, bike.getBikeBarCode());
+		ResultSet resultI = sqlStm.executeQuery();
+		int period = resultI.getInt("rent_period");
+		int rentID = resultI.getInt("rent_id");
+		stm = "SELECT * FROM EcoBikeTransaction WHERE rent_id=?";
+		sqlStm = DBUtils.getConnection().prepareStatement(stm);
+		sqlStm.setInt(1, rentID);
+		ResultSet result = sqlStm.executeQuery();
+		BikeTracker tracker = new BikeTracker(bike, rentID);
+		tracker.setRentedTime(period);
+		tracker.setStartTime(resultI.getString("start_time"));
+		tracker.setActive(true);
+		System.out.println("Getting transaction");
+		while(result.next()) {
+			PaymentTransaction trans = new PaymentTransaction();
+			trans.setTransactionId(result.getInt("transaction_id"));
+			trans.setAmount(result.getFloat("transaction_amount"));
+			trans.setTransactionTime(result.getString("transaction_time"));
+			trans.setCreditCardNumber(result.getString("creditcard_number"));
+			trans.setRentID(result.getInt("rent_id"));
+			trans.setContent(result.getString("transaction_detail"));
+			tracker.addTransaction(trans);
+		}
+		return tracker;
 	}
 }
 

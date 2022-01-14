@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import boundaries.InterbankBoundary;
 import controllers.EcoBikeBaseController;
 import controllers.PaymentController;
 import controllers.RentBikeController;
@@ -16,6 +17,7 @@ import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import entities.Dock;
+import entities.Invoice;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
@@ -90,8 +92,8 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     private void renderBikeRentInformation() {
     	bikeName.setText(this.bikeToRent.getName());
     	bikeType.setText(this.bikeToRent.getBikeType());
-    	rentalTime.setText(Integer.toString(RentBikeController.getRentBikeServiceController(null).stopCountingRentTime())+" mins");
-    	rentalPrice.setText(Float.toString(RentBikeController.getRentBikeServiceController(null).getRentalFee()) + this.bikeToRent.getCurrency());
+    	rentalTime.setText(Integer.toString(RentBikeController.getRentBikeServiceController(null).pauseBikeRental(bikeToRent))+" mins");
+    	rentalPrice.setText(Float.toString(RentBikeController.getRentBikeServiceController(null).getRentalFee(bikeToRent)) + this.bikeToRent.getCurrency());
     }
     
     public void initialize() {
@@ -137,11 +139,12 @@ public class PayForRentScreenHandler extends EcoBikeBaseScreenHandler {
     	if(validateInput()) {
     		System.out.println("Confirm successfully");
     		CreditCard card = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "ACB", securityCode.getText(), expirationDate.getText());
-    		if (RentBikeController.getRentBikeServiceController(null).returnBike(bikeToRent, dockToReturn, card)) {
+    		Invoice invoice = RentBikeController.getRentBikeServiceController(new InterbankBoundary("ACB")).returnBike(bikeToRent, dockToReturn, card);
+    		if (invoice != null){
     			PopupScreen.success("Return bike successfully");    			
-    			InvoiceScreenHandler invoiceScreen = InvoiceScreenHandler.getInvoiceScreenHandler(this.stage, this, RentBikeController.getRentBikeServiceController(null).getInvoice()); 
+    			InvoiceScreenHandler invoiceScreen = InvoiceScreenHandler.getInvoiceScreenHandler(this.stage, this, invoice); 
     			invoiceScreen.show();
-    		} else {
+    		} else {	
     			PopupScreen.error("Cannot perform transaction for paying rental");
     		}
     	} else {

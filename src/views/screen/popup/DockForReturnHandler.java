@@ -61,9 +61,9 @@ public class DockForReturnHandler extends EcoBikeBaseScreenHandler {
         dockAddressTxt.setText(currentDock.getDockAddress() + "");
         availableSlotsTxt.setText(Integer.toString(currentDock.getNumDockSpaceFree()));
         if (currentDock.isOKToAddBike()) {
-        	returnBtn.setDisable(true);
-        } else {
         	returnBtn.setDisable(false);
+        } else {
+        	returnBtn.setDisable(true);
         }
         returnBtn.setOnMouseClicked(e -> {
         	try {

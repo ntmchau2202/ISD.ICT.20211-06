@@ -5,44 +5,28 @@ import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TimeCounter implements Runnable {
+public class TimeCounter {
 	private boolean activate;
-	private int time;
+	private Date start, end;
 	public TimeCounter() {
-		this.activate = true;
-		this.time = 0;
-	}
-	
-	@Override
-	public void run() {
-		System.out.println("Counter started");
-		while(activate) {
-			try {
-				Thread.sleep(1000*60);
-				time +=1;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
+		this.activate = false;
 	}
 	
 	public Date startCounter() {
-		this.activate = true;
-		return Calendar.getInstance().getTime();
+		if (!this.activate) {
+			this.activate = true;
+			start = Calendar.getInstance().getTime();
+		}
+		return start;
 	}
 	
 	public Date stopCounter() {
-		this.activate = false;
-		return Calendar.getInstance().getTime();
+		end = Calendar.getInstance().getTime();
+		return end;
 	}
 	
-	public int getCountedTime() {
-		return this.time;
-	}
-	
-	public void resetCounter() {
-		this.time = 0;
+	public void setActive(boolean active) {
+		this.activate = active;
 	}
 
 }

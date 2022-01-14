@@ -208,6 +208,7 @@ public class Dock implements PropertyChangeListener {
 	}
 	
 	public boolean isOKToAddBike() {
+		System.out.println("Num free space of dock " + this.getName() + " is:" + this.getNumDockSpaceFree());
 		return this.numDockSpaceFree > 0;
 	}
 	
