@@ -1,7 +1,5 @@
 package utils;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection; 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,25 +7,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import entities.NormalBike;
 import entities.Bike;
 import entities.BikeTracker;
 import entities.CreditCard;
-import entities.Customer;
 import entities.Dock;
-import entities.EBike;
 import entities.Invoice;
 import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 
-
+/**
+ * This class provides methods for connecting to the database, query information and do needed modifications
+ */
 public class DBUtils {
 	private static Connection connection;
 	
@@ -75,7 +70,6 @@ public class DBUtils {
 					result.getDate("create_date").toString()
 			);
 		} catch (IllegalArgumentException | SecurityException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -145,21 +139,6 @@ public class DBUtils {
 		return invoiceRes;		
 	}	
 	
-	public static Customer getCustomerInformation(int customerID) throws EcoBikeException, SQLException {
-		if (connection == null) {
-			getConnection();
-		}
-		PreparedStatement stm = connection.prepareStatement(
-				"SELECT * FROM Customer WHERE customer_id=?");
-		stm.setInt(1, customerID);
-		ResultSet result = stm.executeQuery();
-		Customer customerRes = new Customer(result.getString("customer_id"),
-				result.getString("customer_name"),
-				result.getString("customer_email")); 
-		return customerRes;
-	}
-	
-
 	public static PaymentTransaction getTransactionById(int transactionID) throws SQLException, EcoBikeException {
 		PreparedStatement stm = DBUtils.getConnection().prepareStatement(
 				"SELECT * FROM EcoBikeTransaction WHERE transaction_id=?");
@@ -212,7 +191,6 @@ public class DBUtils {
 					result.getDate("create_date").toString()
 			);
 		} catch (IllegalArgumentException | SecurityException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -264,7 +242,6 @@ public class DBUtils {
 						result.getDate("create_date").toString()
 				);
 			} catch (IllegalArgumentException | SecurityException | SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -314,12 +291,10 @@ public class DBUtils {
 						result.getDate("create_date").toString()
 				);
 			} catch (IllegalArgumentException | SecurityException | SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			String bikeStatus = result.getString("current_status");
-//			System.out.println("Status of " + bikeRes.getName() + " is:" + bikeStatus);
 			Configs.BIKE_STATUS bikeStat;
 			if(bikeStatus.equalsIgnoreCase("FREE")) {
 				bikeStat = Configs.BIKE_STATUS.FREE;
@@ -395,8 +370,6 @@ public class DBUtils {
 		sqlStm.setString(2, card.getCardNumber());
 		sqlStm.setString(3, card.getIssueBank());
 		sqlStm.setString(4, card.getCardSecurity());
-		// TODO: fix the expriration date
-//		sqlStm.setTime(5, card.getExpirationDate());
 		sqlStm.execute();
 	}
 	
@@ -455,7 +428,13 @@ public class DBUtils {
 		 return period;
 	}
 	
-	// return rent id
+	/**
+	 * Add a record of bike rental into database, leaving some fields for filling in the end of process
+	 * @param bikeBarcode The bike to be rented
+	 * @return ID of the rental, unique in the database
+	 * @throws SQLException
+	 * @throws EcoBikeException
+	 */
 	public static int addStartRentBikeRecord(String bikeBarcode) throws SQLException, EcoBikeException {
 		String stm = "INSERT INTO RentBike(bike_barcode, start_time)"
 				+ "VALUES (?,?)";
@@ -471,7 +450,14 @@ public class DBUtils {
 		return -1;	
 	}
 	
-	// return time rented
+	/**
+	 * Add end time of the rental and total rent time
+	 * @param rentID the rental ID, provided by the <b> addStartRentBikeRecord </b>method
+	 * @param rentPeriod the rent period. This can be different from the duration between start and end time
+	 * @throws SQLException
+	 * @throws EcoBikeException
+	 * @throws ParseException
+	 */
 	public static void addEndRentBikeRecord(int rentID, int rentPeriod) throws SQLException, EcoBikeException, ParseException {
 		String stm = "UPDATE RentBike SET end_time=? WHERE rent_id=?";
 		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
@@ -488,6 +474,14 @@ public class DBUtils {
 		sqlStm.execute();
 	}
 	
+	/**
+	 * Add transaction associating to a rental to the database
+	 * @param transaction transaction to be added
+	 * @param rentID rental ID associates to the transaction
+	 * @return
+	 * @throws SQLException
+	 * @throws EcoBikeException
+	 */
 	public static int addTransaction(PaymentTransaction transaction, int rentID) throws SQLException, EcoBikeException {
 		String stm = "INSERT INTO EcoBikeTransaction (transaction_amount, transaction_time, transaction_detail, creditcard_number, rent_id) VALUES (?,?,?,?,?)";
 		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm, Statement.RETURN_GENERATED_KEYS);
@@ -541,6 +535,13 @@ public class DBUtils {
 		return battery;
 	}
 	
+	/**
+	 * Update time the bike is rented up current moment
+	 * @param rentID The id of the rental
+	 * @param period rental time up to current moment
+	 * @throws SQLException
+	 * @throws EcoBikeException
+	 */
 	public static void saveRentPeriod(int rentID, int period) throws SQLException, EcoBikeException {
 		String stm = "UPDATE RentBike SET rent_period=? WHERE rent_id=?";
 		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
@@ -549,6 +550,13 @@ public class DBUtils {
 		sqlStm.execute();
 	}
 	
+	/**
+	 * Get current rental time of a bike
+	 * @param bikeBarcode the bike having rental time to be queried
+	 * @return time rented in minute
+	 * @throws SQLException
+	 * @throws EcoBikeException
+	 */
 	public static int getCurrentRentPeriodOfBike(String bikeBarcode) throws SQLException, EcoBikeException {
 		String stm = "SELECT rent_period FROM RentBike WHERE bike_barcode=? ORDER BY rent_id DESC LIMIT 1";
 		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
@@ -557,6 +565,14 @@ public class DBUtils {
 		return result.getInt("rent_period");
 	}
 	
+	/**
+	 * Get a bike tracker associate to a bike. This is useful for the case the application is restarted, 
+	 * when all trackers is deleted and connection to the database is reseted
+	 * @param bike the bike to create tracker
+	 * @return Tracker with rental information associate to the bike. The information is queried from the database
+	 * @throws SQLException
+	 * @throws EcoBikeException
+	 */
 	public static BikeTracker getCurrentBikeRenting(Bike bike) throws SQLException, EcoBikeException {
 		System.out.println("Going to get current bike renting");
 		String stm = "SELECT * FROM RentBike WHERE bike_barcode=? ORDER BY rent_id DESC LIMIT 1";

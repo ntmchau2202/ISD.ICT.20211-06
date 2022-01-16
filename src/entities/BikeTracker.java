@@ -5,11 +5,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import exceptions.ecobike.EcoBikeException;
-import exceptions.ecobike.InvalidEcoBikeInformationException;
-import utils.Configs;
 import utils.DBUtils;
 import utils.FunctionalUtils;
 
+/**
+ * A bike tracker keep information about a bike's rental. 
+ * It has a counter for couting the bike's rental time in current session, and
+ * a list of transactions performed on the rental.
+ * It also provides methods for interacting with the bike's renting session
+ *
+ */
 public class BikeTracker {
 	private TimeCounter timeCounter;
 	private Bike bike;

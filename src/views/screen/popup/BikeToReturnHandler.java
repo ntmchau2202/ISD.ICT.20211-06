@@ -19,9 +19,12 @@ import views.screen.EcoBikeBaseScreenHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import boundaries.RentBikeServiceBoundary;
+import controllers.EcoBikeInformationController;
 
 /**
  * This is the class handler for bike in dock screen
@@ -59,7 +62,7 @@ public class BikeToReturnHandler extends EcoBikeBaseScreenHandler {
         bikeType.setText(currentBike.getBikeType().toString());
         returnBtn.setOnMouseClicked(e -> {
         	try {
-				RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).returnBike(currentBike, currentDock);
+				EcoBikeInformationController.getRentBikeService().returnBike(currentBike, currentDock);
 				this.stage.hide();
 			} catch (RentBikeException | EcoBikeUndefinedException | IOException e1) {
 				// TODO Auto-generated catch block

@@ -1,6 +1,8 @@
 package views.screen.popup;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import controllers.EcoBikeBaseController;
 import javafx.animation.PauseTransition;
@@ -38,7 +40,12 @@ public class PopupScreen extends EcoBikeBaseScreenHandler {
     }
     popup.message.setText(message);
     popup.setImage(imagepath);
+    popup.initialize();
     return popup;
+  }
+  
+  protected void initialize() {
+	  
   }
 
   public static void success(String message) throws IOException {

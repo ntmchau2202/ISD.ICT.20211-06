@@ -8,8 +8,9 @@ import exceptions.interbank.InvalidCardException;
 import utils.FunctionalUtils;
 
 /**
- * This is the class for object entity Transaction including all information of a transaction
- * @author Duong
+ * A record of a transaction, including ID of the transaction, credit card number of the card performing the transaction,
+ * amount of money transfered, and details about the transaction.
+ * This transaction might be for deposit, rental or refund
  *
  */
 public class PaymentTransaction {
@@ -46,10 +47,21 @@ public class PaymentTransaction {
 	
 	private int rentID;
 	
+	/**
+	 * Create a transaction for filling in information later
+	 */
 	public PaymentTransaction() {
 		
 	}
 	
+	/**
+	 * Create a transaction with basic information
+	 * @param transactionId ID of the transaction. This must be unique in the database
+	 * @param creditCardNumber The credit card associated with this transaction
+	 * @param amount The amount of transaction
+	 * @param content Information of the transaction
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public PaymentTransaction(int transactionId, String creditCardNumber, double amount, String content) throws InvalidEcoBikeInformationException {
 		this.setAmount(amount);
 		this.setTransactionId(transactionId);
@@ -111,10 +123,18 @@ public class PaymentTransaction {
 		this.errorMessage = errorMessage;
 	}
 	
+	/**
+	 * Set the rental ID associated with the transaction
+	 * @param rentID
+	 */
 	public void setRentID(int rentID) {
 		this.rentID = rentID;
 	}
 	
+	/**
+	 * Get the rental ID associated with the transaction
+	 * @return
+	 */
 	public int getRentID() { 
 		return this.rentID;
 	}

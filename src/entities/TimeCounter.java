@@ -1,10 +1,13 @@
 package entities;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * A time counter is in charge of recording the start time, end time, as well as returning the time a bike is rented
+ * @author Hikaru
+ *
+ */
 public class TimeCounter {
 	private boolean activate;
 	private Date start, end;

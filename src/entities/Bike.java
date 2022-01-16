@@ -1,6 +1,5 @@
 package entities;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -73,7 +72,7 @@ public abstract class Bike {
 	private PropertyChangeSupport statusNotifier;
 	private PropertyChangeSupport dockNotifier;
 	
-	public Bike(String name, String licensePlateCode, String bikeImage, 
+	protected Bike(String name, String licensePlateCode, String bikeImage, 
 			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
 		this.setName(name);
@@ -87,21 +86,39 @@ public abstract class Bike {
 		this.dockNotifier = new PropertyChangeSupport(this);
 	}
 	
+	/**
+	 * Register an observer for this bike's status
+	 * @param pcl the observer to be registered
+	 */
 	public void addStatusObserver(PropertyChangeListener pcl) {
 		this.statusNotifier.addPropertyChangeListener(pcl);
 	}
 	
+	/**
+	 * Unregister an observer on this bike's status
+	 * @param pcl the observer to be unregistered
+	 */
 	public void removeStatusObserver(PropertyChangeListener pcl) {
 		this.statusNotifier.removePropertyChangeListener(pcl);
 	}
 	
+	/**
+	 * Add a dock observer for this bike. This dock will observe changes of this bike
+	 * @param pcl the dock implementing observe methods
+	 */
+	
 	public void addDockObserver(PropertyChangeListener pcl) {
 		this.dockNotifier.addPropertyChangeListener(pcl);
 	}
-
+	
+	/**
+	 * Remove a dock observer of this bike
+	 * @param pcl the dock implementing the observe methods
+	 */
 	public void removeDockObserver(PropertyChangeListener pcl) {
 		this.dockNotifier.removePropertyChangeListener(pcl);
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -208,6 +225,10 @@ public abstract class Bike {
 		this.currentStatus = currentStatus;
 	}
 	
+	/**
+	 * Put a bike into a dock. This method changes the bike's status and add it into the selected dock's bike list
+	 * @param dock the dock to go to
+	 */
 	public void goToDock(Dock dock) {
 		this.currentDock = dock;
 		this.addDockObserver(dock);
@@ -216,6 +237,9 @@ public abstract class Bike {
 		this.dockNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
 	}
 	
+	/**
+	 * Take a bike out of its current dock dock. This method changes the bike's status and remove it from the current dock's bike list
+	 */
 	public void getOutOfDock() {
 		this.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
 		this.currentDock.removeBikeFromDock(this);
@@ -223,17 +247,6 @@ public abstract class Bike {
 		this.currentDock = null;
 	}
 	
-	// return a JSON string containing information about the string
-	public String toString(){
-		try {
-			return JSONUtils.serializeBikeInformation(this);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public String getCreator() {
 		return creator;
 	}

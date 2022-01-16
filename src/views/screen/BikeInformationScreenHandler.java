@@ -1,7 +1,6 @@
 package views.screen;
 
 import controllers.EcoBikeInformationController;
-import controllers.RentBikeController;
 import entities.Bike;
 import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
@@ -11,16 +10,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
-import utils.DBUtils;
 import views.screen.popup.PopupScreen;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-import boundaries.RentBikeServiceBoundary;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
@@ -77,9 +76,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         if (bikeInformationScreenHandler == null) {
             try {
                 bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.VIEW_BIKE_SCREEN_PATH);
-                bikeInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
                 bikeInformationScreenHandler.setScreenTitle("Bike information screen");
-                bikeInformationScreenHandler.initializeBikeScreen();
+//                bikeInformationScreenHandler.initialize();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -94,12 +92,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         	bikeInformationScreenHandler.currentBike.addStatusObserver(bikeInformationScreenHandler);
         }
 
-        try {
-			bikeInformationScreenHandler.renderBikeScreen();
-		} catch (SQLException | EcoBikeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        bikeInformationScreenHandler.initialize();
 
         return bikeInformationScreenHandler;
     }
@@ -131,10 +124,7 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
     	
     }
     
-    /**
-     * This is the method to do initialization and register button event.
-     */
-    private void initializeBikeScreen(){
+    protected void initialize() {
         rentBikeButton.setOnMouseClicked(e -> rentBike());
         pauseBikeButton.setOnMouseClicked(e->pauseBikeRental());
         returnBikeButton.setOnMouseClicked(e -> returnBike());
@@ -143,15 +133,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
             if (this.getPreviousScreen() != null)
                 this.getPreviousScreen().show();
         });
-    }
-
-    /**
-     * This is the method to do render the screen with the data.
-     * @throws EcoBikeException 
-     * @throws SQLException 
-     */
-    private void renderBikeScreen() throws SQLException, EcoBikeException {
-    	if (currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
+        
+        if (currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
     		bikeImage.setImage(new Image(new File(Configs.BIKE_IMAGE_LIB + "/" + currentBike.getBikeImage()).toURI().toString()));
     	}
         bikeNameText.setText(currentBike.getName());
@@ -160,7 +143,12 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         if (currentBike.getBikeType().equals(Configs.BikeType.EBike.toString())) {
         	batteryLabel.setVisible(true);
         	// TODO: Need to handle this 
-        	batteryTxt.setText(Float.toString(EcoBikeInformationController.getEcoBikeInformationController().getBikeBattery(currentBike.getBikeBarCode())) + " %");
+        	try {
+				batteryTxt.setText(Float.toString(EcoBikeInformationController.getEcoBikeInformationController().getBikeBattery(currentBike.getBikeBarCode())) + " %");
+			} catch (SQLException | EcoBikeException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         	batteryTxt.setVisible(true);
         } else {
         	batteryLabel.setVisible(false);
@@ -181,16 +169,14 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         pauseBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? true : false);
     }
 
-
     public void rentBike() {
         try {
             System.out.println("rent bike");
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.currentBike);
+            EcoBikeInformationController.getRentBikeService().rentBike(this.currentBike);
         } catch (EcoBikeException e) {
             try {
 				PopupScreen.error(e.getMessage());
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
         } catch (Exception e1) {
@@ -208,7 +194,6 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
             try {
 				PopupScreen.error("An error occured when returning the bike");
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
         }
@@ -218,10 +203,10 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         try {
         	System.out.println("pause bike rental");
         	if (this.currentBike.getCurrentStatus() == Configs.BIKE_STATUS.RENTED) {
-                RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).pauseBikeRental(this.currentBike);
+        		EcoBikeInformationController.getRentBikeService().pauseBikeRental(this.currentBike);
     			PopupScreen.success("Pause bike rental successfully!");
         	} else if (this.currentBike.getCurrentStatus() == Configs.BIKE_STATUS.PAUSED) {
-                RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).resumeBikeRental(this.currentBike);
+        		EcoBikeInformationController.getRentBikeService().resumeBikeRental(this.currentBike);
     			PopupScreen.success("Resume bike rental successfully!");
         	}
         } catch (Exception e) {

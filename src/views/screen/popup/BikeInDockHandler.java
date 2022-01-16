@@ -17,7 +17,9 @@ import views.screen.EcoBikeBaseScreenHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /**
  * This is the class handler for bike in dock screen
@@ -46,7 +48,7 @@ public class BikeInDockHandler extends EcoBikeBaseScreenHandler {
         }
         initialize();
     }
-
+    
     protected void initialize() {
     	if(currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
     		bikeImage.setImage(new Image((new File(Configs.BIKE_IMAGE_LIB + "/" +currentBike.getBikeImage())).toURI().toString()));    		
@@ -62,7 +64,6 @@ public class BikeInDockHandler extends EcoBikeBaseScreenHandler {
      *
      */
     public void viewBikeInformation() {
-    	System.out.println("Im goin to be parsed: " + this.currentBike.getName() + "=== from dock " + this.currentBike.getCurrentDock().getName());
     	BikeInformationScreenHandler bikeInfHandler = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this.getPreviousScreen(), this.currentBike);
     	bikeInfHandler.show();
     }

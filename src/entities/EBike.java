@@ -3,10 +3,26 @@ package entities;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.Configs;
 
+/**
+ * A bike with 2 wheels and an electric engine
+ * This bike will have the rental price as 1.5 times as the normal bike
+ *
+ */
 public class EBike extends Bike {
 	
 	private double battery;
 	
+	/**
+	 * Create a EBike instance, automatically set its type and rental price
+	 * @param name Name of the bike
+	 * @param licensePlateCode License plate code of the bike
+	 * @param bikeImage Path to the image of the bike
+	 * @param bikeBarcode Barcode of the bike. This must be unique in the database
+	 * @param currencyUnit Currency unit used to perform bike transactions
+	 * @param deposit Deposit price of the bike
+	 * @param createDate Day that the bike is created on the system
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public EBike(String name, String licensePlateCode, String bikeImage, 
 			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
@@ -14,13 +30,22 @@ public class EBike extends Bike {
 		this.setBikeType(Configs.BikeType.EBike);
 	}	
 
+	/**
+	 * Get the bike's battery status
+	 * @return current battery of the bike
+	 */
 	public double getBattery() {
 		return this.battery;
 	}
 	
-	public void setBattery(double battery) {
+	/**
+	 * Set the bike's battery status
+	 * @param battery new battery status of the bike
+	 * @throws InvalidEcoBikeInformationException 
+	 */
+	public void setBattery(double battery) throws InvalidEcoBikeInformationException {
 		if (battery < 0 || battery > 100) {
-			return;
+			throw new InvalidEcoBikeInformationException("the bike battery is invalid");
 		}
 		this.battery = battery;
 	}

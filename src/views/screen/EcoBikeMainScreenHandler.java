@@ -1,28 +1,22 @@
 package views.screen;
 
-import entities.NormalBike;
 import entities.Bike;
 import entities.Dock;
 import exceptions.ecobike.EcoBikeException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.Configs;
-import utils.DBUtils;
 import views.screen.popup.PopupScreen;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ResourceBundle;
 
 import controllers.EcoBikeInformationController;
 
@@ -34,7 +28,6 @@ import controllers.EcoBikeInformationController;
 public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 
     private static EcoBikeMainScreenHandler ecoBikeMainScreenHandler = null;
-    private EcoBikeInformationController ecoBikeInformationController;
     @FXML
     private ImageView dock1;
     @FXML
@@ -64,9 +57,8 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
         if (ecoBikeMainScreenHandler == null) {
             try {
                 ecoBikeMainScreenHandler = new EcoBikeMainScreenHandler(stage, Configs.MAIN_SCREEN_PATH);
+                EcoBikeInformationController.getEcoBikeInformationController();
                 ecoBikeMainScreenHandler.setScreenTitle("Main screen");
-                ecoBikeMainScreenHandler.ecoBikeInformationController = EcoBikeInformationController.getEcoBikeInformationController();
-                ecoBikeMainScreenHandler.initializeMainScreen();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -75,42 +67,34 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
         if (prevScreen != null) {
             ecoBikeMainScreenHandler.setPreviousScreen(prevScreen);
         }
-
+        ecoBikeMainScreenHandler.initialize();
         return ecoBikeMainScreenHandler;
     }
 
    
-    /**
-     * This is the method to do initialization and register button event.
-     */
-    private void initializeMainScreen() {
-//    	searchResult = new GridPane();
+    protected void initialize() {
     	String choices[] = {"Bike", "Dock"};
         choiceBox.setItems(FXCollections.observableArrayList(choices));
         choiceBox.setValue(choices[0]);
 
-        //TODO: assign dock id for each dock icon on the map
         dock1.setOnMouseClicked(e -> {
 			try {
-				showDock("1");
+				showDock(1);
 			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
         dock2.setOnMouseClicked(e -> {
 			try {
-				showDock("2");
+				showDock(2);
 			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
         dock3.setOnMouseClicked(e -> {
 			try {
-				showDock("3");
+				showDock(3);
 			} catch (NumberFormatException | SQLException | EcoBikeException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
@@ -119,7 +103,6 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
 			try {
 				search();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
@@ -134,14 +117,14 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
     	String searchString = searchBarField.getText();
     	try {
     		 if (choiceBox.getValue().toString() == "Bike") {
-    	        	Bike bike = this.ecoBikeInformationController.getBikeInformationByName(searchString);
+    	        	Bike bike = EcoBikeInformationController.getEcoBikeInformationController().getBikeInformationByName(searchString);
     	            if (bike != null) {
     	            	BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this, bike).show();            	
     	            } else {
     	            	PopupScreen.error("Cannot find bike with such name");
     	            }
     	        } else if (choiceBox.getValue().toString() == "Dock") {
-    	        	Dock dock = this.ecoBikeInformationController.getDockInformationByName(searchString);
+    	        	Dock dock = EcoBikeInformationController.getEcoBikeInformationController().getDockInformationByName(searchString);
     	            if (dock != null) {
     	            	DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock).show();
     	            } else {
@@ -160,12 +143,18 @@ public class EcoBikeMainScreenHandler extends EcoBikeBaseScreenHandler {
      * @throws EcoBikeException 
      * @throws SQLException 
      * @throws NumberFormatException 
+     * @throws IOException 
      */
-    private void showDock(String dockID) throws NumberFormatException, SQLException, EcoBikeException {
-        //TODO: get dock with dock id from somewhere
-        Dock dock = this.ecoBikeInformationController.getDockInformationByID(Integer.parseInt(dockID));
-
-        //render dock screen (always find the dock because it is shown on the map!!!)
+    private void showDock(int dockID) throws NumberFormatException, SQLException, EcoBikeException {
+        Dock dock = EcoBikeInformationController.getEcoBikeInformationController().getDockInformationByID(dockID);
+        if (dock == null) {
+        	try {
+				PopupScreen.error("Cannot find dock information...");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
         DockInformationScreenHandler.getDockInformationScreenHandler(this.stage, this, dock).show();
     }
 }

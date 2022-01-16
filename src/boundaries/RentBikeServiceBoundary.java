@@ -22,29 +22,17 @@ import views.screen.popup.PopupScreen;
  * This class is a real communicator of the rent bike subsystem
  */
 public class RentBikeServiceBoundary implements RentBikeServiceInterface {
-	private static RentBikeServiceBoundary rentBikeService;
-	private EcoBikeBaseScreenHandler prevScreen;
-	private RentBikeServiceBoundary() {
+	public RentBikeServiceBoundary() {
 		super();
 	}
 	
-	public static RentBikeServiceBoundary getRentBikeService(EcoBikeBaseScreenHandler currentStage) {
-		if (rentBikeService == null) {
-			rentBikeService = new RentBikeServiceBoundary();
-		}
-		if (currentStage != null) {
-			rentBikeService.prevScreen = currentStage;
-		}
-		return rentBikeService;
-		
-	}
 	public void rentBike(Bike bike) throws IOException, EcoBikeException, SQLException {
-		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(new Stage(), Configs.PAYING_FOR_DEPOSIT_SCREEN_PATH, this.prevScreen, bike);
+		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(new Stage(), Configs.PAYING_FOR_DEPOSIT_SCREEN_PATH, null, bike);
 		paymentScreenHandler.show();
 	}
 	
 	public void returnBike(Bike bike, Dock dock) throws RentBikeException, EcoBikeUndefinedException, IOException {
-		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYING_FOR_RENTAL_SCREEN_PATH, this.prevScreen, bike, dock);
+		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYING_FOR_RENTAL_SCREEN_PATH, null, bike, dock);
 		paymentScreenHandler.show();
 	}
 	

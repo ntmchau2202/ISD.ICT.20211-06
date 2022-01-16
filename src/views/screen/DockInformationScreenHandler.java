@@ -1,7 +1,6 @@
 package views.screen;
 
 import controllers.EcoBikeInformationController;
-import entities.NormalBike;
 import exceptions.ecobike.EcoBikeException;
 import entities.Bike;
 import entities.Dock;
@@ -19,8 +18,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 /**
  * This class creates a handler for getting behaviors of customer on dock information screen
@@ -71,7 +72,6 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler imple
      * @param stage         the stage to show this screen
      * @param prevScreen    the screen that call to this screen
      * @param dock          the dock to render this screen, provide null if update is not needed
-     * @param bikeList      the bikeList to render this screen, provide null if update is not needed
      *
      */
     public static DockInformationScreenHandler getDockInformationScreenHandler(Stage stage, EcoBikeBaseScreenHandler prevScreen, Dock dock) {
@@ -79,7 +79,6 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler imple
             try {
                 dockInformationScreenHandler = new DockInformationScreenHandler(stage, Configs.VIEW_DOCK_SCREEN_PATH, prevScreen);
                 dockInformationScreenHandler.setScreenTitle("Dock information screen");
-                dockInformationScreenHandler.initializeDockInformationScreen();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -98,21 +97,15 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         if (bikeList != null && bikeList.size() != 0) {
             dockInformationScreenHandler.currentBikeList = bikeList;
         }
-
-        dockInformationScreenHandler.renderDockInformation();
-
+        dockInformationScreenHandler.initialize();
         return dockInformationScreenHandler;
     }
 
-    /**
-     * This is the method to do initialization and register button event.
-     */
-    private void initializeDockInformationScreen() {    	
+    protected void initialize() {    	
         returnBikeButton.setOnMouseClicked(e -> {
 			try {
 				returnBike();
 			} catch (IOException | SQLException | EcoBikeException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
@@ -121,13 +114,14 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler imple
             if (this.getPreviousScreen() != null)
                 this.getPreviousScreen().show();
         });
+        
+        renderDockInformation();
     }
 
     /**
      * This is the method to render the screen with data.
      */
     private void renderDockInformation() {
-        // provide dock image
     	if (currentDock.getDockImage() != null && currentDock.getDockImage().length() != 0) {
     		dockImageView.setImage(new Image(new File(Configs.DOCK_IMAGE_LIB + "/" + currentDock.getDockImage()).toURI().toString()));
     	}
@@ -167,11 +161,9 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler imple
     	for (Bike b : bikeList) {
     		BikeInDockHandler bikeHandler;
 			try {
-				// error in this constructor
 				bikeHandler = new BikeInDockHandler(this.stage, b, Configs.BIKE_IN_DOCK_PATH, this);
 				bikeVBox.getChildren().add(bikeHandler.getContent());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
@@ -181,7 +173,6 @@ public class DockInformationScreenHandler extends EcoBikeBaseScreenHandler imple
 	public void propertyChange(PropertyChangeEvent evt) {
 		System.out.println("The dock has changed....");
 		renderDockInformation();
-		// call the controller to update database here
 	}
 
 

@@ -18,24 +18,20 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * This class provides APIs and methods for connecting to APIs
- * @author chauntm
+ * This class provides APIs and methods for connecting to APIs of banks
  */
 
 public class API {
 	public static DateFormat DATE_FORMATER = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	
 	public static String patch(String url, String message) throws IOException {
-//		allowMethods("PATCH");
 		URL api = new URL(url);
 		HttpURLConnection conn = (HttpURLConnection)api.openConnection();
 		conn.setDoInput(true);
 		conn.setDoOutput(true);
 		conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
 		conn.setRequestMethod("POST");
-//		setRequestMethodViaJreBugWorkaround(conn, "PATCH");
 		conn.setRequestProperty("Content-Type", "application/json");
-//		conn.setRequestProperty("Authorization", "Bearer " + token);
 		Writer writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 		writer.write(message);
 		writer.close();

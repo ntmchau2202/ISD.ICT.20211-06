@@ -3,9 +3,7 @@ package interfaces;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import entities.NormalBike;
 import entities.Bike;
-import entities.CreditCard;
 import entities.Dock;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
@@ -13,38 +11,47 @@ import exceptions.ecobike.RentBikeException;
 
 /**
  * This interface allow communication between the information subsystem and the rent bike service subsystem
- * There is a boundary class in the subsystem implement this interface as a loose connection between the subsystems
+ * Any rent bike service must implement this interface as a loose connection between the subsystems
  * @author chauntm
  *
  */
 public interface RentBikeServiceInterface {
 	/**
-	 * Calls the Rent bike sequence of operations for customers to rent bike
-	 * @param bikeBarcode Barcode of the bike to be rented
-	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @throws IOException 
-	 * @throws SQLException 
-	 * @throws EcoBikeException 
+	 * Perform rent bike process. Each rent bike service must implement their own process here
+	 * @param bike The bike to be rented
+	 * @throws RentBikeException
+	 * @throws EcoBikeUndefinedException
+	 * @throws IOException
+	 * @throws EcoBikeException
+	 * @throws SQLException
 	 */
 	public void rentBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException, EcoBikeException, SQLException;
-	
+
 	/**
-	 * Calls the Return bike sequence of operations for customers to return bike
-	 * @param bikeBarcode Barcode of the bike to be returned
-	 * @throws RentBikeException If the bike is not currently available or the barcode is not valid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @throws IOException 
+	 * Perform return bike process. Each rent bike service must implement their own process here
+	 * @param bike
+	 * @param dock
+	 * @throws RentBikeException
+	 * @throws EcoBikeUndefinedException
+	 * @throws IOException
 	 */
 	public void returnBike(Bike bike, Dock dock) throws RentBikeException, EcoBikeUndefinedException, IOException;
 	
 	/**
-	 * Calls the Pause bike rental sequence of operations for customers to pause bike rental
-	 * @param bikeBarcode Barcode of the bike having rental time to be paused
-	 * @throws RentBikeException If the bike is not currently available, not being rented or the barcode is not valid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
-	 * @throws SQLException 
-	 * @throws EcoBikeException 
+	 * Perform pause bike rental process. Each rent bike service must implement their own process here
+	 * @param bike
+	 * @throws RentBikeException
+	 * @throws EcoBikeUndefinedException
+	 * @throws EcoBikeException
+	 * @throws SQLException
 	 */
 	public void pauseBikeRental(Bike bike) throws RentBikeException, EcoBikeUndefinedException, EcoBikeException, SQLException;
+	
+	/**
+	 * Perform resume bike rental process. Each rent bike service must implement their own process here
+	 * @param bike
+	 * @throws EcoBikeException
+	 * @throws SQLException
+	 */
+	public void resumeBikeRental(Bike bike) throws EcoBikeException, SQLException;
 }

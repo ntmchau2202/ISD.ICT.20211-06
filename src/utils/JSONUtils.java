@@ -1,6 +1,5 @@
 package utils;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -8,10 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
-import entities.Customer;
 import entities.Dock;
 import entities.Invoice;
 import entities.PaymentTransaction;
@@ -20,7 +17,6 @@ import exceptions.ecobike.InvalidEcoBikeInformationException;
 
 /**
  * This class provides functions for handling JSON objects and strings to use in communication between controllers and screen handlers, as well as between subsystems if needed
- * @author chauntm
  */
 public class JSONUtils {
 	public static String serializeBikeInformation(Bike bike) throws JSONException {
@@ -43,7 +39,6 @@ public class JSONUtils {
 		if (!result.has("bike_barcode")) {
 			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Bike");
 		}
-		// TODO: finish constructor here
 		Bike bikeRes = DBUtils.getBikeByBarcode(result.getString("bike_barcode"));
 		String bikeStatus = result.getString("current_status");
 		Configs.BIKE_STATUS bikeStat;
@@ -154,39 +149,6 @@ public class JSONUtils {
 		obj.put("balance", card.getBalance());
 		obj.put("expiration_date", card.getExpirationDate().toString());
 		return obj.toString();
-	}
-	
-	public static CreditCard toCreditCard(String cardStr) throws InvalidEcoBikeInformationException, JSONException {
-		JSONObject result = new JSONObject(cardStr);
-		if (!result.has("creditcard_number")) {
-			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to CreditCard");
-		}
-		return null;
-		// TODO: return properly
-//		return new CreditCard(result.getString("cardholder_name"),
-//				result.getString("creditcard_number"), 
-//				result.getString("issuing_bank"), 
-//				result.getString("security_code"),
-//				result.getDouble("balance"),
-//				result.getString("expiration_date"));
-	}
-	
-	public static String serializeCustomerInformation(Customer customer) throws JSONException {
-		JSONObject obj = new JSONObject();
-		obj.put("customer_id", customer.getCustomerID());
-		obj.put("customer_name", customer.getCustomerName());
-		obj.put("customer_email", customer.getCustomerEmail());
-		return obj.toString();
-	}
-	
-	public static Customer toCustomer(String customerStr) throws InvalidEcoBikeInformationException, JSONException {
-		JSONObject result = new JSONObject(customerStr);
-		if (!result.has("customer_id")) {
-			throw new InvalidEcoBikeInformationException("invalid JSON string to parse to Customer");
-		}
-		return new Customer(result.getString("customer_id"),
-				result.getString("customer_name"),
-				result.getString("customer_email")); 
 	}
 	
 }

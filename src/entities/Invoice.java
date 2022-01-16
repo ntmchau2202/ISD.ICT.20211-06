@@ -1,18 +1,14 @@
 package entities;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 
 /**
- * This is the class for object entity Invoice including all information of an invoice
- * @author Duong
- *
+ * An invoice saves information about transactions performed on a rental,
+ * including the bike rented, ID of the rental, transactions for the rental,
+ * and some other information related to the rental
  */
 public class Invoice {
 	
@@ -62,10 +58,22 @@ public class Invoice {
 		this.rentID = rentID;
 	}
 
+	/**
+	 * Creates a new empty invoice to fill in information later
+	 */
 	public Invoice() {
 		listTransaction = new ArrayList<PaymentTransaction>();
 	}
 
+	/**
+	 * Creates a new invoice with basic information
+	 * @param invoiceID ID of the invoice. This must be unique in the database
+	 * @param bike The bike corresponding to this invoice
+	 * @param startTime The time rental started
+	 * @param endTime The time rental ended
+	 * @param totalRentTime Total rent time. This might be not as the difference of end time and start time
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public Invoice(int invoiceID, Bike bike, Date startTime, Date endTime, int totalRentTime) throws InvalidEcoBikeInformationException {
 		listTransaction = new ArrayList<PaymentTransaction>();
 		this.setInvoiceID(invoiceID);
@@ -91,6 +99,11 @@ public class Invoice {
 		this.bike = bike;
 	}
 	
+	/**
+	 * Add transaction to list of transaction of this invoice
+	 * If the transaction is already added, it will not be added again
+	 * @param transaction The transaction to be added
+	 */
 	public void addTransaction(PaymentTransaction transaction) {
 		if (this.listTransaction.contains(transaction)) {
 			System.out.println("Hey the transaction is duplicated!:" + transaction.getTransactionId());
@@ -102,6 +115,11 @@ public class Invoice {
 		}
 		this.setTotal();
 	}
+	
+	/**
+	 * Remove a transaction from the invoice if it exists
+	 * @param transaction The transaction to be removed
+	 */
 	
 	public void removeTransaction(PaymentTransaction transaction) {
 		if (this.listTransaction.contains(transaction)) {

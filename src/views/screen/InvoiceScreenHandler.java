@@ -1,6 +1,5 @@
 package views.screen;
 
-import controllers.PaymentController;
 import entities.Invoice;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,6 +8,8 @@ import javafx.stage.Stage;
 import utils.Configs;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * This is the class handler for invoice screen
@@ -52,9 +53,7 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
         if (invoiceScreenHandler == null) {
             try {
                 invoiceScreenHandler = new InvoiceScreenHandler(stage, Configs.INVOICE_SCREEN_PATH);
-                invoiceScreenHandler.setbController(PaymentController.getPaymentController());
                 invoiceScreenHandler.setScreenTitle("Invoice screen");
-                invoiceScreenHandler.initializeInvoiceScreen();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -67,26 +66,15 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
         if (prevScreen != null) {
             invoiceScreenHandler.setPreviousScreen(prevScreen);
         }
-
-        invoiceScreenHandler.renderInvoiceScreen();
-
+        invoiceScreenHandler.initialize();
         return invoiceScreenHandler;
     }
 
-    /**
-     * This is the method to do initialization and register button event.
-     */
-    private void initializeInvoiceScreen() {
+	protected void initialize() {
         backToMainScreenButton.setOnMouseClicked(e -> {
         	EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show();
     	  this.stage.hide();
         });
-    }
-
-    /**
-     * This is the method to do render the screen with the data.
-     */
-    private void renderInvoiceScreen() {
         invoiceIDTxt.setText(Integer.toString(currentInvoice.getInvoiceID()));
         invoiceDateTxt.setText(currentInvoice.getIssuedDate());
         rentIDTxt.setText(Integer.toString(currentInvoice.getRentID()));
@@ -98,5 +86,5 @@ public class InvoiceScreenHandler extends EcoBikeBaseScreenHandler {
         rentalPaymentIDTxt.setText(currentInvoice.getTransactionList().get(1).getTransactionId());
         rentalPaymentAmtTxt.setText(Double.toString(currentInvoice.getTransactionList().get(1).getAmount()) + " VND");
         totalTxt.setText(Double.toString(currentInvoice.getTotal())+" VND");
-    }
+	}
 }

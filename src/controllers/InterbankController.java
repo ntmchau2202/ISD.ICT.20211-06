@@ -36,6 +36,15 @@ public class InterbankController {
 		super();
 	}
 	
+	/**
+	 * Perform actions for connecting to the interbank server and pay rental
+	 * @param card The card to be deducted
+	 * @param amount The amount to be deducted
+	 * @param content Information about the transaction
+	 * @return A <b> PaymentTransaction </b> record if the transaction is successfully, null otherwise
+	 * @throws IOException
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public PaymentTransaction payRental(CreditCard card, double amount, String content) throws IOException, InvalidEcoBikeInformationException {
 		// TODO: this is the original code; however, the API is having some problems, so we use a mock instead for testing
 //		TransactionMessage msgToSend = new TransactionMessage(VERSION, APP_CODE, COMMAND_PAY, card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate(), content, amount);
@@ -57,6 +66,15 @@ public class InterbankController {
 		return transaction;
 	}
 	
+	/**
+	 * Perform actions for connecting to the interbank server and pay deposit
+	 * @param card The card to be deducted
+	 * @param amount The amount to be deducted
+	 * @param content Information about the transaction
+	 * @return A <b> PaymentTransaction </b> record if the transaction is successfully, null otherwise
+	 * @throws IOException
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public PaymentTransaction payDeposit(CreditCard card, double amount, String content) throws IOException, InvalidEcoBikeInformationException {
 		// TODO: this is the original code; however, the API is having some problems, so we use a mock instead for testing
 //		TransactionMessage msgToSend = new TransactionMessage(VERSION, APP_CODE, COMMAND_PAY, card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate(), content, amount);
@@ -76,6 +94,15 @@ public class InterbankController {
 		return transaction;
 	}
 	
+	/**
+	 * Perform actions for connecting to the interbank server and do refund
+	 * @param card The card to be refund
+	 * @param amount The amount to be refunded
+	 * @param content Information about the transaction
+	 * @return A <b> PaymentTransaction </b> record if the transaction is successfully, null otherwise
+	 * @throws IOException
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public PaymentTransaction refund(CreditCard card, double amount, String content) throws IOException, InvalidEcoBikeInformationException {
 //		TransactionMessage msgToSend = new TransactionMessage(VERSION, APP_CODE, COMMAND_REFUND, card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate(), content, amount);
 //		String jsonMsg = msgToSend.toJSONString();
@@ -94,6 +121,12 @@ public class InterbankController {
 		return transaction;
 	}
 	
+	/**
+	 * Reset balance of the card
+	 * @param card the card having balance to be reseted
+	 * @throws IOException
+	 * @throws InterbankException
+	 */
 	public void resetBalance(CreditCard card) throws IOException, InterbankException {
 		RefreshAccountMessage msgToSend = new RefreshAccountMessage(card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate());
 		String jsonMsg = msgToSend.toJSONString();

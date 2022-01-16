@@ -1,18 +1,17 @@
 package views.screen;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-import controllers.EcoBikeInformationController;
 import entities.Bike;
 import entities.Dock;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.Configs;
-import views.screen.popup.BikeInDockHandler;
 import views.screen.popup.BikeToReturnHandler;
-import views.screen.popup.DockForReturnHandler;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
@@ -29,6 +28,11 @@ public class SelectBikeToReturnScreenHandler extends EcoBikeBaseScreenHandler {
     	this.dockToReturn = dock;
     	this.setScreenTitle("Select bike to return in " + dockToReturn.getName());
     	addBike(listRentedBike);
+    	initialize();
+    }
+    
+    protected void initialize(){
+    	
     }
 
     private void addBike(ArrayList<Bike> listBike) {

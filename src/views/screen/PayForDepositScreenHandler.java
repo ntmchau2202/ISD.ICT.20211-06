@@ -1,56 +1,29 @@
 package views.screen;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
+import java.util.ResourceBundle;
 
 import boundaries.InterbankBoundary;
-import controllers.EcoBikeBaseController;
-import controllers.PaymentController;
 import controllers.RentBikeController;
-import entities.NormalBike;
 import entities.Bike;
 import entities.CreditCard;
 import exceptions.ecobike.EcoBikeException;
-import exceptions.ecobike.EcoBikeUndefinedException;
-import exceptions.ecobike.RentBikeException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import utils.Configs;
 import views.screen.popup.PopupScreen;
 
 /**
- * This is the class handler for payment method screen
+ * This is the class handler for deposit screen
  *
  * @author Duong
  */
-public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
-	@FXML
-    private Label bikeName;
-	@FXML
-    private Label bikeType;
-	@FXML
-	private Label depositPrice;
+public class PayForDepositScreenHandler extends PaymentScreenHandler {
     @FXML
-    private TextField cardHolderName;
-    @FXML
-    private TextField cardNumber;
-    @FXML
-    private TextField expirationDate;
-    @FXML
-    private TextField securityCode;
-    @FXML
-    private Button confirmPaymentButton;
-    
+    private Label depositPrice;
     private static PayForDepositScreenHandler paymentScreenHandler;
 
     /**
@@ -66,7 +39,6 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     
     private PayForDepositScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
-//        initialize();
     }
     
     public static PayForDepositScreenHandler getPayForDepositScreenHandler(Stage stage, String screenPath, EcoBikeBaseScreenHandler prevScreen, Bike bike) throws IOException {
@@ -76,48 +48,19 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     	}
     	if (bike != null) {
     		paymentScreenHandler.bikeToRent = bike;
-    		paymentScreenHandler.renderBikeDepositInformation();
     	}
+    	paymentScreenHandler.initialize();
     	return paymentScreenHandler;
     	
     }
     
-    public void initialize() {    	
-    	confirmPaymentButton.setOnMouseClicked(e->{
-			try {
-				confirmPaymentMethod();
-			} catch (EcoBikeException | SQLException | IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-    }
-    
-    private void renderBikeDepositInformation() {
+    protected void initialize() {    
+    	super.initializeComponent();
     	bikeName.setText(this.bikeToRent.getName());
     	bikeType.setText(this.bikeToRent.getBikeType());
     	depositPrice.setText(Double.toString(this.bikeToRent.getDeposit()) + this.bikeToRent.getCurrency());
     }
     
-	public boolean validateInput() throws IOException {
-		if(PaymentController.getPaymentController().validateCardHolderName(cardHolderName.getText()) == false){
-			PopupScreen.error("Invalid card holder name!");
-            return false;
-        }
-        if(PaymentController.getPaymentController().validateCardNumber(cardNumber.getText()) == false){
-        	PopupScreen.error("Invalid card number!");
-            return false;
-        }
-        if(PaymentController.getPaymentController().validateExpirationDate(expirationDate.getText()) == false){
-        	PopupScreen.error("Invalid expiration date!");
-            return false;
-        }
-        if(PaymentController.getPaymentController().validateCardSecurity(securityCode.getText()) == false){
-        	PopupScreen.error("Invalid security code!");
-            return false;
-        }
-        return true;
-	}
 
     /**
      * Get payment method information from the form and go to transaction screen
@@ -125,7 +68,7 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
      * @throws SQLException 
      * @throws EcoBikeException 
      */
-    public void confirmPaymentMethod() throws EcoBikeException, SQLException, IOException {
+    public void confirmPaymentMethod() throws EcoBikeException, SQLException, IOException, ParseException {
     	if(validateInput()) {
     		System.out.println("Confirm successfully");
     		CreditCard card = new CreditCard(cardHolderName.getText(), cardNumber.getText(), "ACB", securityCode.getText(), expirationDate.getText());
@@ -138,7 +81,7 @@ public class PayForDepositScreenHandler extends EcoBikeBaseScreenHandler {
     			PopupScreen.error("Error performing transaction");
     		}
     	} else {
-    		PopupScreen.error("Confirm payment method failed!");
+    		PopupScreen.error("Invalid input, please check again");
     	}
     }
 }

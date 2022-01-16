@@ -1,16 +1,16 @@
 package views.screen;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-import controllers.EcoBikeInformationController;
 import entities.Bike;
 import entities.Dock;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.Configs;
-import views.screen.popup.BikeInDockHandler;
 import views.screen.popup.DockForReturnHandler;
 
 /**
@@ -29,6 +29,11 @@ public class SelectDockToReturnBikeScreenHandler extends EcoBikeBaseScreenHandle
     	this.setScreenTitle("Select dock to return bike");
     	this.bikeToReturn = bike;
     	addDock(listDock);
+    	initialize();
+    }
+    
+    protected void initialize() {
+    	
     }
 
     private void addDock(ArrayList<Dock> listDock) {
