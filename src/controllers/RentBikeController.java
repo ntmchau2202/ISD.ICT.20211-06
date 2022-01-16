@@ -206,6 +206,7 @@ public class RentBikeController extends EcoBikeBaseController {
 	}
 		
 	
+	
 	private float calculateFee(String bikeType, int rentTime) {
 		//renting cost
 		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute

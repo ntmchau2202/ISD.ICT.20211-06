@@ -2,6 +2,7 @@ package entities;
 
 import java.util.Date;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class BankResponse {
@@ -13,7 +14,7 @@ public class BankResponse {
 	protected String dateExpired;	
 	protected JSONObject jsonObj;
 	
-	protected BankResponse(String response) {
+	protected BankResponse(String response) throws JSONException {
 		System.out.println("Here we have our response:"+response);
 		jsonObj = new JSONObject(response);
 		this.errorCode = jsonObj.getInt("errorCode");

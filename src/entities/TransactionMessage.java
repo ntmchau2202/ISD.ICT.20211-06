@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import utils.FunctionalUtils;
@@ -18,7 +19,7 @@ public class TransactionMessage extends BankMessage {
 	private double amount;
 	private JSONObject jsonObj;
 	
-	public TransactionMessage(String version, String appCode, String command, String cardCode, String owner, String cvvCode, String dateExpried, String content, double amount) {
+	public TransactionMessage(String version, String appCode, String command, String cardCode, String owner, String cvvCode, String dateExpried, String content, double amount) throws JSONException {
 		super(cardCode, owner, cvvCode, dateExpried);
 		this.version = version;
 		this.command = command;
@@ -37,7 +38,7 @@ public class TransactionMessage extends BankMessage {
 	}
 	
 	
-	private JSONObject toJSONObject() {
+	private JSONObject toJSONObject() throws JSONException {
 		jsonObj = new JSONObject();
 		JSONObject transaction = new JSONObject();
 		jsonObj.put("version", this.version);

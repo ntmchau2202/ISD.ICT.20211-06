@@ -1,5 +1,7 @@
 package entities;
 
+import org.json.JSONException;
+
 public abstract class BankMessage {
 	protected String cardCode;
 	protected String ownner;
@@ -13,5 +15,5 @@ public abstract class BankMessage {
 		this.dateExprired = dateExpried;
 	}
 	
-	public abstract String toJSONString();
+	public abstract String toJSONString() throws JSONException;
 }

@@ -1,5 +1,6 @@
 package entities;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RefreshAccountMessage extends BankMessage {
@@ -9,7 +10,7 @@ public class RefreshAccountMessage extends BankMessage {
 	}
 
 	@Override
-	public String toJSONString() {
+	public String toJSONString() throws JSONException {
 		JSONObject jsonMsg = new JSONObject();
 		jsonMsg.put("cardCode", this.cardCode);
 		jsonMsg.put("owner", this.ownner);

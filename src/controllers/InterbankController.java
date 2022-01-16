@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 
+import org.json.JSONException;
+
 import entities.CreditCard;
 import entities.PaymentTransaction;
 import entities.RefreshAccountMessage;
@@ -126,8 +128,9 @@ public class InterbankController {
 	 * @param card the card having balance to be reseted
 	 * @throws IOException
 	 * @throws InterbankException
+	 * @throws JSONException 
 	 */
-	public void resetBalance(CreditCard card) throws IOException, InterbankException {
+	public void resetBalance(CreditCard card) throws IOException, InterbankException, JSONException {
 		RefreshAccountMessage msgToSend = new RefreshAccountMessage(card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate());
 		String jsonMsg = msgToSend.toJSONString();
 		String result = API.patch(Configs.API_BASE_URL + Configs.API_RESET_BALANCE, jsonMsg);
