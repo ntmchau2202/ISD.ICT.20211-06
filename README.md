@@ -3,24 +3,18 @@
 ## Contribution
 - Chau: 35%
 - Long: 35%
-- Duong: 35%
+- Duong: 30%
 
 ## Notes:
 This submission includes 
 - README (this file)
-- Presentation slides
-- SRS
-- SDS
+- Presentation slides, SRS, SDS, video: in folder `/reports`. The video can also be found here: https://youtu.be/4pyF1RDT6KA
 - Diagrams, with astah files: in the corresponding folders of previous labs
-- Source code (up to this moment): in folder `/doc`
-- Program specifications (Javadocs): in folder `/doc` - Note that this is temporary only since the functions are being implemented and adjusted
+- Source code (up to this moment): in folder `/src`
+- Program specifications (Javadocs): in folder `/doc` 
 - Test case: The first version, in folder `/test_cases` We are updating the testcases according to real situations 
 
-Although this is the submission, it still has so many bugs and errors that we're trying our best to handle (but due to the fact that all 3 members are overwhelmed with deadlines, we couldn't finish that on time)
-
-We are trying to fix them and will push them to the repo in the hotfix branches
-
-All the missing parts will be added later
+[16/01/22]: Update some missing components, including source codes and videos. Note that since all members has Java 15 instead of 11, which eliminated us from implementing the `PATCH` method for requesting to the server, we are now _mimiking_ the behavior of the server, by always return true if user input the correct information of the card (given by TA team).
 
 -------
 

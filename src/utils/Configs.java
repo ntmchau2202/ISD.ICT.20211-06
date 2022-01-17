@@ -8,17 +8,30 @@ package utils;
 public class Configs {
     //renting service related constant
     public enum BikeType{
-        STANDARDBIKE,
-        STANDARDEBIKE,
-        TWINBIKE
+        NormalBike,
+        EBike,
+        TwinBike,
+        Others;
     }
 
     @SuppressWarnings("serial")
 	public static java.util.Map<BikeType, Float> chargeMultiplierDictionary = new java.util.HashMap<BikeType, Float>() {{
-        put(BikeType.STANDARDBIKE, 1f);
-        put(BikeType.STANDARDEBIKE, 1.5f);
-        put(BikeType.TWINBIKE, 1.5f);
+        put(BikeType.NormalBike, 1f);
+        put(BikeType.EBike, 1.5f);
+        put(BikeType.TwinBike, 1.5f);
     }};
+    
+    public static BikeType getBikeType(String bikeType) {
+    	if (bikeType.equalsIgnoreCase(BikeType.NormalBike.toString())) {
+    		return BikeType.NormalBike;
+    	} else if (bikeType.equalsIgnoreCase(BikeType.EBike.toString())) {
+    		return BikeType.EBike;
+    	} else if (bikeType.equalsIgnoreCase(BikeType.TwinBike.toString())) {
+    		return BikeType.TwinBike;
+    	} else {
+    		return BikeType.Others;
+    	}
+    }
 
     public static float freeOfChargeTimeInMinute = 10f;
 
@@ -32,11 +45,13 @@ public class Configs {
     public static float PERCENT_VAT = 10;
     
     // static resource
-    public static final String IMAGE_PATH = "assets/images";
-    public static final String DEPOSIT_SCREEN_PATH = "/views/fxml/FXML_DepositScreen.fxml";
+    public static final String IMAGE_PATH = "assets/icons";
+    public static final String BIKE_IMAGE_LIB = "assets/bikes";
+    public static final String DOCK_IMAGE_LIB = "assets/docks";
     public static final String LIST_DOCK_SCREEN_PATH = "/views/fxml/FXML_ListDockScreen.fxml";
     public static final String MAIN_SCREEN_PATH = "/views/fxml/FXML_MainScreen.fxml";
-    public static final String PAYING_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
+    public static final String PAYING_FOR_DEPOSIT_SCREEN_PATH = "/views/fxml/FXML_PayForDepositScreen.fxml";
+    public static final String PAYING_FOR_RENTAL_SCREEN_PATH = "/views/fxml/FXML_PayForRentalScreen.fxml";
     public static final String PAYMENT_SCREEN_PATH = "/views/fxml/FXML_PaymentScreen.fxml";
     public static final String POPUP_SCREEN_PATH = "/views/fxml/FXML_PopupScreen.fxml";
     public static final String RETURN_BIKE_SCREEN_PATH = "/views/fxml/FXML_ReturnBikeScreen.fxml";
@@ -46,11 +61,16 @@ public class Configs {
     public static final String INVOICE_SCREEN_PATH = "/views/fxml/FXML_InvoiceScreen.fxml";
 	public static final String BIKE_IN_DOCK_PATH = "/views/fxml/FXML_BikeInDock.fxml";
 	public static final String PAYMENT_METHOD_SCREEN_PATH = "/views/fxml/FXML_PayingMethodScreen.fxml";
+	public static final String SELECT_DOCK_SCREEN_PATH = "/views/fxml/FXML_ListDockScreen.fmxl";
+	public static final String DOCK_FOR_RETURN_SCREEN_PATH = "/views/fxml/FXML_DockForReturn.fxml";
+	public static final String LIST_RENTED_BIKE_SCREEN_PATH = "/views/fxml/FXML_ListRentedBikeScreen.fxml";
+	public static final String BIKE_TO_RETURN_SCREEN_PATH = "/views/fxml/FXML_BikeToReturn.fxml";
 
 
 	public enum BIKE_STATUS {
 		FREE,
 		RENTED,		
+		PAUSED
 	}
 	
 	public enum TransactionType {
@@ -68,7 +88,7 @@ public class Configs {
 			return this.transactionType;
 		}
 	}
-	
+	public static final String ENTITIES_PKG = "entities.";
 	public static final String API_BASE_URL = "https://ecopark-system-api.herokuapp.com";
 	public static final String API_TRANSACTION = "/api/card/processTransaction";
 	public static final String API_RESET_BALANCE = "/api/card/reset-balance";

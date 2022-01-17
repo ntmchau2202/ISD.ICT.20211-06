@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 
+import org.json.JSONException;
+
 import entities.CreditCard;
 import entities.PaymentTransaction;
 import entities.RefreshAccountMessage;
@@ -36,6 +38,15 @@ public class InterbankController {
 		super();
 	}
 	
+	/**
+	 * Perform actions for connecting to the interbank server and pay rental
+	 * @param card The card to be deducted
+	 * @param amount The amount to be deducted
+	 * @param content Information about the transaction
+	 * @return A <b> PaymentTransaction </b> record if the transaction is successfully, null otherwise
+	 * @throws IOException
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public PaymentTransaction payRental(CreditCard card, double amount, String content) throws IOException, InvalidEcoBikeInformationException {
 		// TODO: this is the original code; however, the API is having some problems, so we use a mock instead for testing
 //		TransactionMessage msgToSend = new TransactionMessage(VERSION, APP_CODE, COMMAND_PAY, card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate(), content, amount);
@@ -53,10 +64,19 @@ public class InterbankController {
 //		PaymentTransaction transaction = new PaymentTransaction(tranResp.getTransactionID(), tranResp.getCardCode(), tranResp.getAmount(), tranResp.getTransactionContent());
 		
 		// this is for testing, since the api is daed
-		PaymentTransaction transaction = new PaymentTransaction("123", "ict_group6_2021", amount, content);
+		PaymentTransaction transaction = new PaymentTransaction(123, "ict_group6_2021", amount, content);
 		return transaction;
 	}
 	
+	/**
+	 * Perform actions for connecting to the interbank server and pay deposit
+	 * @param card The card to be deducted
+	 * @param amount The amount to be deducted
+	 * @param content Information about the transaction
+	 * @return A <b> PaymentTransaction </b> record if the transaction is successfully, null otherwise
+	 * @throws IOException
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public PaymentTransaction payDeposit(CreditCard card, double amount, String content) throws IOException, InvalidEcoBikeInformationException {
 		// TODO: this is the original code; however, the API is having some problems, so we use a mock instead for testing
 //		TransactionMessage msgToSend = new TransactionMessage(VERSION, APP_CODE, COMMAND_PAY, card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate(), content, amount);
@@ -72,10 +92,19 @@ public class InterbankController {
 //			throw excpt;
 //		}
 //		PaymentTransaction transaction = new PaymentTransaction(tranResp.getTransactionID(), tranResp.getCardCode(), tranResp.getAmount(), tranResp.getTransactionContent());
-		PaymentTransaction transaction = new PaymentTransaction("123", "ict_group6_2021", amount, content);
+		PaymentTransaction transaction = new PaymentTransaction(123, "ict_group6_2021", amount, content);
 		return transaction;
 	}
 	
+	/**
+	 * Perform actions for connecting to the interbank server and do refund
+	 * @param card The card to be refund
+	 * @param amount The amount to be refunded
+	 * @param content Information about the transaction
+	 * @return A <b> PaymentTransaction </b> record if the transaction is successfully, null otherwise
+	 * @throws IOException
+	 * @throws InvalidEcoBikeInformationException
+	 */
 	public PaymentTransaction refund(CreditCard card, double amount, String content) throws IOException, InvalidEcoBikeInformationException {
 //		TransactionMessage msgToSend = new TransactionMessage(VERSION, APP_CODE, COMMAND_REFUND, card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate(), content, amount);
 //		String jsonMsg = msgToSend.toJSONString();
@@ -90,11 +119,18 @@ public class InterbankController {
 //			throw excpt;
 //		}
 //		PaymentTransaction transaction = new PaymentTransaction(tranResp.getTransactionID(), tranResp.getCardCode(), tranResp.getAmount(), tranResp.getTransactionContent());
-		PaymentTransaction transaction = new PaymentTransaction("123", "ict_group6_2021", amount, content);
+		PaymentTransaction transaction = new PaymentTransaction(123, "ict_group6_2021", amount, content);
 		return transaction;
 	}
 	
-	public void resetBalance(CreditCard card) throws IOException, InterbankException {
+	/**
+	 * Reset balance of the card
+	 * @param card the card having balance to be reseted
+	 * @throws IOException
+	 * @throws InterbankException
+	 * @throws JSONException 
+	 */
+	public void resetBalance(CreditCard card) throws IOException, InterbankException, JSONException {
 		RefreshAccountMessage msgToSend = new RefreshAccountMessage(card.getCardNumber(), card.getCardHolderName(), card.getCardSecurity(), card.getExpirationDate());
 		String jsonMsg = msgToSend.toJSONString();
 		String result = API.patch(Configs.API_BASE_URL + Configs.API_RESET_BALANCE, jsonMsg);

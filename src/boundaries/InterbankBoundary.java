@@ -10,7 +10,6 @@ import interfaces.InterbankInterface;
 
 /**
  * This class implements functions for performing transactions on the bank side
- * It must have functions in InterbankInterface for further communication with the EcoBike subsystems
  */
 public class InterbankBoundary implements InterbankInterface {
 	private String bankName;
@@ -19,7 +18,7 @@ public class InterbankBoundary implements InterbankInterface {
 	public InterbankBoundary(String issuingBank) {
 		super();
 		this.bankName = issuingBank;
-		interbankController = new InterbankController(); // should we need this?
+		interbankController = new InterbankController(); 
 	}
 
 	@Override
@@ -28,7 +27,6 @@ public class InterbankBoundary implements InterbankInterface {
 		try {
 			transaction = interbankController.payDeposit(creditCard, amount, content);
 		} catch (IOException | InvalidEcoBikeInformationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		return transaction;
@@ -40,7 +38,6 @@ public class InterbankBoundary implements InterbankInterface {
 		try {
 			transaction = interbankController.refund(creditCard, amount, content);
 		} catch (IOException | InvalidEcoBikeInformationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		return transaction;	
@@ -52,7 +49,6 @@ public class InterbankBoundary implements InterbankInterface {
 		try {
 			transaction = interbankController.payRental(creditCard, amount, content);
 		} catch (IOException | InvalidEcoBikeInformationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		return transaction;	

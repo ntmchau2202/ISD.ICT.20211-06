@@ -1,13 +1,16 @@
 package entities;
 
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.Date;
+
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import exceptions.interbank.InvalidCardException;
 import utils.FunctionalUtils;
 
 /**
- * This is the class for object entity Transaction including all information of a transaction
- * @author Duong
+ * A record of a transaction, including ID of the transaction, credit card number of the card performing the transaction,
+ * amount of money transfered, and details about the transaction.
+ * This transaction might be for deposit, rental or refund
  *
  */
 public class PaymentTransaction {
@@ -42,23 +45,36 @@ public class PaymentTransaction {
 	 */
 	private String errorMessage;
 	
+	private int rentID;
+	
+	/**
+	 * Create a transaction for filling in information later
+	 */
 	public PaymentTransaction() {
 		
 	}
 	
-	public PaymentTransaction(String transactionId, String creditCardNumber, double amount, String content) throws InvalidEcoBikeInformationException {
+	/**
+	 * Create a transaction with basic information
+	 * @param transactionId ID of the transaction. This must be unique in the database
+	 * @param creditCardNumber The credit card associated with this transaction
+	 * @param amount The amount of transaction
+	 * @param content Information of the transaction
+	 * @throws InvalidEcoBikeInformationException
+	 */
+	public PaymentTransaction(int transactionId, String creditCardNumber, double amount, String content) throws InvalidEcoBikeInformationException {
 		this.setAmount(amount);
 		this.setTransactionId(transactionId);
 		this.setCreditCardNumber(creditCardNumber);
 		this.setContent(content);
-//		this.setTransactionTime(transactionTime);
+		this.setTransactionTime("");
 	}
 	
 	public String getTransactionId() {
 		return transactionId;
 	}
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
+	public void setTransactionId(int transactionId) {
+		this.transactionId = Integer.toString(transactionId);
 	}
 	public String getCreditCardNumber() {
 		return this.creditCardNumber;
@@ -83,10 +99,15 @@ public class PaymentTransaction {
 		return transactionTime;
 	}
 	public void setTransactionTime(String transactionTime) throws InvalidEcoBikeInformationException {
-		try {
-			this.transactionTime = FunctionalUtils.stringToDate(transactionTime);
+		try {			
+			if (transactionTime == null || transactionTime.length() == 0) {
+				this.transactionTime = FunctionalUtils.stringToDate(Calendar.getInstance().getTime().toString());			
+			} else {
+				this.transactionTime = FunctionalUtils.stringToDate(transactionTime);
+			}
 		} catch (Exception e) {
-			throw new InvalidEcoBikeInformationException("invalid date format");
+			e.printStackTrace();
+			throw new InvalidEcoBikeInformationException("invalid time format");
 		}
 	}
 	public String getContent() {
@@ -100,6 +121,22 @@ public class PaymentTransaction {
 	}
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+	
+	/**
+	 * Set the rental ID associated with the transaction
+	 * @param rentID
+	 */
+	public void setRentID(int rentID) {
+		this.rentID = rentID;
+	}
+	
+	/**
+	 * Get the rental ID associated with the transaction
+	 * @return
+	 */
+	public int getRentID() { 
+		return this.rentID;
 	}
 	
 }

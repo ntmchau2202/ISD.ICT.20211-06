@@ -5,32 +5,31 @@ import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
 import interfaces.InterbankInterface;
 import entities.Bike;
+import entities.BikeTracker;
 import entities.CreditCard;
+import entities.Dock;
+import entities.Invoice;
 import entities.PaymentTransaction;
-import entities.TimeCounter;
 import utils.*;
-import views.screen.popup.PopupScreen;
 import java.io.IOException;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.time.LocalTime;
+import java.text.ParseException;
+import java.util.HashMap;
 
 /**
  * This class handles rent bike, return bike and pause bike rental request from customers
  */
 public class RentBikeController extends EcoBikeBaseController {
-	@SuppressWarnings("unused")
+	private static int invoiceCounter = 1;
 	private InterbankInterface interbankSystem;
-	private TimeCounter timeCounter;
-	private LocalTime startTime, stopTime;
-	private int customerID, rentID, timeRented;
-	private Bike currentBike;
 	private static RentBikeController rentBikeServiceController;
+	private HashMap<String, BikeTracker> listBikeTracker;
+	
 
 	public static RentBikeController getRentBikeServiceController(InterbankInterface interbankSystem){
-		if (rentBikeServiceController == null)
+		if (rentBikeServiceController == null) {
 			rentBikeServiceController = new RentBikeController();
+		}
 		if (interbankSystem != null) {
 			rentBikeServiceController.interbankSystem = interbankSystem;
 		}
@@ -39,80 +38,174 @@ public class RentBikeController extends EcoBikeBaseController {
 	/**
 	 * Initialize the controller for EcoBike rent bike service
 	 */
-	public RentBikeController() {
+	private RentBikeController() {
+		this.listBikeTracker = new HashMap<String, BikeTracker>();
 	}
 
 	/**
-	 * Start renting bike process, including calling the interbank subsystem for performing transaction
-	 *
-	 * @param bikeToRent barCode of the bike to be rented
-	 * @throws IOException 
-	 * @throws RentBikeException If the bike is not currently available, the barcode is not valid
-	 * @throws EcoBikeUndefinedException If there is an unexpected error occurs during the renting process
+	 * Rent a bike by a given card. This function will try to deduct money from the interbank, and if the transaction is successfuly,
+	 * it will change the bike status and modify the database correspodingly
+	 * @param bikeToRent The bike to be rented
+	 * @param card the card to perform transaction
+	 * @return true if process is OK, false otherwise
+	 * @throws EcoBikeException
+	 * @throws SQLException
+	 * @throws IOException
 	 */
-	public void rentBike(Bike bikeToRent, CreditCard card) throws EcoBikeException, SQLException, IOException {
+	public boolean rentBike(Bike bikeToRent, CreditCard card) throws EcoBikeException, SQLException, IOException {
 		
-		// TODO: process the payment before updating the database;
+		// NOTE: Since we cannot connect to the service
+		// We will immediately check the card here
+		// For java 11 and bellow, please uncomment this
+		if (!checkCardIdentity(card)) {
+			return false;
+		}
+		
 		PaymentTransaction transaction = interbankSystem.payDeposit(card, bikeToRent.getDeposit(), "PAY_DEPOSIT");
 		
 		if (transaction == null) {
-			PopupScreen.error("Error performing transaction");
-			return;
+			return false;
 		}
-		System.out.println("Successfully performing transaction!");
-		System.out.println("Transaction ID:"+transaction.getTransactionId());
-		// save credit card information
-		this.currentBike = bikeToRent;
-		startCountingRentTime();
-		System.out.println("Done invoking counter");
-		DBUtils.saveCardInformation(card);
 		
-		// TODO: save transaction
-		this.customerID = DBUtils.saveCustomer(card.getCardHolderName());
-		this.rentID = DBUtils.createNewRentRecord(customerID);
-		DBUtils.changeBikeStatus(this.currentBike.getBikeBarCode(), Configs.BIKE_STATUS.RENTED.toString());
+		int rentID = DBUtils.addStartRentBikeRecord(bikeToRent.getBikeBarCode());
+		transaction.setRentID(rentID);
+		DBUtils.removeBikeFromDock(bikeToRent.getBikeBarCode());
+		bikeToRent.getOutOfDock();
+
+		BikeTracker newTracker = new BikeTracker(bikeToRent, rentID);
+		DBUtils.addTransaction(transaction, rentID);
+		newTracker.addTransaction(transaction);		
+		newTracker.startCountingRentTime();
+		DBUtils.changeBikeStatus(bikeToRent.getBikeBarCode(), Configs.BIKE_STATUS.RENTED.toString());
+		this.listBikeTracker.put(bikeToRent.getBikeBarCode(), newTracker);
+		return true;
+
+
+	}
+	
+	private boolean checkCardIdentity(CreditCard card) {
+		/**
+		 * ict_group6_2021
+		 * Group 6
+		 * 936
+		 * 11/25
+		 */
+		if (!card.getCardHolderName().equalsIgnoreCase("Group 6")) {
+			System.out.println(card.getCardHolderName());
+			System.out.println("Name failed");
+			return false;
+		}
+		
+		if (!card.getCardNumber().equalsIgnoreCase("ict_group6_2021")) {
+			System.out.println("card number failed");
+			return false;
+		}
+		
+		if (!card.getCardSecurity().equalsIgnoreCase("936")) {
+			System.out.println("cvv failed");
+			return false;
+		}
+		
+		if (!card.getExpirationDate().equalsIgnoreCase("11/25")) {
+			System.out.println("expiration date failed");
+			return false;
+		}
+		System.out.println("Everything's ok");
+		return true;
 	}
 	
 	/**
-	 * Start pausing bike rental process
-	 * @param bikeBarcode barCode of the bike to be rented
+	 * Pause rental of a bike
+	 * @param bike the bike to pause rental
+	 * @return
 	 */
-	public void pauseBikeRental() {
-		this.timeCounter.stopCounter();
+	public int pauseBikeRental(Bike bike) {
+		BikeTracker tracker = this.listBikeTracker.get(bike.getBikeBarCode());
+		if (tracker == null) {
+			try {
+				tracker = DBUtils.getCurrentBikeRenting(bike);
+			} catch (SQLException | EcoBikeException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			System.out.println("Going to stop counting rent time");
+			tracker.stopCountingRentTime();
+			bike.setCurrentStatus(Configs.BIKE_STATUS.PAUSED);
+		} catch (SQLException | EcoBikeException e) {
+			e.printStackTrace();
+		}
+		return tracker.getRentedTime();
+		
 	}
 	
-	public void resumeBikeRental() {
-		this.timeCounter.startCounter();
+	public void resumeBikeRental(Bike bike) {
+		BikeTracker tracker = this.listBikeTracker.get(bike.getBikeBarCode());
+		if (tracker == null) {
+			try {
+				int rentPeriod = DBUtils.getCurrentRentPeriodOfBike(bike.getBikeBarCode());
+				if (rentPeriod != 0) {
+					// retrieve bike renting record
+					tracker = DBUtils.getCurrentBikeRenting(bike);
+					tracker.resumeCountingRentTime();
+				}
+			} catch (SQLException | EcoBikeException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			tracker.resumeCountingRentTime();
+			bike.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
+		} catch (SQLException | EcoBikeException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * Invoke counter for tracking rental time
+	 * Pay rental for a bike by a given card and return it to the selected dock. 
+	 * This function will try to deduct money from the interbank, and if the transaction is successfuly,
+	 * it will change the bike status and modify the database correspodingly
+	 * @param bikeToRent The bike to be rented
+	 * @param dockToReturn the dock to return the bike
+	 * @param card the card to perform transaction
+	 * @return true if process is OK, false otherwise
+	 * @throws EcoBikeException
+	 * @throws SQLException
+	 * @throws IOException
 	 */
-	private void startCountingRentTime() {
-		this.timeCounter = new TimeCounter();
-		Thread counterThread = new Thread(timeCounter);
-		this.startTime = timeCounter.startCounter();
-		counterThread.start();
-	}
-	
-	private int stopCountingRentTime() {
-		this.stopTime = timeCounter.stopCounter();
-		return timeCounter.getCountedTime();
-	}
-	
-	public void returnBike(Bike bikeToRent, CreditCard card) throws IOException, SQLException, EcoBikeException {
-		this.timeRented = stopCountingRentTime();
-		float rentCost = calculateFee(bikeToRent.getBikeType(), this.timeRented);
+	public Invoice returnBike(Bike bikeToRent, Dock dockToReturn, CreditCard card) throws IOException, SQLException, EcoBikeException, ParseException {
+		if (!checkCardIdentity(card)) {
+			return null;
+		}
+		
+		BikeTracker tracker = this.listBikeTracker.get(bikeToRent.getBikeBarCode());
+		if (tracker == null) {
+			tracker = DBUtils.getCurrentBikeRenting(bikeToRent);
+		}
+		
+		int period = tracker.stopCountingRentTime();
+		float rentCost = calculateFee(bikeToRent.getBikeType(), period);
+		
 		PaymentTransaction transaction = interbankSystem.payRental(card, rentCost, "PAY_RENTAL");
 		
 		if (transaction == null) {
-			PopupScreen.error("Cannot perform transaction for paying rental");
+			return null;
 		}
 		
-		// TODO: save transaction
-		// TODO: reset everything
-		DBUtils.changeBikeStatus(bikeToRent.getBikeBarCode(), Configs.BIKE_STATUS.RENTED.toString());
+		DBUtils.addEndRentBikeRecord(tracker.getRentID(), period);
+		transaction.setRentID(tracker.getRentID());;
+		DBUtils.addTransaction(transaction, tracker.getRentID());
+		tracker.addTransaction(transaction);
+		Invoice invoice = tracker.createInvoice(invoiceCounter);
+		invoiceCounter++;
+		DBUtils.changeBikeStatus(bikeToRent.getBikeBarCode(), Configs.BIKE_STATUS.FREE.toString());
+		bikeToRent.goToDock(dockToReturn);
+		DBUtils.addBikeToDock(bikeToRent.getBikeBarCode(), dockToReturn.getDockID());
+		this.listBikeTracker.remove(bikeToRent.getBikeBarCode());
+		return invoice;
 	}
+		
+	
 	
 	private float calculateFee(String bikeType, int rentTime) {
 		//renting cost
@@ -122,7 +215,28 @@ public class RentBikeController extends EcoBikeBaseController {
 					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
 					: Configs.firstChargeTimeIntervalCost;
 
-		rentingCost *= Configs.chargeMultiplierDictionary.get(bikeType);
+		rentingCost *= Configs.chargeMultiplierDictionary.get(Configs.getBikeType(bikeType));
 		return rentingCost;
+	}
+	
+	/**
+	 * Return rental fee of the selected bike
+	 * @param bike the bike having rental fee to be queried
+	 * @return the bike's rental fee if found the record in database; -1 otherwise
+	 */
+	public float getRentalFee(Bike bike)  {
+		BikeTracker tracker = this.listBikeTracker.get(bike.getBikeBarCode());
+		if (tracker == null) {
+			try {
+				tracker = DBUtils.getCurrentBikeRenting(bike);
+				if (tracker == null) {
+					return -1;
+				}
+			} catch (SQLException | EcoBikeException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return calculateFee(bike.getBikeType(), tracker.getRentedTime());
 	}
 }

@@ -1,6 +1,6 @@
 package views.screen;
-import controllers.EcoBikeBaseController;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,17 +20,14 @@ import java.util.Hashtable;
 public abstract class EcoBikeBaseScreenHandler {
 
     protected final Stage stage;
-    protected EcoBikeMainScreenHandler mainScreenHandler;
     protected Hashtable<String, String> messages;
     protected FXMLLoader loader;
     protected AnchorPane content;
     private Scene scene;
     private EcoBikeBaseScreenHandler prev;
-    private EcoBikeBaseController baseController;
 
 
     public EcoBikeBaseScreenHandler(Stage newStage, String screenPath) throws IOException {
-    	System.out.println("Going to use the path:"+screenPath);
         this.loader = new FXMLLoader(getClass().getResource(screenPath));
         this.loader.setController(this);
 
@@ -38,9 +35,6 @@ public abstract class EcoBikeBaseScreenHandler {
         this.stage = newStage;
     }
 
-    /**
-     * This is the method to show the screen.
-     */
     public void show() {
         if (this.scene == null) {
             this.scene = new Scene(this.content);
@@ -67,14 +61,6 @@ public abstract class EcoBikeBaseScreenHandler {
         this.stage.setTitle(string);
     }
 
-    public EcoBikeBaseController getbController() {
-        return this.baseController;
-    }
-
-    public void setbController(EcoBikeBaseController newBaseController) {
-        this.baseController = newBaseController;
-    }
-
     public void setPreviousScreen(EcoBikeBaseScreenHandler prev) {
         this.prev = prev;
     }
@@ -82,13 +68,7 @@ public abstract class EcoBikeBaseScreenHandler {
     public EcoBikeBaseScreenHandler getPreviousScreen() {
         return this.prev;
     }
-
-    @SuppressWarnings("rawtypes")
-    public void forward(Hashtable message) {
-        this.messages = message;
-    }
-
-    public void setMainScreenHandler(EcoBikeMainScreenHandler mainScreenHandler) {
-        this.mainScreenHandler = mainScreenHandler;
-    }
+    
+    protected abstract void initialize();
+    
 }

@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 import controllers.RentBikeController;
 import entities.Bike;
+import entities.Dock;
+import entities.NormalBike;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import exceptions.ecobike.RentBikeException;
@@ -20,38 +22,25 @@ import views.screen.popup.PopupScreen;
  * This class is a real communicator of the rent bike subsystem
  */
 public class RentBikeServiceBoundary implements RentBikeServiceInterface {
-	private static RentBikeServiceBoundary rentBikeService;
-	private EcoBikeBaseScreenHandler prevScreen;
-	private RentBikeServiceBoundary() {
+	public RentBikeServiceBoundary() {
 		super();
 	}
 	
-	public static RentBikeServiceBoundary getRentBikeService(EcoBikeBaseScreenHandler currentStage) {
-		if (rentBikeService == null) {
-			rentBikeService = new RentBikeServiceBoundary();
-		}
-		if (currentStage != null) {
-			rentBikeService.prevScreen = currentStage;
-		}
-		return rentBikeService;
-		
-	}
 	public void rentBike(Bike bike) throws IOException, EcoBikeException, SQLException {
-		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(new Stage(), Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
+		PayForDepositScreenHandler paymentScreenHandler = PayForDepositScreenHandler.getPayForDepositScreenHandler(new Stage(), Configs.PAYING_FOR_DEPOSIT_SCREEN_PATH, null, bike);
 		paymentScreenHandler.show();
 	}
 	
-	public void returnBike(Bike bike) throws RentBikeException, EcoBikeUndefinedException, IOException {
-		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYMENT_METHOD_SCREEN_PATH, this.prevScreen, bike);
+	public void returnBike(Bike bike, Dock dock) throws RentBikeException, EcoBikeUndefinedException, IOException {
+		PayForRentScreenHandler paymentScreenHandler = PayForRentScreenHandler.getPayForRentScreenHandler(new Stage(), Configs.PAYING_FOR_RENTAL_SCREEN_PATH, null, bike, dock);
 		paymentScreenHandler.show();
 	}
 	
 	public void pauseBikeRental(Bike bike) throws EcoBikeException, SQLException {
-		RentBikeController.getRentBikeServiceController(null).pauseBikeRental();
-		try {
-			PopupScreen.success("Pause bike rental successfully!");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+		RentBikeController.getRentBikeServiceController(null).pauseBikeRental(bike);	
+	}
+	
+	public void resumeBikeRental(Bike bike) throws EcoBikeException, SQLException {
+		RentBikeController.getRentBikeServiceController(null).resumeBikeRental(bike);	
 	}
 }

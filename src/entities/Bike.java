@@ -1,31 +1,23 @@
 package entities;
 
-import java.text.DateFormat; 
-import java.text.SimpleDateFormat;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import org.json.JSONException;
 
-import java.sql.Date;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.Configs;
 import utils.FunctionalUtils;
 import utils.JSONUtils;
 
-/**
- * This is the class for object entity Bike including information of a bike
- * @author Duong
- *
- */
-public class Bike {
-	/**
-	 * name of the bike
-	 */
+public abstract class Bike {
+	
 	private String name;
 	
 	/**
 	 * type of the bike.
 	 */
-	private String bikeType;
+	private Configs.BikeType bikeType;
 	
 	/**
 	 * Plate code of the bike.
@@ -74,38 +66,59 @@ public class Bike {
 	 */
 	private Configs.BIKE_STATUS currentStatus;
 	
-	/**
-	 * The current battery of the bike
-	 */
-	private float currentBattery;
-	
-	/**
-	 * The total time the customer has rent calculated in minute
-	 */
-	private int totalRentTime;
-	
-	private String dockId;
-	
-	public Bike() {
-		
-	}
+	private Dock currentDock;
 
-	public Bike(String name, String bikeType, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, double bikeRentalPrice, String currencyUnit, double deposit, 
+	
+	private PropertyChangeSupport statusNotifier;
+	private PropertyChangeSupport dockNotifier;
+	
+	protected Bike(String name, String licensePlateCode, String bikeImage, 
+			String bikeBarcode, String currencyUnit, double deposit, 
 			String createDate) throws InvalidEcoBikeInformationException {
-		super();
 		this.setName(name);
-		this.setBikeType(bikeType);
 		this.setLicensePlateCode(licensePlateCode);
 		this.setBikeImage(bikeImage);
 		this.setBikeBarCode(bikeBarcode);
-		this.setBikeRentalPrice(bikeRentalPrice);
 		this.setCurrency(currencyUnit);
 		this.setDeposit(deposit);
 		this.setCreateDate(createDate);
+		this.statusNotifier = new PropertyChangeSupport(this);
+		this.dockNotifier = new PropertyChangeSupport(this);
 	}
-
-
+	
+	/**
+	 * Register an observer for this bike's status
+	 * @param pcl the observer to be registered
+	 */
+	public void addStatusObserver(PropertyChangeListener pcl) {
+		this.statusNotifier.addPropertyChangeListener(pcl);
+	}
+	
+	/**
+	 * Unregister an observer on this bike's status
+	 * @param pcl the observer to be unregistered
+	 */
+	public void removeStatusObserver(PropertyChangeListener pcl) {
+		this.statusNotifier.removePropertyChangeListener(pcl);
+	}
+	
+	/**
+	 * Add a dock observer for this bike. This dock will observe changes of this bike
+	 * @param pcl the dock implementing observe methods
+	 */
+	
+	public void addDockObserver(PropertyChangeListener pcl) {
+		this.dockNotifier.addPropertyChangeListener(pcl);
+	}
+	
+	/**
+	 * Remove a dock observer of this bike
+	 * @param pcl the dock implementing the observe methods
+	 */
+	public void removeDockObserver(PropertyChangeListener pcl) {
+		this.dockNotifier.removePropertyChangeListener(pcl);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -130,27 +143,13 @@ public class Bike {
 	}
 
 	public String getBikeType() {
-		return bikeType;
+		return bikeType.toString();
 	}
 
-	private void setBikeType(String bikeType) throws InvalidEcoBikeInformationException {
-		if(bikeType == null) {
-			throw new InvalidEcoBikeInformationException("bike type parameter must not be null");
-		}
-		
-		if(bikeType.length() == 0) {
-			throw new InvalidEcoBikeInformationException("a bike must have type information");
-		}
-		
-		if (!Character.isLetter(bikeType.charAt(0))) {
-			throw new InvalidEcoBikeInformationException("bike type must start with a letter");
-		}
-		
-		if (FunctionalUtils.contains(bikeType, "[^a-z0-9 -_]")) {
-			throw new InvalidEcoBikeInformationException("bike type can only contain letters, digits, space, hypen and underscore");
-		}
-		
+	protected void setBikeType(Configs.BikeType bikeType) throws InvalidEcoBikeInformationException {				
+		this.statusNotifier.firePropertyChange("bikeType", this.bikeType, bikeType);
 		this.bikeType = bikeType;
+		this.bikeRentalPrice = Configs.chargeTimeIntervalCost * Configs.chargeMultiplierDictionary.get(bikeType);
 	}
 	
 
@@ -189,12 +188,6 @@ public class Bike {
 		return bikeRentalPrice;
 	}
 
-	private void setBikeRentalPrice(double bikeRentalPrice) throws InvalidEcoBikeInformationException {
-		if(bikeRentalPrice <= 0) {
-			throw new InvalidEcoBikeInformationException("bike rental price must be greater than 0");
-		}
-		this.bikeRentalPrice = bikeRentalPrice;
-	}
 
 	public double getDeposit() {
 		return deposit;
@@ -220,15 +213,6 @@ public class Bike {
 	}
 
 	private void setCreateDate(String createDate) throws InvalidEcoBikeInformationException {
-		// TODO: Fix bug here
-//		try {
-//			System.out.println(createDate);
-//			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");	
-//			Date date = (Date) dateFormat.parse(createDate);
-//			this.createDate = new java.sql.Date(date.getTime());
-//		} catch (Exception e) {
-//			throw new InvalidEcoBikeInformationException("invalid date format");
-//		}
 		this.createDate = createDate.toString();
 	}
 
@@ -237,48 +221,32 @@ public class Bike {
 	}
 
 	public void setCurrentStatus(Configs.BIKE_STATUS currentStatus) {
+		this.statusNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
 		this.currentStatus = currentStatus;
 	}
-
-	public float getCurrentBattery() {
-		return currentBattery;
-	}
-
-	public void setCurrentBattery(float currentBattery) throws InvalidEcoBikeInformationException {
-		if(currentBattery < 0 || currentBattery > 100) {
-			throw new InvalidEcoBikeInformationException("bike batery percentage must be between 0 and 100");
-		}
-		this.currentBattery = currentBattery;
-	}
-
-	public int getTotalRentTime() {
-		return totalRentTime;
-	}
-
-	public void setTotalRentTime(int totalRentTime) {
-		this.totalRentTime = totalRentTime;
+	
+	/**
+	 * Put a bike into a dock. This method changes the bike's status and add it into the selected dock's bike list
+	 * @param dock the dock to go to
+	 */
+	public void goToDock(Dock dock) {
+		this.currentDock = dock;
+		this.addDockObserver(dock);
+		dock.addBikeToDock(this);
+		this.setCurrentStatus(Configs.BIKE_STATUS.FREE);
+		this.dockNotifier.firePropertyChange("currentStatus", this.currentStatus, currentStatus);
 	}
 	
-	
-	// return a JSON string containing information about the string
-	public String toString(){
-		try {
-			return JSONUtils.serializeBikeInformation(this);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public String getdockId() {
-		return dockId;
+	/**
+	 * Take a bike out of its current dock dock. This method changes the bike's status and remove it from the current dock's bike list
+	 */
+	public void getOutOfDock() {
+		this.setCurrentStatus(Configs.BIKE_STATUS.RENTED);
+		this.currentDock.removeBikeFromDock(this);
+		this.removeDockObserver(this.currentDock);
+		this.currentDock = null;
 	}
 	
-	public float getDistanceEstimated() {
-		return this.currentBattery * 5;
-	}
-
 	public String getCreator() {
 		return creator;
 	}
@@ -286,16 +254,8 @@ public class Bike {
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
-
-	public String getDockId() {
-		return dockId;
-	}
-
-	public void setDockId(String dockId) {
-		this.dockId = dockId;
-	}
 	
-	
+	public Dock getCurrentDock() {
+		return this.currentDock;
+	}
 }
-
-	

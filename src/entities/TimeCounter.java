@@ -1,43 +1,35 @@
 package entities;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.Date;
 
-public class TimeCounter implements Runnable {
+/**
+ * A time counter is in charge of recording the start time, end time, as well as returning the time a bike is rented
+ * @author Hikaru
+ *
+ */
+public class TimeCounter {
 	private boolean activate;
-	private int time;
+	private Date start, end;
 	public TimeCounter() {
-		this.activate = true;
-		this.time = 0;
-	}
-	
-	@Override
-	public void run() {
-		System.out.println("Counter started");
-		while(activate) {
-			try {
-				Thread.sleep(1000*60);
-				time +=1;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
-	
-	public LocalTime startCounter() {
-		this.activate = true;
-		return LocalTime.now();
-	}
-	
-	public LocalTime stopCounter() {
 		this.activate = false;
-		return LocalTime.now();
 	}
 	
-	public int getCountedTime() {
-		return this.time;
+	public Date startCounter() {
+		if (!this.activate) {
+			this.activate = true;
+			start = Calendar.getInstance().getTime();
+		}
+		return start;
+	}
+	
+	public Date stopCounter() {
+		end = Calendar.getInstance().getTime();
+		return end;
+	}
+	
+	public void setActive(boolean active) {
+		this.activate = active;
 	}
 
 }

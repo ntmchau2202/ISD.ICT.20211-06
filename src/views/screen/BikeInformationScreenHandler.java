@@ -1,25 +1,32 @@
 package views.screen;
 
 import controllers.EcoBikeInformationController;
-import controllers.RentBikeController;
 import entities.Bike;
+import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
+import views.screen.popup.PopupScreen;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-import boundaries.RentBikeServiceBoundary;
 
 /**
  * This class creates a handler for getting customer's behaviors on the bike information screen
  *
  * @author chauntm
  */
-public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
+public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler implements PropertyChangeListener {
 
     private static BikeInformationScreenHandler bikeInformationScreenHandler = null;
     private Bike currentBike = null;
@@ -31,25 +38,27 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Label bikeStatusText;
     @FXML
-    private Label bikeBatteryText;
-    @FXML
     private Label bikeDistanceText;
     @FXML
     private Label bikeRentingText;
     @FXML
     private Label bikeDepositText;
     @FXML
-    private Label bikeLocationText;
-    @FXML
     private Button rentBikeButton;
     @FXML
     private Button returnBikeButton;
+    @FXML
+    private Button pauseBikeButton;
     @FXML
     private ImageView bikeImage;
     @FXML
     private ImageView mainScreenIcon;
     @FXML
     private ImageView backIcon;
+    @FXML
+    private Label bikeLocationTxt;
+    @FXML
+    private Label batteryTxt, batteryLabel;
 
     private BikeInformationScreenHandler(Stage stage, String screenPath) throws IOException {
         super(stage, screenPath);
@@ -67,9 +76,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         if (bikeInformationScreenHandler == null) {
             try {
                 bikeInformationScreenHandler = new BikeInformationScreenHandler(stage, Configs.VIEW_BIKE_SCREEN_PATH);
-                bikeInformationScreenHandler.setbController(EcoBikeInformationController.getEcoBikeInformationController());
                 bikeInformationScreenHandler.setScreenTitle("Bike information screen");
-                bikeInformationScreenHandler.initializeBikeScreen();
+//                bikeInformationScreenHandler.initialize();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,75 +88,133 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler {
         }
 
         if (bike != null) {
-            bikeInformationScreenHandler.currentBike = bike;
+        	bikeInformationScreenHandler.currentBike = bike;
+        	bikeInformationScreenHandler.currentBike.addStatusObserver(bikeInformationScreenHandler);
         }
 
-        bikeInformationScreenHandler.renderBikeScreen();
+        bikeInformationScreenHandler.initialize();
 
         return bikeInformationScreenHandler;
     }
 
-    /**
-     * This is the method to do initialization and register button event.
-     */
-    private void initializeBikeScreen(){
+    public void propertyChange(PropertyChangeEvent evt) {
+    	Object val = evt.getNewValue();
+    	if (val instanceof Configs.BIKE_STATUS) {
+    		Configs.BIKE_STATUS newStatus = (Configs.BIKE_STATUS) val;
+    		System.out.println("Got new event change: bike status is now:"+newStatus.toString());
+        	bikeStatusText.setText(newStatus.toString());
+        	if (newStatus == Configs.BIKE_STATUS.FREE) {
+        		rentBikeButton.setDisable(false);
+        		pauseBikeButton.setDisable(true);
+        		returnBikeButton.setDisable(true);
+        	} else if (newStatus == Configs.BIKE_STATUS.PAUSED) {
+        		rentBikeButton.setDisable(true);
+        		pauseBikeButton.setText("Continue rental");
+        		pauseBikeButton.setDisable(false);
+        		returnBikeButton.setDisable(false);
+        	} else if (newStatus == Configs.BIKE_STATUS.RENTED) {
+        		rentBikeButton.setDisable(true);
+        		pauseBikeButton.setText("Pause rental");
+        		pauseBikeButton.setDisable(false);
+        		returnBikeButton.setDisable(false);
+        	}
+        	
+            returnBikeButton.setDisable((Configs.BIKE_STATUS)evt.getNewValue() == Configs.BIKE_STATUS.FREE ? true : false);
+    	}
+    	
+    }
+    
+    protected void initialize() {
         rentBikeButton.setOnMouseClicked(e -> rentBike());
+        pauseBikeButton.setOnMouseClicked(e->pauseBikeRental());
         returnBikeButton.setOnMouseClicked(e -> returnBike());
         mainScreenIcon.setOnMouseClicked(e -> EcoBikeMainScreenHandler.getEcoBikeMainScreenHandler(this.stage, null).show());
         backIcon.setOnMouseClicked(e -> {
             if (this.getPreviousScreen() != null)
                 this.getPreviousScreen().show();
         });
-    }
-
-    /**
-     * This is the method to do render the screen with the data.
-     */
-    private void renderBikeScreen() {
-    	if (currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
-    		super.setImage(bikeImage, currentBike.getBikeImage());    		
+        
+        if (currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
+    		bikeImage.setImage(new Image(new File(Configs.BIKE_IMAGE_LIB + "/" + currentBike.getBikeImage()).toURI().toString()));
     	}
         bikeNameText.setText(currentBike.getName());
         bikeTypeText.setText(currentBike.getBikeType());
-        bikeStatusText.setText(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? "Free" : "Rented");
-        bikeBatteryText.setText(currentBike.getCurrentBattery() + "%");
-        bikeDistanceText.setText("30 km");
+        bikeStatusText.setText(currentBike.getCurrentStatus().toString());
+        if (currentBike.getBikeType().equals(Configs.BikeType.EBike.toString())) {
+        	batteryLabel.setVisible(true);
+        	// TODO: Need to handle this 
+        	try {
+				batteryTxt.setText(Float.toString(EcoBikeInformationController.getEcoBikeInformationController().getBikeBattery(currentBike.getBikeBarCode())) + " %");
+			} catch (SQLException | EcoBikeException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	batteryTxt.setVisible(true);
+        } else {
+        	batteryLabel.setVisible(false);
+        	batteryTxt.setVisible(false);
+        }
+        bikeDistanceText.setText("100 km");
         bikeRentingText.setText(currentBike.getBikeRentalPrice() + " " + currentBike.getCurrency());
         bikeDepositText.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());
-        bikeLocationText.setText("Dai Co Viet");
+        
+        if (currentBike.getCurrentDock() != null) {
+        	bikeLocationTxt.setText(currentBike.getCurrentDock().getName());        	
+        } else {
+        	bikeLocationTxt.setText("no information");
+        }
 
         rentBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? false : true);
         returnBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? true : false);
+        pauseBikeButton.setDisable(currentBike.getCurrentStatus() == Configs.BIKE_STATUS.FREE ? true : false);
     }
-
 
     public void rentBike() {
         try {
             System.out.println("rent bike");
-            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).rentBike(this.currentBike);
-//            DepositScreenHandler.getDepositScreenHandler(this.stage, this, null, currentBike);
-        } catch (Exception e) {
-            e.printStackTrace();
+            EcoBikeInformationController.getRentBikeService().rentBike(this.currentBike);
+        } catch (EcoBikeException e) {
+            try {
+				PopupScreen.error(e.getMessage());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+        } catch (Exception e1) {
+        	e1.printStackTrace();
         }
     }
 
     public void returnBike() {
         try {
             System.out.println("return bike");
-            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).returnBike(this.currentBike);
+            SelectDockToReturnBikeScreenHandler selectDockHandler = new SelectDockToReturnBikeScreenHandler(new Stage(), this, EcoBikeInformationController.getEcoBikeInformationController().getAllDocks(), this.currentBike);
+            selectDockHandler.show();
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+				PopupScreen.error("An error occured when returning the bike");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
         }
     }
 
     public void pauseBikeRental() {
         try {
         	System.out.println("pause bike rental");
-            // TODO: change job to RentBikeServiceBoundary to invoke the RentBike subsystem
-            RentBikeServiceBoundary.getRentBikeService(this.getPreviousScreen()).pauseBikeRental(this.currentBike);
+        	if (this.currentBike.getCurrentStatus() == Configs.BIKE_STATUS.RENTED) {
+        		EcoBikeInformationController.getRentBikeService().pauseBikeRental(this.currentBike);
+    			PopupScreen.success("Pause bike rental successfully!");
+        	} else if (this.currentBike.getCurrentStatus() == Configs.BIKE_STATUS.PAUSED) {
+        		EcoBikeInformationController.getRentBikeService().resumeBikeRental(this.currentBike);
+    			PopupScreen.success("Resume bike rental successfully!");
+        	}
         } catch (Exception e) {
+        	try {
+				PopupScreen.error("An error occured when pausing renting the bike");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
             e.printStackTrace();
         }
     }

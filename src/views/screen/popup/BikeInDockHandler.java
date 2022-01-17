@@ -1,6 +1,8 @@
 package views.screen.popup;
 
 import entities.Bike;
+import entities.NormalBike;
+import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.EcoBikeUndefinedException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,11 +11,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.Configs;
+import utils.DBUtils;
 import views.screen.BikeInformationScreenHandler;
 import views.screen.EcoBikeBaseScreenHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /**
  * This is the class handler for bike in dock screen
@@ -28,7 +34,7 @@ public class BikeInDockHandler extends EcoBikeBaseScreenHandler {
     @FXML
     private Label bikeName;
     @FXML
-    private Label bikeBattery;
+    private Label bikeType;
     @FXML
     private Label distanceEstimation;
     @FXML
@@ -42,17 +48,14 @@ public class BikeInDockHandler extends EcoBikeBaseScreenHandler {
         }
         initialize();
     }
-
+    
     protected void initialize() {
     	if(currentBike.getBikeImage() != null && currentBike.getBikeImage().length() != 0) {
-    		bikeImage.setImage(new Image((new File(currentBike.getBikeImage())).toURI().toString()));    		
+    		bikeImage.setImage(new Image((new File(Configs.BIKE_IMAGE_LIB + "/" +currentBike.getBikeImage())).toURI().toString()));    		
     	}
     	// testing information
-    	System.out.println("Bike name:"+currentBike.getName());
-    	System.out.println("Bike barcode:"+currentBike.getBikeBarCode());
         bikeName.setText(currentBike.getName());
-        bikeBattery.setText(currentBike.getCurrentBattery() + "%");
-        distanceEstimation.setText(.2 * currentBike.getCurrentBattery() + "km");
+        bikeType.setText(currentBike.getBikeType() + "");
         viewBikeButton.setOnMouseClicked(e -> viewBikeInformation());
     }
 
@@ -61,7 +64,7 @@ public class BikeInDockHandler extends EcoBikeBaseScreenHandler {
      *
      */
     public void viewBikeInformation() {
-    	BikeInformationScreenHandler bikeInfHandler = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this.getPreviousScreen(), currentBike);
+    	BikeInformationScreenHandler bikeInfHandler = BikeInformationScreenHandler.getBikeInformationScreenHandler(this.stage, this.getPreviousScreen(), this.currentBike);
     	bikeInfHandler.show();
     }
 

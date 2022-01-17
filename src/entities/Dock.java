@@ -1,5 +1,8 @@
 package entities;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -7,6 +10,7 @@ import org.json.JSONException;
 
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
+import utils.Configs;
 import utils.DBUtils;
 import utils.FunctionalUtils;
 import utils.JSONUtils;
@@ -16,7 +20,7 @@ import utils.JSONUtils;
  * @author Duong
  *
  */
-public class Dock {
+public class Dock implements PropertyChangeListener {
 
 	/**
 	 * name of the dock
@@ -48,22 +52,33 @@ public class Dock {
 	 */
 	private int numDockSpaceFree;
 	
+	private int totalSpace;
+	
 	private String dockImage;
+	private PropertyChangeSupport propertyNotifier;
 	
 	private ArrayList<Bike> bikeInDock;
 	
-	public Dock(String name, int dockID, String dock_address, double dock_area, int num_available_bike,
-			int num_dock_space_free, String dockImage) throws SQLException, EcoBikeException {
+	public Dock(String name, int dockID, String dockAddress, double dock_area, int totalSpace, String dockImage) throws SQLException, EcoBikeException {
 		this.setName(name);
 		this.setDockID(dockID);
-		this.setDockAddress(dock_address);
+		this.setDockAddress(dockAddress);
 		this.setDockArea(dock_area);
-		this.setNumAvailableBike(num_available_bike);
-		this.setNumDockSpaceFree(num_dock_space_free);
+		this.totalSpace = totalSpace;
+		this.numDockSpaceFree = totalSpace;
 		this.setDockImage(dockImage);
-		this.bikeInDock = DBUtils.getAllBikeByDockId(this.dockID);
+		this.bikeInDock = new ArrayList<Bike>();
+		this.propertyNotifier = new PropertyChangeSupport(this);
 	}
 
+	public void addObserver(PropertyChangeListener pcl) {
+		this.propertyNotifier.addPropertyChangeListener(pcl);
+	}
+	
+	public void removeObserver(PropertyChangeListener pcl) {
+		this.propertyNotifier.removePropertyChangeListener(pcl);
+	}
+	
 	public String getDockImage() {
 		return dockImage;
 	}
@@ -172,6 +187,42 @@ public class Dock {
 	
 	public ArrayList<Bike> getAllBikeInDock() {
 		return this.bikeInDock;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		Configs.BIKE_STATUS newStatus = (Configs.BIKE_STATUS) evt.getNewValue();
+		System.out.println("Dock listened evt from bike");
+		if (newStatus == Configs.BIKE_STATUS.RENTED) {
+//			this.removeBikeFromDock((Bike)evt.getSource());
+		}
+	}
+	
+	public void addBikeToDock(Bike bike) {
+		if (!this.bikeInDock.contains(bike)) {
+			this.bikeInDock.add(bike);
+			this.numDockSpaceFree -= 1;
+			this.numAvailableBike += 1;
+			this.propertyNotifier.firePropertyChange("numDockSpaceFree", this.numDockSpaceFree + 1, this.numDockSpaceFree);	
+		}
+	}
+	
+	public boolean isOKToAddBike() {
+		System.out.println("Num free space of dock " + this.getName() + " is:" + this.getNumDockSpaceFree());
+		return this.numDockSpaceFree > 0;
+	}
+	
+	public void removeBikeFromDock(Bike bike) {
+		if(this.bikeInDock.contains(bike)) {
+			this.bikeInDock.remove(bike);
+			this.numDockSpaceFree += 1;
+			this.numAvailableBike -= 1;
+			this.propertyNotifier.firePropertyChange("numDockSpaceFree", this.numDockSpaceFree - 1, this.bikeInDock);
+		}
+	}
+	
+	public int getTotalSpace() {
+		return this.totalSpace;
 	}
 	
 }
