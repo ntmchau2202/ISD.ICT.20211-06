@@ -1,3 +1,23 @@
+# ECOBIKE APPLICATION REPORT
+
+## Contribution
+- Chau: 35%
+- Long: 35%
+- Duong: 30%
+
+## Notes:
+This submission includes 
+- README (this file)
+- Presentation slides, SRS, SDS, video: in folder `/reports`. The video can also be found here: https://youtu.be/4pyF1RDT6KA
+- Diagrams, with astah files: in the corresponding folders of previous labs
+- Source code (up to this moment): in folder `/src`
+- Program specifications (Javadocs): in folder `/doc` 
+- Test case: The first version, in folder `/test_cases` We are updating the testcases according to real situations 
+
+[16/01/22]: Update some missing components, including source codes and videos. Note that since all members has Java 15 instead of 11, which eliminated us from implementing the `PATCH` method for requesting to the server, we are now _mimiking_ the behavior of the server, by always return true if user input the correct information of the card (given by TA team).
+
+-------
+
 # LAB 01: USECASE DIAGRAMS
 ## Tasks:
 - Design usecase diagram for EcoBike System, with the problem statment given
@@ -106,3 +126,146 @@ a. Submissions:
 - 1st meeting for review: 8 PM 23 Oct. 2021
 - 2nd deadline after review: 5 PM 24 Oct. 2021
 - Deadline submission: before 10 PM 24 Oct. 2021
+
+-------------------- 
+
+# LAB 05: Interface design
+## Tasks:
+- Design graphical user interface: Screen configuration standarlization, mockup designs, screen transition diagrams, detailed screen specifications
+- Design interface with another system/device: using subsystem
+
+## Assignments:
+
+1. Assignments:
+
+- Long: design UI and write specifications for Rent bike usecase
+- Duong: design UI and write specifications for Return bike usecase
+- Chau: design UI and write specifications for the main UI and View bike usecase; propose Interbank subsystem
+
+2. Notes:
+
+a. Submissions:
+
+- Put all your `.astah` file to folder `/detailed_design/interface_design/.astah`
+- Put all your exported diagrams to folder `/detailed_design/interface_design/diagrams`
+- Put all your UI design (i.e mockups) to folder `/detailed_design/interface_design/design`
+- Put all your preview images (if you have) to folder `/detailed_design/interface_design/preview` 
+- Put all your images used to conduct the UI to folder `/detailed_design/interface_design/images`. The brand logo or button icons... should be put in `./icon` folder, other images can be put in `./data` folder
+- Put all your specfications to folder `/detailed_design/interface_design/interface_specs`
+- Push your GUI design to a specific brach with the name convention `topic/gui-usecase-name`, for example, `topic/gui-view-bike`
+- Push the subsystem design to a specific branch `topic/subsystem-subsystemname`, for example, `topic/subsystem-interbank`
+
+b. Timeline for working
+
+- 1st meeting for discussing the configuration standarlization and subsystem design: 10 PM 27 Oct. 2021
+- 1st deadline: 5 PM 28 Oct. 2021
+- 2nd meeting for reviewing work: 8 PM 30 Oct. 2021
+- 2nd deadline for refine work: 5 PM 31 Oct. 2021
+- Deadline submission: before 10 PM 31 Oct. 2021
+
+-------------------- 
+
+# LAB 05: Analyze class diagram
+## Tasks:
+- Design class diagrams for the usecases: 
+  - View station, and/or View bike information
+  - Rent bike
+  - Return bike
+with all relevant usecases
+
+## Assignments:
+
+1. Assignments:
+
+- Long: Rent bike usecase
+- Duong: Return bike usecase
+- Chau: View bike station and/or view bike information
+
+1. Notes:
+
+a. Submissions:
+
+- Modify your previous works in your `.astah` files and export them to `/architectural_design/diagrams` folder
+- Push your work to a specific branch with naming convention `topic/cd-your-usecase`, for example, `topic/cd-view-bike-info`
+
+b. Timeline for working
+
+- 1st deadline: 5 PM 04 Nov. 2021
+- 1st meeting for review: 10 PM 04 Nov. 2021
+- 2nd deadline for refining work: 5 PM 06 Nov. 2021
+- 2nd meeting for review (if needed): 10 PM 04 Nov. 2021
+- Deadline submission: before 10 PM 05 Oct. 2021
+
+-------------------- 
+
+# LAB 06: Class implementation
+## Tasks: 
+Design class functions and write docs for the classes
+
+## Assignments:
+1. Assignments
+- Chau: Bike information subsystem and interbank subsystem
+- Long & Duong: Rent bike subsystem
+
+2. Notes:
+
+a. Guidelines for submission
+
+- Pull the branch `topic/class-design` and add packages/classes/interfaces according to your design to the source code folder `/src`
+- If you need to update the subsystem classes and methods of classes, make a clone of `EcoBike-Full-Class-Diagrams.asta` in folder `architecture_design/.astah`, add your name to the end and modify on this file. Put it in the above `/.astah` folder for future merge
+- Write detail doc for classes in comment form, so that it can be exported into JavaDocs later
+- Push your work to a specific branch with the naming convention `topic/cd-docs-yourpartname`, for example, `topic/cd-docs-rentbike`
+
+b. Timeline for working
+
+- 5 PM 13 Nov. 2021
+- Deadline submission: before 10 PM 13 Nov. 2021
+
+---------------------------
+
+# LAB 07: Data modeling
+## Tasks: 
+- Implement database for EcoBike system. Write detail specifications for the database
+
+## Assignments:
+1. Assignments
+- Chau: Bike, BikeInDock, Dock, Administrator database
+- Duong & Long: CreditCard, Transaction, Invoice, BikeRent database
+
+2. Notes:
+
+a. Guidelines for submission
+- Write your database specification in a .docx file with given template and put it into `/detailed_design/data_modeling`, push it to a specific brand with the convention `topic/data-yourpartofdatabase`
+
+b. Timeline for working
+- Team meeting to discuss about database design: 16 Nov. 2021
+- Deadline for 1st submission: 8 PM 19 Nov. 2021
+- Deadline for submission: 10 PM 20 Nov. 2021
+  
+----------------------------
+
+# LAB 08: Unit Test
+## Tasks: 
+- Desig test cases for the application, write corresponding code for these test cases
+
+## Assignments:
+1. Assignments
+- Chau: Test cases related to adding and viewing bike information
+- Duong & Long: Test cases related to rent bike & performing transaction
+
+2. Notes:
+
+a. Guidelines for submission
+- Write your testcase specification for each class in a different sheet with name of the class into `unit_test/ecobike_testcase_specs.xlsx` excel file (just for separation and better tracking :) )
+- Write your test classes into `src/test` package
+- Push your work to a specific branch, namely `topic/test-yourusecase`
+
+b. Timeline for working
+- Deadline for 1st submission: 5 PM 3 Dec. 2021
+- Deadline for submission: 10 PM 4 Nov. 2021
+
+---------------------------
+
+# LABS afterwards
+
+Each team member discuss to each other try to complete his/her as much as posibile
