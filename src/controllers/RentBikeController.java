@@ -207,16 +207,18 @@ public class RentBikeController extends EcoBikeBaseController {
 		
 	
 	
-	private float calculateFee(String bikeType, int rentTime) {
+	private float calculateFee(double price, int rentTime) {
 		//renting cost
-		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute
-				? 0
-				: rentTime - Configs.firstChargeTimeIntervalInMinute > 0
-					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
-					: Configs.firstChargeTimeIntervalCost;
-
-		rentingCost *= Configs.chargeMultiplierDictionary.get(Configs.getBikeType(bikeType));
-		return rentingCost;
+//		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute
+//				? 0
+//				: rentTime - Configs.firstChargeTimeIntervalInMinute > 0
+//					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
+//					: Configs.firstChargeTimeIntervalCost;
+//
+//		rentingCost *= Configs.chargeMultiplierDictionary.get(Configs.getBikeType(bikeType));
+//		return rentingCost;
+		return (float) price * rentTime;
+		
 	}
 	
 	/**
@@ -237,6 +239,6 @@ public class RentBikeController extends EcoBikeBaseController {
 			}
 		}
 		
-		return calculateFee(bike.getBikeType(), tracker.getRentedTime());
+		return calculateFee(bike.getBikeRentalPrice(), tracker.getRentedTime());
 	}
 }
