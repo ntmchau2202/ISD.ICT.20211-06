@@ -3,8 +3,6 @@ package entities;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import org.json.JSONException;
-
 import exceptions.ecobike.InvalidEcoBikeInformationException;
 import utils.Configs;
 import utils.FunctionalUtils;
@@ -35,11 +33,6 @@ public abstract class Bike {
 	private String bikeBarcode;
 	
 	/**
-	 * The rental price of the bike per unit time.
-	 */
-	private double bikeRentalPrice;
-	
-	/**
 	 * The currency of money the credit card uses.
 	 */
 	private String currencyUnit;
@@ -65,6 +58,9 @@ public abstract class Bike {
 	 * The current status of the bike
 	 */
 	private Configs.BIKE_STATUS currentStatus;
+	
+	protected int saddles, pedals, rearSeats;
+	protected float rentFactor;
 	
 	private Dock currentDock;
 
@@ -149,7 +145,26 @@ public abstract class Bike {
 	protected void setBikeType(Configs.BikeType bikeType) throws InvalidEcoBikeInformationException {				
 		this.statusNotifier.firePropertyChange("bikeType", this.bikeType, bikeType);
 		this.bikeType = bikeType;
-		this.bikeRentalPrice = Configs.chargeTimeIntervalCost * Configs.chargeMultiplierDictionary.get(bikeType);
+		this.rearSeats = Configs.BikeType.getTypeRearSeat(bikeType);
+		this.saddles = Configs.BikeType.getTypeSadde(bikeType);
+		this.pedals = Configs.BikeType.getTypePedals(bikeType);
+		this.rentFactor = Configs.BikeType.getMultiplier(bikeType);
+	}
+	
+	public float getRentFactor() {
+		return this.rentFactor;
+	}
+	
+	public int getRearSeats() {
+		return this.rearSeats;
+	}
+	
+	public int getSaddle() {
+		return this.saddles;
+	}
+	
+	public int getPedals() {
+		return this.pedals;
 	}
 	
 
@@ -183,11 +198,6 @@ public abstract class Bike {
 		}
 		this.bikeBarcode = barCode;
 	}
-
-	public double getBikeRentalPrice() {
-		return bikeRentalPrice;
-	}
-
 
 	public double getDeposit() {
 		return deposit;

@@ -10,6 +10,7 @@ import entities.CreditCard;
 import entities.Dock;
 import entities.Invoice;
 import entities.PaymentTransaction;
+import entities.strategies.RentalFactory;
 import utils.*;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -184,7 +185,7 @@ public class RentBikeController extends EcoBikeBaseController {
 		}
 		
 		int period = tracker.stopCountingRentTime();
-		float rentCost = calculateFee(bikeToRent.getBikeType(), period);
+		float rentCost = calculateFee(bikeToRent.getRentFactor(), period);
 		
 		PaymentTransaction transaction = interbankSystem.payRental(card, rentCost, "PAY_RENTAL");
 		
@@ -207,18 +208,8 @@ public class RentBikeController extends EcoBikeBaseController {
 		
 	
 	
-	private float calculateFee(double price, int rentTime) {
-		//renting cost
-//		float rentingCost = rentTime <= Configs.freeOfChargeTimeInMinute
-//				? 0
-//				: rentTime - Configs.firstChargeTimeIntervalInMinute > 0
-//					? (Configs.firstChargeTimeIntervalCost + (float)Math.ceil((rentTime - Configs.firstChargeTimeIntervalInMinute)/ Configs.chargeTimeIntervalInMinute) * Configs.chargeTimeIntervalCost)
-//					: Configs.firstChargeTimeIntervalCost;
-//
-//		rentingCost *= Configs.chargeMultiplierDictionary.get(Configs.getBikeType(bikeType));
-//		return rentingCost;
-		return (float) price * rentTime;
-		
+	private float calculateFee(float factor, int rentTime) {
+		return RentalFactory.getRentalStrategy(rentTime).getRentalPrice(factor, rentTime);
 	}
 	
 	/**
@@ -239,6 +230,6 @@ public class RentBikeController extends EcoBikeBaseController {
 			}
 		}
 		
-		return calculateFee(bike.getBikeRentalPrice(), tracker.getRentedTime());
+		return calculateFee(bike.getRentFactor(), tracker.getRentedTime());
 	}
 }

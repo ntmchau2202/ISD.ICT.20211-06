@@ -19,6 +19,7 @@ import entities.Invoice;
 import entities.PaymentTransaction;
 import exceptions.ecobike.EcoBikeException;
 import exceptions.ecobike.InvalidEcoBikeInformationException;
+import utils.Configs.BikeType;
 
 /**
  * This class provides methods for connecting to the database, query information and do needed modifications
@@ -34,9 +35,25 @@ public class DBUtils {
             connection = DriverManager.getConnection(url);
             System.out.println("Connect database successfully");
         } catch (Exception e) {
-        	throw new EcoBikeException("Error when initialize database for EcoBike:"+e.getMessage());
+        	e.printStackTrace();
+//        	throw new EcoBikeException("Error when initialize database for EcoBike:"+e.getMessage());
         }
         return connection;
+	}
+	
+	public static void initializeConfigs() throws SQLException {
+		String sql = "Select * from Configs";
+		PreparedStatement sqlStm = connection.prepareStatement(sql);
+		ResultSet result = sqlStm.executeQuery();
+		while(result.next()) {
+			BikeType type = Configs.BikeType.toBikeType(result.getString("bike_type"));
+			Configs.BikeType.setMultiplier(type, result.getFloat("rent_factor"));
+			Configs.BikeType.setTypeMotor(type, result.getInt("motors"));
+			Configs.BikeType.setTypePedals(type, result.getInt("pedals"));
+			Configs.BikeType.setTypePrice(type, result.getFloat("bike_price"));
+			Configs.BikeType.setTypeRearSeat(type, result.getInt("rear_seats"));
+			Configs.BikeType.setTypeSaddle(type, result.getInt("saddles"));
+		}
 	}
 	
 	public static Bike getBikeByName(String name) throws SQLException, EcoBikeException {
@@ -59,17 +76,8 @@ public class DBUtils {
 		ResultSet result = stm.executeQuery();
 		Bike bikeRes = null;
 		try {
-			bikeRes = FunctionalUtils.getBikeWithInformation(
-					result.getString("name"), 
-					result.getString("bike_type"),
-					result.getString("license_plate_code"),
-					result.getString("bike_image"), 
-					result.getString("bike_barcode"), 
-					result.getString("currency_unit"),
-					result.getDouble("deposit_price"),  
-					result.getDate("create_date").toString()
-			);
-		} catch (IllegalArgumentException | SecurityException | SQLException e) {
+			bikeRes = BikeFactory.getBikeWithInformation(result);
+		} catch (IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
 		
@@ -180,17 +188,8 @@ public class DBUtils {
 		ResultSet result = stm.executeQuery();
 		Bike bikeRes = null;
 		try {
-			bikeRes = FunctionalUtils.getBikeWithInformation(
-					result.getString("name"), 
-					result.getString("bike_type"),
-					result.getString("license_plate_code"),
-					result.getString("bike_image"), 
-					result.getString("bike_barcode"), 
-					result.getString("currency_unit"),
-					result.getDouble("deposit_price"),  
-					result.getDate("create_date").toString()
-			);
-		} catch (IllegalArgumentException | SecurityException | SQLException e) {
+			bikeRes = BikeFactory.getBikeWithInformation(result);
+		} catch (IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
 		
@@ -231,17 +230,8 @@ public class DBUtils {
 		while(result.next()) {
 			Bike bikeRes = null;
 			try {
-				bikeRes = FunctionalUtils.getBikeWithInformation(
-						result.getString("name"), 
-						result.getString("bike_type"),
-						result.getString("license_plate_code"),
-						result.getString("bike_image"), 
-						result.getString("bike_barcode"), 
-						result.getString("currency_unit"),
-						result.getDouble("deposit_price"),  
-						result.getDate("create_date").toString()
-				);
-			} catch (IllegalArgumentException | SecurityException | SQLException e) {
+				bikeRes = BikeFactory.getBikeWithInformation(result);
+			} catch (IllegalArgumentException | SecurityException e) {
 				e.printStackTrace();
 			}
 			
@@ -280,17 +270,8 @@ public class DBUtils {
 		while(result.next()) {
 			Bike bikeRes = null;
 			try {
-				bikeRes = FunctionalUtils.getBikeWithInformation(
-						result.getString("name"), 
-						result.getString("bike_type"),
-						result.getString("license_plate_code"),
-						result.getString("bike_image"), 
-						result.getString("bike_barcode"), 
-						result.getString("currency_unit"),
-						result.getDouble("deposit_price"),  
-						result.getDate("create_date").toString()
-				);
-			} catch (IllegalArgumentException | SecurityException | SQLException e) {
+				bikeRes = BikeFactory.getBikeWithInformation(result);
+			} catch (IllegalArgumentException | SecurityException e) {
 				e.printStackTrace();
 			}
 			
@@ -360,7 +341,6 @@ public class DBUtils {
 		}
 		return docks;
 	}
-	
 	
 	public static void saveCardInformation(CreditCard card) throws SQLException, EcoBikeException {
 		String stm = "INSERT INTO CreditCard(cardholder_name, creditcard_number, issuing_bank, security_code)"
