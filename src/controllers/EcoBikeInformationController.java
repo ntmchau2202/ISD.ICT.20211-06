@@ -42,7 +42,8 @@ public class EcoBikeInformationController extends EcoBikeBaseController implemen
 	public static EcoBikeInformationController getEcoBikeInformationController() throws SQLException, EcoBikeException {
 		if (ecoBikeInformationController == null) {
 			ecoBikeInformationController = new EcoBikeInformationController();
-//			ecoBikeInformationController.listAllDocks = DBUtils.getAllDock();
+//			DBUtils.initializeConfigs();
+			ecoBikeInformationController.listAllDocks = DBUtils.getAllDock();
 			// in this part, actually we should combine the factory pattern and move this line to "getBoundary..."
 			// the passed param will be the name of the rent bike service, and the factory will return the corresponding rent bike service
 			// EcoBike will become a third-party that helps users to connect multiple rent bike services

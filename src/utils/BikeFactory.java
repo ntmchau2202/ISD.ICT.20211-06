@@ -52,7 +52,6 @@ public class BikeFactory {
 						result.getString("bike_image"), 
 						result.getString("bike_barcode"), 
 						result.getString("currency_unit"),
-						result.getDouble("deposit_price"),  
 						result.getDate("create_date").toString());
 				}
 			if (bikeType == Configs.BikeType.TwinBike) {
@@ -61,7 +60,6 @@ public class BikeFactory {
 						result.getString("bike_image"), 
 						result.getString("bike_barcode"), 
 						result.getString("currency_unit"),
-						result.getDouble("deposit_price"),  
 						result.getDate("create_date").toString());
 			}
 			if (bikeType == Configs.BikeType.EBike) {
@@ -70,7 +68,6 @@ public class BikeFactory {
 						result.getString("bike_image"), 
 						result.getString("bike_barcode"), 
 						result.getString("currency_unit"),
-						result.getDouble("deposit_price"),  
 						result.getDate("create_date").toString(),
 						result.getFloat("current_battery"));
 				
@@ -81,7 +78,6 @@ public class BikeFactory {
 						result.getString("bike_image"), 
 						result.getString("bike_barcode"), 
 						result.getString("currency_unit"),
-						result.getDouble("deposit_price"),  
 						result.getDate("create_date").toString(),
 						result.getFloat("current_battery"));
 			}

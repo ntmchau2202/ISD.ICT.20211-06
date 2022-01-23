@@ -10,6 +10,7 @@ import boundaries.InterbankBoundary;
 import controllers.RentBikeController;
 import entities.Bike;
 import entities.CreditCard;
+import entities.strategies.DepositFactory;
 import exceptions.ecobike.EcoBikeException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -58,7 +59,7 @@ public class PayForDepositScreenHandler extends PaymentScreenHandler {
     	super.initializeComponent();
     	bikeName.setText(this.bikeToRent.getName());
     	bikeType.setText(this.bikeToRent.getBikeType());
-    	depositPrice.setText(Double.toString(this.bikeToRent.getDeposit()) + this.bikeToRent.getCurrency());
+    	depositPrice.setText(Double.toString(DepositFactory.getDepositStrategy().getDepositPrice((float)bikeToRent.getDeposit())) + this.bikeToRent.getCurrency());
     }
     
 

@@ -69,14 +69,13 @@ public abstract class Bike {
 	private PropertyChangeSupport dockNotifier;
 	
 	protected Bike(String name, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, String currencyUnit, double deposit, 
+			String bikeBarcode, String currencyUnit, 
 			String createDate) throws InvalidEcoBikeInformationException {
 		this.setName(name);
 		this.setLicensePlateCode(licensePlateCode);
 		this.setBikeImage(bikeImage);
 		this.setBikeBarCode(bikeBarcode);
 		this.setCurrency(currencyUnit);
-		this.setDeposit(deposit);
 		this.setCreateDate(createDate);
 		this.statusNotifier = new PropertyChangeSupport(this);
 		this.dockNotifier = new PropertyChangeSupport(this);
@@ -149,6 +148,7 @@ public abstract class Bike {
 		this.saddles = Configs.BikeType.getTypeSadde(bikeType);
 		this.pedals = Configs.BikeType.getTypePedals(bikeType);
 		this.rentFactor = Configs.BikeType.getMultiplier(bikeType);
+		this.deposit = Configs.BikeType.getTypePrice(bikeType);
 	}
 	
 	public float getRentFactor() {

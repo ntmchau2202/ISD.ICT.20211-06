@@ -125,6 +125,9 @@ public class RentBikeController extends EcoBikeBaseController {
 		if (tracker == null) {
 			try {
 				tracker = DBUtils.getCurrentBikeRenting(bike);
+				if (tracker != null) {
+					listBikeTracker.put(bike.getBikeBarCode(), tracker);
+				}
 			} catch (SQLException | EcoBikeException e) {
 				e.printStackTrace();
 			}

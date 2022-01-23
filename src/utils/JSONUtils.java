@@ -26,7 +26,7 @@ public class JSONUtils {
 		obj.put("license_plate_code", bike.getLicensePlateCode());
 		obj.put("bike_image", bike.getBikeImage());
 		obj.put("bike_barcode", bike.getBikeBarCode());
-		obj.put("bike_rental_price", bike.getBikeRentalPrice());
+//		obj.put("bike_rental_price", bike.getBikeRentalPrice());
 		obj.put("currency_unit", bike.getCurrency());
 		obj.put("deposit_price", bike.getDeposit());
 		obj.put("create_date", bike.getCreateDate().toString());

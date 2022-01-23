@@ -73,25 +73,4 @@ public class FunctionalUtils {
 		}
 		return digest;
 	}
-	
-	public static Bike getBikeWithInformation(String name, String bikeType, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, String currencyUnit, double deposit, 
-			String createDate) {
-		Bike b = null;
-		try {			
-			if (bikeType.equalsIgnoreCase("NormalBike")) {
-				b = new NormalBike(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
-				return b;
-			} 
-			
-			if (bikeType.equalsIgnoreCase("EBike")) {
-				b = new EBike(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
-				return b;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return b;
-	}
-	
 }

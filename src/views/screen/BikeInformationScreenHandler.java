@@ -2,7 +2,9 @@ package views.screen;
 
 import controllers.EcoBikeInformationController;
 import entities.Bike;
+import entities.strategies.DepositFactory;
 import exceptions.ecobike.EcoBikeException;
+import interfaces.Chargeable;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,8 +41,6 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
     private Label bikeStatusText;
     @FXML
     private Label bikeDistanceText;
-    @FXML
-    private Label bikeRentingText;
     @FXML
     private Label bikeDepositText;
     @FXML
@@ -140,9 +140,10 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         bikeNameText.setText(currentBike.getName());
         bikeTypeText.setText(currentBike.getBikeType());
         bikeStatusText.setText(currentBike.getCurrentStatus().toString());
-        if (currentBike.getBikeType().equals(Configs.BikeType.EBike.toString())) {
+        if (currentBike instanceof Chargeable) {
         	batteryLabel.setVisible(true);
-        	// TODO: Need to handle this 
+        	batteryTxt.setVisible(true);
+        	batteryTxt.setText(Float.toString(((Chargeable)currentBike).getBattery()));
         	try {
 				batteryTxt.setText(Float.toString(EcoBikeInformationController.getEcoBikeInformationController().getBikeBattery(currentBike.getBikeBarCode())) + " %");
 			} catch (SQLException | EcoBikeException e1) {
@@ -155,8 +156,8 @@ public class BikeInformationScreenHandler extends EcoBikeBaseScreenHandler imple
         	batteryTxt.setVisible(false);
         }
         bikeDistanceText.setText("100 km");
-        bikeRentingText.setText(currentBike.getBikeRentalPrice() + " " + currentBike.getCurrency());
-        bikeDepositText.setText(currentBike.getDeposit() + " " + currentBike.getCurrency());
+//        bikeRentingText.setText(currentBike.getBikeRentalPrice() + " " + currentBike.getCurrency());
+        bikeDepositText.setText(DepositFactory.getDepositStrategy().getDepositPrice((float)currentBike.getDeposit()) + " " + currentBike.getCurrency());
         
         if (currentBike.getCurrentDock() != null) {
         	bikeLocationTxt.setText(currentBike.getCurrentDock().getName());        	

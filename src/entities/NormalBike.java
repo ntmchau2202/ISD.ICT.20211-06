@@ -20,9 +20,9 @@ public class NormalBike extends Bike{
 	 * @throws InvalidEcoBikeInformationException
 	 */
 	public NormalBike(String name, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, String currencyUnit, double deposit, 
+			String bikeBarcode, String currencyUnit,
 			String createDate) throws InvalidEcoBikeInformationException {
-		super(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
+		super(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, createDate);
 		this.setBikeType(Configs.BikeType.NormalBike);
 	}		
 }

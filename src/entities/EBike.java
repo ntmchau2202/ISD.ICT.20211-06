@@ -1,6 +1,7 @@
 package entities;
 
 import exceptions.ecobike.InvalidEcoBikeInformationException;
+import interfaces.Chargeable;
 import utils.Configs;
 
 /**
@@ -8,7 +9,7 @@ import utils.Configs;
  * This bike will have the rental price as 1.5 times as the normal bike
  *
  */
-public class EBike extends Bike {
+public class EBike extends Bike implements Chargeable {
 	
 	private double battery;
 	
@@ -24,9 +25,9 @@ public class EBike extends Bike {
 	 * @throws InvalidEcoBikeInformationException
 	 */
 	public EBike(String name, String licensePlateCode, String bikeImage, 
-			String bikeBarcode, String currencyUnit, double deposit, 
+			String bikeBarcode, String currencyUnit, 
 			String createDate, float battery) throws InvalidEcoBikeInformationException {
-		super(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, deposit, createDate);
+		super(name, licensePlateCode, bikeImage, bikeBarcode, currencyUnit, createDate);
 		this.setBikeType(Configs.BikeType.EBike);
 		this.setBattery(battery);
 	}	
@@ -35,8 +36,8 @@ public class EBike extends Bike {
 	 * Get the bike's battery status
 	 * @return current battery of the bike
 	 */
-	public double getBattery() {
-		return this.battery;
+	public float getBattery() {
+		return (float)this.battery;
 	}
 	
 	/**

@@ -34,6 +34,7 @@ public class DBUtils {
             String url = "jdbc:sqlite:src/lib/ecobikedb.db";
             connection = DriverManager.getConnection(url);
             System.out.println("Connect database successfully");
+            initializeConfigs();
         } catch (Exception e) {
         	e.printStackTrace();
 //        	throw new EcoBikeException("Error when initialize database for EcoBike:"+e.getMessage());
@@ -41,7 +42,7 @@ public class DBUtils {
         return connection;
 	}
 	
-	public static void initializeConfigs() throws SQLException {
+	private static void initializeConfigs() throws SQLException {
 		String sql = "Select * from Configs";
 		PreparedStatement sqlStm = connection.prepareStatement(sql);
 		ResultSet result = sqlStm.executeQuery();
@@ -62,9 +63,7 @@ public class DBUtils {
 				+ "Bike.license_plate_code as license_plate_code,"
 				+ "Bike.bike_image as bike_image,"
 				+ "Bike.bike_barcode as bike_barcode,"
-				+ "Bike.bike_rental_price as bike_rental_price,"
 				+ "Bike.currency_unit as currency_unit,"
-				+ "Bike.bike_rental_price as deposit_price,"
 				+ "Bike.create_date as create_date,"
 				+ "BikeStatus.total_rent_time as total_rent_time,"
 				+ "BikeStatus.current_battery as current_battery,"
@@ -174,9 +173,7 @@ public class DBUtils {
 				+ "Bike.license_plate_code as license_plate_code,"
 				+ "Bike.bike_image as bike_image,"
 				+ "Bike.bike_barcode as bike_barcode,"
-				+ "Bike.bike_rental_price as bike_rental_price,"
 				+ "Bike.currency_unit as currency_unit,"
-				+ "Bike.bike_rental_price as deposit_price,"
 				+ "Bike.create_date as create_date,"
 				+ "BikeStatus.total_rent_time as total_rent_time,"
 				+ "BikeStatus.current_battery as current_battery,"
@@ -214,9 +211,7 @@ public class DBUtils {
 				+ "Bike.license_plate_code as license_plate_code,"
 				+ "Bike.bike_image as bike_image,"
 				+ "Bike.bike_barcode as bike_barcode,"
-				+ "Bike.bike_rental_price as bike_rental_price,"
 				+ "Bike.currency_unit as currency_unit,"
-				+ "Bike.bike_rental_price as deposit_price,"
 				+ "Bike.create_date as create_date,"
 				+ "BikeStatus.total_rent_time as total_rent_time,"
 				+ "BikeStatus.current_battery as current_battery,"
@@ -257,9 +252,7 @@ public class DBUtils {
 				+ "Bike.license_plate_code as license_plate_code,"
 				+ "Bike.bike_image as bike_image,"
 				+ "Bike.bike_barcode as bike_barcode,"
-				+ "Bike.bike_rental_price as bike_rental_price,"
 				+ "Bike.currency_unit as currency_unit,"
-				+ "Bike.bike_rental_price as deposit_price,"
 				+ "Bike.create_date as create_date,"
 				+ "BikeStatus.total_rent_time as total_rent_time,"
 				+ "BikeStatus.current_battery as current_battery,"
@@ -340,17 +333,6 @@ public class DBUtils {
 			docks.add(dockRes);
 		}
 		return docks;
-	}
-	
-	public static void saveCardInformation(CreditCard card) throws SQLException, EcoBikeException {
-		String stm = "INSERT INTO CreditCard(cardholder_name, creditcard_number, issuing_bank, security_code)"
-				+ "VALUES (?,?,?,?)";
-		PreparedStatement sqlStm = DBUtils.getConnection().prepareStatement(stm);
-		sqlStm.setString(1, card.getCardHolderName());
-		sqlStm.setString(2, card.getCardNumber());
-		sqlStm.setString(3, card.getIssueBank());
-		sqlStm.setString(4, card.getCardSecurity());
-		sqlStm.execute();
 	}
 	
 	public static int saveCustomer(String customerName) throws SQLException, EcoBikeException {
