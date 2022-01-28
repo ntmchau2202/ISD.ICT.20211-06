@@ -133,6 +133,7 @@ public class Configs {
 	public static final String LIST_RENTED_BIKE_SCREEN_PATH = "/views/fxml/FXML_ListRentedBikeScreen.fxml";
 	public static final String BIKE_TO_RETURN_SCREEN_PATH = "/views/fxml/FXML_BikeToReturn.fxml";
 
+	
 
 	public enum BIKE_STATUS {
 		FREE,

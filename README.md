@@ -16,6 +16,15 @@ This submission includes
 
 [16/01/22]: Update some missing components, including source codes and videos. Note that since all members has Java 15 instead of 11, which eliminated us from implementing the `PATCH` method for requesting to the server, we are now _mimiking_ the behavior of the server, by always return true if user input the correct information of the card (given by TA team).
 
+[28/01/22]: Update design as teacher's review. This includes
+- Review the formulas for calculating fees: This drives us to separate Bike's price and some other relevant information into a database called `Configs` for easily retrieving
+- Using `Strategy` design pattern for creating new strategies for calculating fee, in case the app extends
+- Separate the `BikeFactory` into a complete class
+- Add `Chargable` interface for types of bikes that can be charge, elimnate the reduntant function extension from base class `Bike` 
+- Updated overall class diagram:
+
+![Class diagram refined](.\architecture_design\diagrams\class_diagrams\EcoBike_Full_ClassDiagrams\ClassDiagram-EcoBike.png)
+
 -------
 
 # LAB 01: USECASE DIAGRAMS
